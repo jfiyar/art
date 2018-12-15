@@ -7,19 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 
 public class Test {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
+    @Autowired
+    public Test(UserService userService) {
+        this.userService = userService;
+    }
 
 
     @RequestMapping(value = "/")
     public String hello() {
-        var List=userService.getUserInfo();
-        for (User u:List) {
+        List<User> list=userService.getUserInfo();
+        for (User u:list) {
             System.out.println(u.getName());
         }
         return "hello,Spring Boot";
