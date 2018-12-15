@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户登陆</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+        function isNull(string){
+            return string.trim() === "" || string === null;
+        }
+        $(function () {
+            var loginForm=$("#login-form");
+            var usernameInput=$("#user-name-label");
+            var passwordInput=$("#user-password-label");
+            loginForm.submit(function (event) {
+                event.preventDefault();
+                var username=usernameInput.val();
+                var password=passwordInput.val();
+                if(isNull(username)){
+                    alert('用户名不能为空');
+                }else if(isNull(password)){
+                    alert('密码不能为空');
+                }else {
+                    loginForm.submit();
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<form id="login-form" action="/login.do">
+    <p>
+        <label for="user-name-label">用户名</label>
+        <input id="user-name-label" type="text">
+    </p>
+    <p>
+        <label for="user-password-label">密码</label>
+        <input id="user-password-label" type="password">
+    </p>
+    <button type="submit">登陆</button>
+    <a href="/reg">注册</a>
+</form>
+</body>
+</html>
