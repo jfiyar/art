@@ -3,8 +3,6 @@ package com.jfiy.art.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,7 +15,7 @@ public class Test {
     public String Index(HttpServletRequest req) {
         HttpSession session = req.getSession();
         if (session.getAttribute("user") == null) {
-            return "index";
+            return "login";
         }
         return "homepage";
     }
