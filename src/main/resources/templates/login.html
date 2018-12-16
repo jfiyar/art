@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户登陆</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function isNull(string){
+            return string.trim() === "" || string === null;
+        }
+        $(function () {
+            var loginForm=$("#login-form");
+            var usernameInput=$("#user-name-label");
+            var passwordInput=$("#user-password-label");
+            loginForm.submit(function (event) {
+                event.preventDefault();
+                var username=usernameInput.val();
+                var password=passwordInput.val();
+                if(isNull(username)){
+                    alert('用户名不能为空');
+                }else if(isNull(password)){
+                    alert('密码不能为空');
+                }else {
+                    loginForm.submit();
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div style="padding: 100px 100px 10px;">
+<form id="login-form"  action="/login.do" >
+    <div class="input-group " style="width: 400px;">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span>用户名</span>
+        <input type="text" class="form-control" placeholder="请输入用户名">
+    </div>
+    <br>
+    <div class="input-group">
+        <span class="input-group-addon">密    码</span>
+        <input type="text" class="form-control" placeholder="请输入密码">
+    </div>
+    <!--<p>-->
+        <!--<label for="user-name-label">用户名</label>-->
+        <!--<input id="user-name-label" type="text">-->
+    <!--</p>-->
+    <!--<p>-->
+        <!--<label for="user-password-label">密码</label>-->
+        <!--<input id="user-password-label" type="password">-->
+    <!--</p>-->
+    <button class="btn btn-success" type="submit">登陆</button>
+    <a class="btn btn-primary" href="/reg">注册</a>
+</form>
+</div>
+</body>
+</html>
