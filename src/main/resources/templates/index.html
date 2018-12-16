@@ -3,7 +3,9 @@
 <head>
     <title>用户登陆</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap.css">
+    <script src="/jquery.js"></script>
+    <script src="/bootstrap.js"></script>
     <script>
         function isNull(string){
             return string.trim() === "" || string === null;
@@ -37,8 +39,8 @@
         <label for="user-password-label">密码</label>
         <input id="user-password-label" type="password">
     </p>
-    <button type="submit">登陆</button>
-    <a href="/reg">注册</a>
+    <button class="btn btn-default" type="submit">登陆</button>
+    <a class="btn btn-primary" href="/reg">注册</a>
 </form>
 </body>
 </html>
