@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -14,5 +15,5 @@ public interface UserMapper {
 
     @Insert("insert into user(name,password) values(#{name},#{password})")
     @Options(useGeneratedKeys=true,keyProperty="id")
-    public int InsertUser(String name,String password);
+    public void InsertUser(User user);
 }

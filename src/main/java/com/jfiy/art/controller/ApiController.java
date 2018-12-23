@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api")
@@ -22,9 +23,11 @@ public class ApiController {
     }
     @GetMapping(value = "/register")
     public String Register(String username,String password) {
-        System.out.println(username);
-        System.out.println(password);
-        int id=userMapper.InsertUser(username,password);
-        return ""+id;
+        User user=new User();
+        user.setName(username);
+        user.setPassword(password);
+        userMapper.InsertUser(user);
+        System.out.println(user.getId());
+        return ""+user.getId();
     }
 }
