@@ -15,7 +15,7 @@ public class Test {
     public String Index(HttpServletRequest req) {
         HttpSession session = req.getSession();
         if (session.getAttribute("user") == null) {
-            return "login";
+            return "index";
         }
         return "homepage";
     }
