@@ -1,0 +1,18 @@
+body{
+    background: url("../img/register.jpg");
+    background-size:cover;
+}
+form{
+    display: block;
+    width: 400px;
+    margin: 300px auto 0;
+}
+form a{
+    color: black;
+    font-size: 20px;
+    padding-left: 20px;
+}
+.toHomepage:hover{
+    color: beige;
+    text-decoration: none;
+}
