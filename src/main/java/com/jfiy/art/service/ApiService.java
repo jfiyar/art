@@ -1,8 +1,5 @@
 package com.jfiy.art.service;
 
-import com.jfiy.art.model.User;
-import org.springframework.http.HttpRequest;
-
 import javax.servlet.http.HttpSession;
 
 public interface ApiService {
