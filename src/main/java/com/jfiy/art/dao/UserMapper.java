@@ -11,6 +11,8 @@ import java.util.List;
 public interface UserMapper {
     User findUserByUsername(String username);
 
+    User findUserByNameAndPwd(String name,String pwd);
+
     void updateUserByUsername(User user);
 
     void deleteUserByUsername(String username);

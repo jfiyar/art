@@ -1,7 +1,10 @@
 package com.jfiy.art.service;
 
-import com.jfiy.art.entity.User;
+
+import com.mysql.cj.Session;
+
+import javax.servlet.http.HttpSession;
 
 public interface UserService {
-    public String getUser(User user);
+    public String login(HttpSession session,String name, String pwd);
 }

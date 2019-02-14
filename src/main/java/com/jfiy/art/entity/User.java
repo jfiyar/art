@@ -8,18 +8,18 @@ import org.apache.ibatis.type.Alias;
 public class User {
 
     private int id;
-    private String user_name;
-    private String user_password;
+    private String name;
+    private String pwd;
 
     public User(String user_name, String user_password) {
-        this.user_name = user_name;
-        this.user_password = user_password;
+        this.name = user_name;
+        this.pwd = user_password;
     }
 
     public User(int id, String user_name, String user_password) {
         this.id = id;
-        this.user_name = user_name;
-        this.user_password = user_password;
+        this.name = user_name;
+        this.pwd = user_password;
     }
 
     public int getId() {
@@ -30,19 +30,19 @@ public class User {
         this.id = id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getName() {
+        return name;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUser_password() {
-        return user_password;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setUser_password(String user_password) {
-        this.user_password = user_password;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 }

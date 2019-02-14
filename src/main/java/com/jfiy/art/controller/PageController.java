@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public class PageController {
 
-    @GetMapping(value = "/index")
+    @GetMapping(value = "/")
     public String Index() {
         return "index";
     }
@@ -16,5 +16,4 @@ public class PageController {
     public String Register() {
         return "register";
     }
-
 }
