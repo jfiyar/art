@@ -4,30 +4,12 @@
     <resultMap id="user" type="com.jfiy.art.entity.User"/>
     <parameterMap id="user" type="com.jfiy.art.entity.User"/>
 
-    <select id="findUserByNameAndPwd" resultMap="user">
-        select * from user where name=#{1} and pwd=#{2}
+    <select id="findUserByNameAndPwd" resultMap="user" parameterType="user">
+        select * from user where name=#{name} and pwd=#{pwd}
     </select>
 
-    <select id="findUserByUsername" parameterType="String" resultMap="user">
-        SELECT * FROM user
-        WHERE name=#{1}
-    </select>
-
-
-    <update id="updateUserByUsername" parameterMap="user">
-        UPDATE USER SET pwd=#{user_password} WHERE name=#{user_name}
-    </update>
-
-    <delete id="deleteUserByUsername" parameterType="String">
-        DELETE FROM USER WHERE name=#{1}
-    </delete>
-
-    <!-- 使用alias自定义的parameterType-->
-    <insert id="saveUser" parameterType="user">
-        INSERT INTO USER (pwd,name) VALUES (#{user_password},#{user_name})
+    <insert id="addUser" parameterType="user">
+        INSERT INTO USER (name,pwd) VALUES (#{name},#{pwd})
     </insert>
 
-    <select id="getUserList" resultMap="user">
-        SELECT  * FROM USER
-    </select>
 </mapper>

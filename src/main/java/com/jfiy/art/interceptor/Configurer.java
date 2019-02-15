@@ -15,6 +15,9 @@ public class Configurer
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/**");
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/star");
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/modify");
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/review");
     }
 
 }

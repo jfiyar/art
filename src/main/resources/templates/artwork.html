@@ -25,7 +25,7 @@
 
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
-                                <li class="active">
+                                <li>
                                     <a href="/">首页</a>
                                 </li>
                                 <li>
@@ -34,7 +34,7 @@
                                 <li th:if="${session.user!=null}">
                                     <a href="/star">收藏</a>
                                 </li>
-                                <li th:if="${session.user!=null&&(session.user.getIsArtist()==1)}">
+                                <li class="active" th:if="${session.user!=null&&(session.user.getIsArtist()==1)}">
                                     <a href="/star">我的作品</a>
                                 </li>
                             </ul>

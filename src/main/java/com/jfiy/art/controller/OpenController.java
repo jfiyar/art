@@ -2,8 +2,8 @@ package com.jfiy.art.controller;
 
 
 import com.jfiy.art.service.UserService;
-import com.jfiy.art.service.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +13,13 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/open")
 public class OpenController {
-    private UserService userService = new UserServiceImpl();
-    @RequestMapping("/login")
-    public String login(HttpSession session){
-        return userService.login(session,"123","123");
+    @Autowired UserService userService;
+    @PostMapping("/login")
+    public Object login(HttpSession session,String name,String pwd) throws Exception {
+        return userService.login(session,name,pwd);
+    }
+    @PostMapping("/register")
+    public Long register(HttpSession session,String username,String password) throws Exception {
+        return userService.register(session,username,password).getId();
     }
 }
