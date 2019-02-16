@@ -18,6 +18,7 @@ public class Configurer
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/star");
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/modify");
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/review");
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/artwork");
     }
 
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jfiy.art.dao.ArtworkMapper">
+
+    <select id="findArtworkByUser" resultType="com.jfiy.art.entity.Artwork" parameterType="com.jfiy.art.entity.User">
+        select * from artwork where artist=#{id}
+    </select>
+    <select id="findArtworkByScore" resultType="com.jfiy.art.entity.Artwork" parameterType="HashMap">
+        select * from artwork order by score limit #{limit} offset #{offset}
+    </select>
+    <select id="findArtworkByTime" resultType="com.jfiy.art.entity.Artwork" parameterType="HashMap">
+        select * from artwork order by id desc limit #{limit} offset #{offset}
+    </select>
+
+</mapper>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<heed>
+    <title>管理台</title>
+    <meta charset="utf-8">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</heed>
+<body>
+<style>
+    body{
+        margin: 0;
+        background: #f3f3f3;
+    }
+</style>
+<section>
+    <style>
+        .left{
+            position: fixed;
+            width: 260px;
+            height: 100%;
+            background: #f8f8f8f8;
+            box-shadow: 5px 0 10px #ccc;
+        }
+        .title{
+            color: #0d2739;
+            font-size: 18px;
+            text-align: center;
+            padding: 30px 30px 15px;
+            border-bottom: 1px solid #aaa;
+            margin: 0 30px;
+        }
+        .menu{
+            padding: 20px;
+        }
+        ul,li{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .menu li{
+            cursor: pointer;
+            margin: 10px 0;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+            border-radius: 4px;
+        }
+        .menu li:hover{
+            background: rgba(173, 173, 173, 0.1);
+        }
+        .active{
+            background: #92241f;
+            color: #ffffff !important;
+        }
+        .active:hover{
+            background: #92241f !important;
+        }
+        .menu li svg{
+            width: 26px;
+            height: 26px;
+            position: relative;
+            top: 5px;
+            padding-right: 10px;
+            padding-left: 20px;
+        }
+    </style>
+    <div class="left">
+        <div class="title">
+            ARTWORK CMS
+        </div>
+        <ul class="menu" id="menu">
+            <li id="homeBtn" key="home">
+                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"></path></svg>
+                <span>首页</span>
+            </li>
+            <li id="sysBtn" key="sys">
+                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M888.3 693.2c-42.5-24.6-94.3-18-129.2 12.8l-53-30.7V523.6c0-15.7-8.4-30.3-22-38.1l-136-78.3v-67.1c44.2-15 76-56.8 76-106.1 0-61.9-50.1-112-112-112s-112 50.1-112 112c0 49.3 31.8 91.1 76 106.1v67.1l-136 78.3c-13.6 7.8-22 22.4-22 38.1v151.6l-53 30.7c-34.9-30.8-86.8-37.4-129.2-12.8-53.5 31-71.7 99.4-41 152.9 30.8 53.5 98.9 71.9 152.2 41 42.5-24.6 62.7-73 53.6-118.8l48.7-28.3 140.6 81c6.8 3.9 14.4 5.9 22 5.9s15.2-2 22-5.9L674.5 740l48.7 28.3c-9.1 45.7 11.2 94.2 53.6 118.8 53.3 30.9 121.5 12.6 152.2-41 30.8-53.6 12.6-122-40.7-152.9zm-673 138.4a47.6 47.6 0 0 1-65.2-17.6c-13.2-22.9-5.4-52.3 17.5-65.5a47.6 47.6 0 0 1 65.2 17.6c13.2 22.9 5.4 52.3-17.5 65.5zM522 463.8zM464 234a48.01 48.01 0 0 1 96 0 48.01 48.01 0 0 1-96 0zm170 446.2l-122 70.3-122-70.3V539.8l122-70.3 122 70.3v140.4zm239.9 133.9c-13.2 22.9-42.4 30.8-65.2 17.6-22.8-13.2-30.7-42.6-17.5-65.5s42.4-30.8 65.2-17.6c22.9 13.2 30.7 42.5 17.5 65.5z"></path></svg>
+                <span>系统管理</span>
+            </li>
+            <li id="userBtn" key="user">
+                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M824.2 699.9a301.55 301.55 0 0 0-86.4-60.4C783.1 602.8 812 546.8 812 484c0-110.8-92.4-201.7-203.2-200-109.1 1.7-197 90.6-197 200 0 62.8 29 118.8 74.2 155.5a300.95 300.95 0 0 0-86.4 60.4C345 754.6 314 826.8 312 903.8a8 8 0 0 0 8 8.2h56c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5A226.62 226.62 0 0 1 612 684c60.9 0 118.2 23.7 161.3 66.8C814.5 792 838 846.3 840 904.3c.1 4.3 3.7 7.7 8 7.7h56a8 8 0 0 0 8-8.2c-2-77-33-149.2-87.8-203.9zM612 612c-34.2 0-66.4-13.3-90.5-37.5a126.86 126.86 0 0 1-37.5-91.8c.3-32.8 13.4-64.5 36.3-88 24-24.6 56.1-38.3 90.4-38.7 33.9-.3 66.8 12.9 91 36.6 24.8 24.3 38.4 56.8 38.4 91.4 0 34.2-13.3 66.3-37.5 90.5A127.3 127.3 0 0 1 612 612zM361.5 510.4c-.9-8.7-1.4-17.5-1.4-26.4 0-15.9 1.5-31.4 4.3-46.5.7-3.6-1.2-7.3-4.5-8.8-13.6-6.1-26.1-14.5-36.9-25.1a127.54 127.54 0 0 1-38.7-95.4c.9-32.1 13.8-62.6 36.3-85.6 24.7-25.3 57.9-39.1 93.2-38.7 31.9.3 62.7 12.6 86 34.4 7.9 7.4 14.7 15.6 20.4 24.4 2 3.1 5.9 4.4 9.3 3.2 17.6-6.1 36.2-10.4 55.3-12.4 5.6-.6 8.8-6.6 6.3-11.6-32.5-64.3-98.9-108.7-175.7-109.9-110.9-1.7-203.3 89.2-203.3 199.9 0 62.8 28.9 118.8 74.2 155.5-31.8 14.7-61.1 35-86.5 60.4-54.8 54.7-85.8 126.9-87.8 204a8 8 0 0 0 8 8.2h56.1c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5 29.4-29.4 65.4-49.8 104.7-59.7 3.9-1 6.5-4.7 6-8.7z"></path></svg>
+                <span>用户管理</span>
+            </li>
+            <li id="artBtn" key="art">
+                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136v-39.9l138.5-164.3 150.1 178L658.1 489 888 761.6V792zm0-129.8L664.2 396.8c-3.2-3.8-9-3.8-12.2 0L424.6 666.4l-144-170.7c-3.2-3.8-9-3.8-12.2 0L136 652.7V232h752v430.2zM304 456a88 88 0 1 0 0-176 88 88 0 0 0 0 176zm0-116c15.5 0 28 12.5 28 28s-12.5 28-28 28-28-12.5-28-28 12.5-28 28-28z"></path></svg>
+                <span>艺术作品管理</span>
+            </li>
+        </ul>
+    </div>
+    <script>
+        $(function () {
+            $('#'+(sessionStorage.getItem('indexTriggerKey')||'home')+'Btn').trigger('click');
+        });
+        !function () {
+            $('#menu').on('click','li',function () {
+                $('#pages>div').hide();
+                $('.active').removeClass('active');
+                $(this).addClass('active');
+                var key=$(this).attr('key');
+                $('#'+key).fadeIn(100);
+                $('#pageIndex').html($(this).find('span').html());
+                sessionStorage.setItem('indexTriggerKey',key);
+            })
+        }();
+    </script>
+</section>
+<section>
+    <style>
+        .right{
+            width: calc(100% - 260px);
+            margin-left: 260px;
+        }
+        #pages>div{
+            display: none;
+        }
+    </style>
+    <div class="right">
+        <div style="padding: 20px;">
+            <span id="pageIndex">首页</span>
+            <div style="float: right;">
+                <span th:text="${session.user.getName()}">逆臣</span>
+                <span>欢迎登录</span>
+                <a href="/logout">注销</a>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div id="pages">
+            <div id="home">
+                <style>
+                    .card{
+                        margin: 0 auto;
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 60px 20px 0;
+                    }
+                    .card>div{
+                        max-width: 280px;
+                        width: 23%;
+                        background: #fff;
+                        border-radius: 10px;
+                        box-shadow: 2px 2px 4px #ccc;
+                        height: 160px;
+                    }
+
+                </style>
+                <div class="card">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div id="sys">
+                <style>
+                    #sys{
+                        padding: 20px;
+                    }
+                    .newBanner{
+                        width: 100%;
+                        height: 400px;
+                        background: #fff;
+                        border-radius: 20px;
+                        margin-bottom: 40px;
+                    }
+                </style>
+                <div>
+                    <h3>banner设置</h3>
+                    <div class="newBanner"></div>
+                    <div class="newBanner"></div>
+                    <div class="newBanner"></div>
+                    <div class="newBanner"></div>
+                </div>
+            </div>
+            <div id="user">
+                <style>
+                    #user{
+                        padding: 20px;
+                    }
+                    table{
+                        width: 100%;
+                    }
+                    thead tr{
+                        display: block;
+                        padding-left: 20px;
+                        background: #ff0000;
+                    }
+                    tr{
+                        border-bottom: 1px solid #000;
+                        padding-bottom: 10px;
+                        background: #ffffff;
+                    }
+                    table .head{
+                        height: 10px;
+                        border-radius:4px;
+                    }
+                    table .head>td>div{
+                        position: relative;
+                        width: 90%;
+                        top: -20px;
+                        height: 60px;
+                        background: #b7349f;
+                        margin: 0 auto;
+                        padding:0 30px;
+                        border-radius: 4px;
+                    }
+                    .srhNav{
+                        display: flex;
+                        justify-content: space-between;
+                        padding-bottom: 20px;
+                    }
+                    .srhNav>div{
+                        width: 25%;
+                        max-width: 300px;
+                        height: 40px;
+                        background: #ff0000;
+                    }
+                </style>
+                <div style="padding-top: 20px;padding-bottom: 40px;">
+                    <div class="srhNav">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="srhNav">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <table th:remove="tag" th:fragment="table (name,desc,cols,data)">
+                    <tr class="head">
+                        <td colspan="9999">
+                            <div>
+                                <div th:text="${name}">表格名字</div>
+                                <div th:text="${desc}">表格描述</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>id</th>
+                        <th>头像</th>
+                        <th>用户名</th>
+                        <th>账号状态</th>
+                        <th>艺术家</th>
+                        <th>性别</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="art">
+                art
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
