@@ -37,7 +37,15 @@ public class ArtworkServiceImpl implements ArtworkService {
     }
 
     @Override
-    public List<Artwork> getArtList(HashMap map) {
+    public List<HashMap> getArtList(HashMap map) {
         return artworkMapper.findArtList(map);
+    }
+
+    @Override
+    public HashMap getArtById(int id) {
+        return new HashMap<String,Object>(){{
+            put("media",artworkMapper.findArtMediaById(id));
+            put("info",artworkMapper.findArtInfoById(id));
+        }};
     }
 }

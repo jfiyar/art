@@ -46,5 +46,9 @@
     </trim>  where id=#{id}
     </update>
 
+    <select id="findUserForSug" resultType="HashMap" parameterType="String">
+        select id,name from user where id like #{1} or name like #{1} limit 10
+    </select>
+
 
 </mapper>

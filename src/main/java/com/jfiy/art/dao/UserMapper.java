@@ -15,6 +15,7 @@ public interface UserMapper {
     void addUser(User user);
     List<User> findUserList(HashMap queryMap);
     void updateUser(HashMap queryMap);
+    List<HashMap> findUserForSug(String keyword);
 
 
 

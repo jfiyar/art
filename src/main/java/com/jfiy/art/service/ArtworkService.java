@@ -10,6 +10,7 @@ public interface ArtworkService {
     List<Artwork> getArtworkByUser(User user);
     List<Artwork> getArtworkByScore(int offset,int limit);
     List<Artwork> getArtworkByTime(int offset,int limit);
-    List<Artwork> getArtList(HashMap map);
+    List<HashMap> getArtList(HashMap map);
+    HashMap getArtById(int id);
 
 }

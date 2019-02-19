@@ -80,4 +80,9 @@ public class UserServiceImpl implements UserService {
     public void updateUser(HashMap<String, Object> queryMap) {
         userMapper.updateUser(queryMap);
     }
+
+    @Override
+    public List<HashMap> getUserSugByIdOrName(String keyword) {
+        return userMapper.findUserForSug(keyword);
+    }
 }

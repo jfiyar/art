@@ -12,4 +12,5 @@ public interface UserService {
     User register(HttpSession session, String name, String pwd) throws Exception;
     List<User> getUserList(HashMap<String,Object> queryMap);
     void updateUser(HashMap<String,Object> queryMap);
+    List<HashMap> getUserSugByIdOrName(String keyword);
 }

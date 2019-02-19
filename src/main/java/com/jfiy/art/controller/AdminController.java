@@ -9,6 +9,7 @@ import com.jfiy.art.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,5 +44,26 @@ public class AdminController {
         queryMap.put("limit",limit);
         System.out.println(JSON.toJSONString(queryMap));
         return artworkService.getArtList(queryMap);
+    }
+
+    @PostMapping("/art/info")
+    public HashMap getArtInfo(int id){
+        System.out.println(id);
+        return artworkService.getArtById(id);
+    }
+
+    @GetMapping("/user/sug")
+    public List getUserSug(String keyword){
+        return userService.getUserSugByIdOrName(keyword);
+    }
+
+    @PostMapping("/art/update")
+    public List updateArtInfo(String delArr){
+        System.out.println(delArr);
+        return null;
+    }
+    @PostMapping("/art/upload")
+    public List uploadArtMedia(){
+        return null;
     }
 }

@@ -631,7 +631,16 @@
                             <input id="srhByArtist" name="artistName" type="text" class="form-control">
                         </div>
 
-                        <div></div>
+                        <div class="input-group">
+                            <span class="input-group-addon">审核状态</span>
+                            <div class="form-control" style="padding: 0;">
+                                <select name="review" class="form-control" style="padding: 0;border:none;margin: 0;outline: none;box-shadow: none">
+                                    <option value="">全部显示</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">已通过</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="btnGroup">
                             <button class="btn btn-default" type="reset">重置</button>
@@ -639,6 +648,11 @@
                         </div>
                     </div>
                 </form>
+                <style>
+                    #artTable  td{
+
+                    }
+                </style>
                 <table class="table" id="artTable">
                     <tr class="head">
                         <td colspan="9999">
@@ -653,7 +667,7 @@
                         <th width="10%">艺术品ID</th>
                         <th width="10%">名称</th>
                         <th width="10%">艺术家</th>
-                        <th width="10%">简介</th>
+                        <!--<th width="10%">简介</th>-->
                         <th width="5%">审核</th>
                         <th width="5%">评分</th>
                         <th width="10%">操作</th>
@@ -664,10 +678,46 @@
                         width: 400px;
                         margin: 0 auto 30px;
                     }
+                    #artModal .media .image{
+                        display: flex;
+                        justify-content: space-between;
+                        flex-flow: row wrap;
+                        padding: 20px;
+                    }
+                    .image>.img{
+                        margin-bottom: 20px;
+                    }
+                    .image>.img>img{
+                        height: 120px;
+                    }
+                    .image>.markDelete::after{
+                        content: '删';
+                        position: absolute;
+                        width: 100%;
+                        display: block;
+                        height: 100%;
+                        line-height: 120px;
+                        color: rgb(255, 55, 56);
+                        font-size: 60px;
+                        text-shadow: 2px 2px 3px #000;
+                        text-align: center;
+                        top: 0;
+                        left: 0;
+                        background: rgba(255, 255, 255, 0.7);
+                    }
+                    #artModal .media .image>*{
+                        position: relative;
+                        height: 120px;
+                        box-shadow: 1px 1px 2px #333;
+                        border-radius:10px;
+                        padding-bottom: 10px;
+                        cursor: pointer;
+                        overflow: hidden;
+                    }
                 </style>
                 <form class="modal" id="artModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content" style="width: 800px;">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">XXX艺术作品的详细信息</h4>
@@ -675,16 +725,21 @@
                             <div class="modal-body">
                                 <div class="input-group ">
                                     <span class="input-group-addon">艺术品名/name</span>
-                                    <input  class="form-control" type="text">
+                                    <input name="name" class="form-control" type="text">
+                                </div>
+                                <div class="input-group" style="position: relative;">
+                                    <span class="input-group-addon">艺术家/artist</span>
+                                    <input autocomplete="off" id="nameIpt" name="artistName"  class="form-control" type="text">
+                                    <ul class="sugBox list-group" style="z-index: 99;display: none;position: absolute;left: 0;top: 40px;background: #ffffff;width: 100%;"></ul>
                                 </div>
                                 <div class="input-group">
-                                    <span class="input-group-addon">艺术家/artist</span>
-                                    <input  class="form-control" type="text">
+                                    <span class="input-group-addon">评分/score</span>
+                                    <div class="form-control score" type="text">5</div>
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-addon">审核状态/review</span>
                                     <div class="form-control" style="padding: 0;">
-                                        <select class="form-control" style="padding: 0;border:none;margin: 0;outline: none;box-shadow: none">
+                                        <select name="review" class="form-control" style="padding: 0;border:none;margin: 0;outline: none;box-shadow: none">
                                             <option value="0">待审核</option>
                                             <option value="1">已通过</option>
                                         </select>
@@ -693,10 +748,37 @@
                                 <div class="input-group">
                                     <div class="form-group">
                                         <span >文字简介/information</span>
-                                        <textarea class="form-control" rows="3"></textarea>
+                                        <textarea name="info" class="form-control info" rows="3"></textarea>
                                     </div>
                                 </div>
-
+                                <style>
+                                    .file input {
+                                        position: absolute;
+                                        font-size: 100px;
+                                        right: 0;
+                                        top: 0;
+                                        opacity: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+                                </style>
+                                <div>
+                                    <a class="file btn btn-default" style="display: block;margin: 0 auto;width: 200px;position: relative;">
+                                        <span class="glyphicon glyphicon-cloud-upload"></span> 点击上传素材
+                                        <input type="file" id="upload" name="media">
+                                    </a>
+                                </div>
+                                <div class="media">
+                                    <div class="image">
+                                        <div class="img"><img src="https://ss.net.tw/images/product_images/popup_images/VanGogh016.jpg"></div>
+                                        <div class="img"><img src="https://ss.net.tw/images/product_images/popup_images/VanGogh016.jpg"></div>
+                                        <div class="img"><img src="https://ss.net.tw/images/product_images/popup_images/VanGogh016.jpg"></div>
+                                        <div class="img"><img src="https://ss.net.tw/images/product_images/popup_images/VanGogh016.jpg"></div>
+                                        <div class="img"><img src="https://ss.net.tw/images/product_images/popup_images/VanGogh016.jpg"></div>
+                                    </div>
+                                    <div class="video"></div>
+                                    <div class="audio"></div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -711,7 +793,10 @@
                         var offset=0;
                         var $artTable=$('#artTable');
                         var $modal=$('#artModal');
-                        $('#srhArtForm').submit(function (e) {
+                        var $artForm=$('#srhArtForm');
+                        var modalData={};
+                        var uploads=[];
+                        $artForm.submit(function (e) {
                             e.preventDefault();
                             var dataArr=$(this).serializeArray();
                             var data={};
@@ -722,6 +807,12 @@
                             }
                             data.offset=offset;
                             data.limit=limit;
+                            if(data.artistName){
+                                data.artistName='%'+data.artistName+'%'
+                            }
+                            if(data.artName){
+                                data.artName='%'+data.artName+'%'
+                            }
                             console.log(data);
                             $.ajax({
                                 url:'/admin/art/list',
@@ -729,30 +820,214 @@
                                 type:'post',
                                 datatype:'json',
                                 success:function (json) {
-                                    console.log(json);
+                                    if(json.code===200){
+                                        json=json.data;
+                                        for (var i = 0; i < limit; i++) {
+                                            var art=json[i];
+                                            var tr=$('#artTableTr'+i);
+                                            var td=tr.find('td');
+                                            if(art){
+                                                td.css('opacity',1);
+                                                $(td[1]).html(art.id);
+                                                $(td[2]).html(art.name);
+                                                $(td[3]).html(art.artistName).attr('id',art.artist);
+                                                $(td[4]).html(art.review);
+                                                $(td[5]).html(art.score);
+                                            }else {
+                                                td.css('opacity',0);
+                                            }
+                                        }
+                                    }
                                 }
                             })
                         });
+                        $artForm.submit();
                         !function(){
                             for (var i = 0; i < limit; i++) {
-                                $artTable.append($('<tr id="userTableTr'+i+'">' +
+                                $artTable.append($('<tr id="artTableTr'+i+'">' +
                                     '<td>'+(i+1)+'</td>' +
-                                    '<td>id</td>' +
-                                    '<td>http://iamges</td>' +
-                                    '<td>name</td>' +
-                                    '<td>auth</td>' +
-                                    '<td>isArtist</td>' +
-                                    '<td>sex</td>' +
+                                    '<td>41</td>' +
+                                    '<td>星空下的眼尾画</td>' +
+                                    '<td id="100">超级艺术家</td>' +
+                                    // '<td>简介的信息很多，很多很多很多很很多很多很多很很多很多很多很很多很多很多很很多很多很多很...</td>' +
+                                    '<td>通过</td>' +
+                                    '<td >5.0</td>' +
                                     '<td>' +
-                                    '<div><a class="edit btn btn-default btn-xs">编辑</a></div>' +
+                                    '<div><a class="edit btn btn-default btn-xs">查看详情</a></div>' +
                                     '</td>' +
                                     '</tr>'));
                             }
-                            $artTable.append($('<tr></tr>').append($('<td colspan="8"></td>').append($('#userTablePagination').clone())))
+                            $artTable.append($('<tr></tr>').append($('<td colspan="8"></td>').append($('#userTablePagination').clone().attr('id','artTablePagination'))))
                         }();
                         $artTable.on('click','.edit',function () {
+                            var td=$(this).parent().parent().parent().find('td');
+                            modalData={
+                                id:$(td[1]).html(),
+                                name:$(td[2]).html(),
+                                artistId:td[3].id,
+                                artistName:$(td[3]).html(),
+                                review:$(td[4]).html()==='通过'?'1':'0',
+                                score:$(td[5]).html()
+                            };
+                            console.log(modalData);
+                            $modal.find('.modal-title').html('id '+modalData.id+' 的详细信息');
+                            $modal.find('input[name="name"]').val(modalData.name);
+                            $modal.find('input[name="artistName"]').attr('placeholder',modalData.artistName+'/id:'+modalData.artistId).val('');
+                            $modal.find('.score').html(modalData.score);
+                            $modal.find('select').val(modalData.review);
                             $modal.modal('show');
-                        })
+                            $.ajax({
+                                url:'/admin/art/info',
+                                data:{id:modalData.id},
+                                type:'post',
+                                datatype:'json',
+                                success:function (data) {
+                                    console.log(data);
+                                    if(data.code===200){
+                                        data=data.data;
+                                        modalData.info=data.info;
+                                        $modal.find('.info').html(data.info);
+                                        var $media=$modal.find('.media');
+                                        var $image=$media.find('.image').html('');
+                                        for (let i = 0; i < data.media.length; i++) {
+                                            var m=data.media[i];
+                                            if(m.type==='image'){
+                                                $image.append($('<div data-id="'+m.id+'" class="img"><img src="'+m.url+'"></div>'));
+                                            }
+                                        }
+                                    }
+                                }
+                            })
+                        });
+                        $artTable.on('click','#artTablePagination li',function () {
+                            console.log(offset,limit);
+                            if(this.id==='next'){
+                                offset=offset+limit;
+                            }else if(this.id==='past'){
+                                offset=offset-limit;
+                            }
+                            if(offset<=0){
+                                $artTable.find('#past').addClass('disabled');
+                                offset=0;
+                            }else {
+                                $artTable.find('#past').removeClass('disabled');
+                            }
+                            console.log(offset,limit);
+                            $artForm.submit();
+                        });
+                        $modal.on('click','.img',function () {
+                            console.log('mark delete');
+                            if($(this).is('.markDelete')){
+                                $(this).removeClass('markDelete');
+                                return;
+                            }
+                            $(this).addClass('markDelete');
+                        });
+                        $modal.find('#upload').on('change',function (e) {
+                            var file=e.target.files[0];
+                            var formData=new FormData();
+                            formData.append('file',file);
+                            uploads.push(formData);
+                            console.log(file);
+                            var reader=new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onload=function (arg) {
+                                console.log(arg);
+                                $modal.find('.image').append($('<div class="img upload upload'+uploads.length+'"><img src="'+arg.target.result+'"></div>'))
+                            }
+                        });
+                        $modal.submit(function (e) {
+                            e.preventDefault();
+                            var dataArr=$modal.serializeArray();
+                            var param={};
+                            console.log(modalData);
+                            for (let i = 0; i < dataArr.length; i++) {
+                                if(dataArr[i].value&&dataArr[i].value!==modalData[dataArr[i].name]){
+                                    param[dataArr[i].name]=dataArr[i].value;
+                                }
+                            }
+                            if(param.artistName){
+                                param.artist=param.artistName.split('/id:')[1];
+                                if(param.artist===modalData.artistId){
+                                    delete param.artist;
+                                }
+                                delete param.artistName;
+                            }
+                            var deleteMedias=$('.markDelete');
+                            console.log(deleteMedias);
+                            for (let i = 0; i < deleteMedias.length; i++) {
+                                if(!param.delArr){
+                                    param.delArr=[];
+                                }
+                                param.delArr.push(deleteMedias[i].getAttribute('data-id'))
+                            }
+                            if(param.delArr){
+                                param.delArr=param.delArr.toString();
+                            }
+
+                            console.log(param);
+                            $.ajax({
+                                url:'/admin/art/update',
+                                data:param,
+                                datatype:'json',
+                                type:'post',
+                                success:function (data) {
+                                    console.log(data);
+                                }
+                            });
+                            for (var i = 0; i < uploads.length; i++) {
+                                var upload = uploads[i];
+                                var notUpload=false;
+                                for (var j = 0; j < deleteMedias.length; j++) {
+                                    var del=deleteMedias[j];
+                                    if($(del).is('.upload'+(i+1))){
+                                        notUpload=true;
+                                        break;
+                                    }
+                                }
+                                if(!notUpload){
+                                    console.log('uploading',upload);
+                                    $.ajax({
+                                        url:'admin/art/upload',
+                                        type:'post',
+                                        cache:false,
+                                        data:upload,
+                                        processData:false,
+                                        contentType:false,
+                                        success:function (data) {
+                                            console.log(data);
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                        $('.sugBox').on('click','.btn',function () {
+                            console.log(this.id);
+                            $('#nameIpt').val($(this).attr('data-name')+' /id:'+$(this).attr('data-id')+'');
+                            $('.sugBox').hide();
+                        });
+                        $('#nameIpt').on('input propertychange',function () {
+                            if(!this.value||this.value.trim()===""){
+                                pushSug([]);
+                                return;
+                            }
+                            $.ajax({
+                                type:'get',
+                                datatype:'json',
+                                url:'/admin/user/sug',
+                                data:{keyword:'%'+this.value+'%'},
+                                success:function (e) {
+                                    pushSug(e.data)
+                                }
+                            })
+                        });
+                        function pushSug(arr) {
+                            var box=$('.sugBox').html('').show();
+                            for (let i = 0; i < arr.length; i++) {
+                                box.append($('<li class="list-group-item"></li>').html(arr[i].name+'  id:'+arr[i].id+' ')
+                                    .append($('<span data-name="'+arr[i].name+'" data-id="'+arr[i].id+'" style="float: right;" class="btn btn-xs btn-default">︎ ↖︎ 设置</span>')))
+                            }
+                        }
                     }();
                 </script>
             </div>
