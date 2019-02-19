@@ -15,5 +15,6 @@ public interface ArtworkMapper {
     List<Artwork> findArtworkByUser(User user);
     List<Artwork> findArtworkByScore(HashMap map);
     List<Artwork> findArtworkByTime(HashMap map);
+    List<Artwork> findArtList(HashMap map);
 
 }

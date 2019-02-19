@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService {
@@ -46,5 +47,37 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             throw new Exception("用户名不可用");
         }
+    }
+
+    @Override
+    public List<User> getUserList(HashMap<String,Object> queryMap) {
+        if(queryMap.get("sex").equals("all")){
+            queryMap.remove("sex");
+        }else if(queryMap.get("sex").equals("mal")){
+            queryMap.put("sex",0);
+        }else{
+            queryMap.put("sex",1);
+        }
+        if(queryMap.get("auth").equals("all")){
+            queryMap.remove("auth");
+        }
+        if(queryMap.get("order").equals("default")){
+            queryMap.remove("order");
+        }
+        if(queryMap.get("isArtist").equals("default")){
+            queryMap.remove("isArtist");
+        }
+        if(queryMap.get("id").equals("")){
+            queryMap.remove("id");
+        }
+        if(queryMap.get("name").equals("")){
+            queryMap.remove("name");
+        }
+        return userMapper.findUserList(queryMap);
+    }
+
+    @Override
+    public void updateUser(HashMap<String, Object> queryMap) {
+        userMapper.updateUser(queryMap);
     }
 }

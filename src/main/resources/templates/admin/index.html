@@ -4,6 +4,9 @@
     <title>管理台</title>
     <meta charset="utf-8">
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.js"></script>
 </heed>
 <body>
 <style>
@@ -49,18 +52,17 @@
             background: rgba(173, 173, 173, 0.1);
         }
         .active{
-            background: #92241f;
+            background: #9d1cb2;
             color: #ffffff !important;
         }
         .active:hover{
-            background: #92241f !important;
+            background: #9d1cb2 !important;
         }
-        .menu li svg{
-            width: 26px;
-            height: 26px;
+        .menu li .glyphicon{
+            font-size: 18px;
             position: relative;
-            top: 5px;
-            padding-right: 10px;
+            top: 3px;
+            padding-right: 20px;
             padding-left: 20px;
         }
     </style>
@@ -70,19 +72,19 @@
         </div>
         <ul class="menu" id="menu">
             <li id="homeBtn" key="home">
-                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"></path></svg>
+                <span class="glyphicon glyphicon-home"></span>
                 <span>首页</span>
             </li>
             <li id="sysBtn" key="sys">
-                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M888.3 693.2c-42.5-24.6-94.3-18-129.2 12.8l-53-30.7V523.6c0-15.7-8.4-30.3-22-38.1l-136-78.3v-67.1c44.2-15 76-56.8 76-106.1 0-61.9-50.1-112-112-112s-112 50.1-112 112c0 49.3 31.8 91.1 76 106.1v67.1l-136 78.3c-13.6 7.8-22 22.4-22 38.1v151.6l-53 30.7c-34.9-30.8-86.8-37.4-129.2-12.8-53.5 31-71.7 99.4-41 152.9 30.8 53.5 98.9 71.9 152.2 41 42.5-24.6 62.7-73 53.6-118.8l48.7-28.3 140.6 81c6.8 3.9 14.4 5.9 22 5.9s15.2-2 22-5.9L674.5 740l48.7 28.3c-9.1 45.7 11.2 94.2 53.6 118.8 53.3 30.9 121.5 12.6 152.2-41 30.8-53.6 12.6-122-40.7-152.9zm-673 138.4a47.6 47.6 0 0 1-65.2-17.6c-13.2-22.9-5.4-52.3 17.5-65.5a47.6 47.6 0 0 1 65.2 17.6c13.2 22.9 5.4 52.3-17.5 65.5zM522 463.8zM464 234a48.01 48.01 0 0 1 96 0 48.01 48.01 0 0 1-96 0zm170 446.2l-122 70.3-122-70.3V539.8l122-70.3 122 70.3v140.4zm239.9 133.9c-13.2 22.9-42.4 30.8-65.2 17.6-22.8-13.2-30.7-42.6-17.5-65.5s42.4-30.8 65.2-17.6c22.9 13.2 30.7 42.5 17.5 65.5z"></path></svg>
+                <span class="glyphicon glyphicon-cog"></span>
                 <span>系统管理</span>
             </li>
             <li id="userBtn" key="user">
-                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M824.2 699.9a301.55 301.55 0 0 0-86.4-60.4C783.1 602.8 812 546.8 812 484c0-110.8-92.4-201.7-203.2-200-109.1 1.7-197 90.6-197 200 0 62.8 29 118.8 74.2 155.5a300.95 300.95 0 0 0-86.4 60.4C345 754.6 314 826.8 312 903.8a8 8 0 0 0 8 8.2h56c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5A226.62 226.62 0 0 1 612 684c60.9 0 118.2 23.7 161.3 66.8C814.5 792 838 846.3 840 904.3c.1 4.3 3.7 7.7 8 7.7h56a8 8 0 0 0 8-8.2c-2-77-33-149.2-87.8-203.9zM612 612c-34.2 0-66.4-13.3-90.5-37.5a126.86 126.86 0 0 1-37.5-91.8c.3-32.8 13.4-64.5 36.3-88 24-24.6 56.1-38.3 90.4-38.7 33.9-.3 66.8 12.9 91 36.6 24.8 24.3 38.4 56.8 38.4 91.4 0 34.2-13.3 66.3-37.5 90.5A127.3 127.3 0 0 1 612 612zM361.5 510.4c-.9-8.7-1.4-17.5-1.4-26.4 0-15.9 1.5-31.4 4.3-46.5.7-3.6-1.2-7.3-4.5-8.8-13.6-6.1-26.1-14.5-36.9-25.1a127.54 127.54 0 0 1-38.7-95.4c.9-32.1 13.8-62.6 36.3-85.6 24.7-25.3 57.9-39.1 93.2-38.7 31.9.3 62.7 12.6 86 34.4 7.9 7.4 14.7 15.6 20.4 24.4 2 3.1 5.9 4.4 9.3 3.2 17.6-6.1 36.2-10.4 55.3-12.4 5.6-.6 8.8-6.6 6.3-11.6-32.5-64.3-98.9-108.7-175.7-109.9-110.9-1.7-203.3 89.2-203.3 199.9 0 62.8 28.9 118.8 74.2 155.5-31.8 14.7-61.1 35-86.5 60.4-54.8 54.7-85.8 126.9-87.8 204a8 8 0 0 0 8 8.2h56.1c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5 29.4-29.4 65.4-49.8 104.7-59.7 3.9-1 6.5-4.7 6-8.7z"></path></svg>
+                <span class="glyphicon glyphicon-user"></span>
                 <span>用户管理</span>
             </li>
             <li id="artBtn" key="art">
-                <svg viewBox="64 64 896 896" fill="currentColor" aria-hidden="true"><path d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136v-39.9l138.5-164.3 150.1 178L658.1 489 888 761.6V792zm0-129.8L664.2 396.8c-3.2-3.8-9-3.8-12.2 0L424.6 666.4l-144-170.7c-3.2-3.8-9-3.8-12.2 0L136 652.7V232h752v430.2zM304 456a88 88 0 1 0 0-176 88 88 0 0 0 0 176zm0-116c15.5 0 28 12.5 28 28s-12.5 28-28 28-28-12.5-28-28 12.5-28 28-28z"></path></svg>
+                <span class="glyphicon glyphicon-picture"></span>
                 <span>艺术作品管理</span>
             </li>
         </ul>
@@ -93,11 +95,15 @@
         });
         !function () {
             $('#menu').on('click','li',function () {
-                $('#pages>div').hide();
-                $('.active').removeClass('active');
-                $(this).addClass('active');
                 var key=$(this).attr('key');
-                $('#'+key).fadeIn(100);
+                var $active=$('.active');
+                if(key===$active.attr('key')){
+                    return;
+                }
+                $('#pages>div').hide();
+                $active.removeClass('active');
+                $(this).addClass('active');
+                $('#'+key).show();
                 $('#pageIndex').html($(this).find('span').html());
                 sessionStorage.setItem('indexTriggerKey',key);
             })
@@ -115,7 +121,7 @@
         }
     </style>
     <div class="right">
-        <div style="padding: 20px;">
+        <div style="padding: 20px 20px 0 20px;">
             <span id="pageIndex">首页</span>
             <div style="float: right;">
                 <span th:text="${session.user.getName()}">逆臣</span>
@@ -174,34 +180,38 @@
             <div id="user">
                 <style>
                     #user{
-                        padding: 20px;
+                        padding: 20px 20px 0 20px;
                     }
                     table{
                         width: 100%;
+                        text-align: center;
+                        box-shadow:1px 1px 2px #666;
+                        background: #ffffff;
+                    }
+                    th{
+                        text-align: center;
                     }
                     thead tr{
                         display: block;
                         padding-left: 20px;
-                        background: #ff0000;
+
                     }
                     tr{
-                        border-bottom: 1px solid #000;
-                        padding-bottom: 10px;
-                        background: #ffffff;
+                        height: 40px;
                     }
                     table .head{
                         height: 10px;
-                        border-radius:4px;
                     }
                     table .head>td>div{
                         position: relative;
                         width: 90%;
                         top: -20px;
                         height: 60px;
-                        background: #b7349f;
+                        background: #9625B0;
                         margin: 0 auto;
                         padding:0 30px;
                         border-radius: 4px;
+                        box-shadow: 0 2px 3px #000;
                     }
                     .srhNav{
                         display: flex;
@@ -209,47 +219,542 @@
                         padding-bottom: 20px;
                     }
                     .srhNav>div{
-                        width: 25%;
+                        width: 22%;
                         max-width: 300px;
-                        height: 40px;
-                        background: #ff0000;
+                        height: 34px;
+                        position: relative;
+                    }
+                    .srhNav .btnGroup{
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .srhNav .btnGroup .btn{
+                        width: 40%;
+                    }
+                    @media screen and (max-width: 1200px){
+                        .smHide{
+                            display: none;
+                        }
                     }
                 </style>
-                <div style="padding-top: 20px;padding-bottom: 40px;">
+                <form id="srhUserForm" style="padding-top: 20px;padding-bottom: 40px;">
                     <div class="srhNav">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+
+                        <div class="input-group">
+                            <label for="srhById" class="input-group-addon">id</label>
+                            <input id="srhById" name="id" type="text" class="form-control">
+                        </div>
+
+
+                        <div class="input-group">
+                            <label for="srhByName" class="input-group-addon">用户名</label>
+                            <input id="srhByName" name="name" type="text" class="form-control">
+                        </div>
+
+
+                        <div>
+                            <span class="smHide" style="margin-right: 20px;">类型</span>
+                            <span>
+                                <label class="radio-inline">
+                                    <input type="radio" name="auth" value="all" checked>全部
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="auth" value="user">用户
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="auth"  value="admin">管理员
+                                </label>
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="smHide" style="margin-right: 20px;">排序</span>
+                            <span>
+                                <label class="radio-inline">
+                                    <input type="radio" name="order" value="default" checked>默认
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="order" value="desc">倒序
+                                </label>
+                            </span>
+                        </div>
+
+
                     </div>
                     <div class="srhNav">
+                        <div>
+                            <span class="smHide" style="margin-right: 20px;">性别</span>
+                            <span>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="all" checked>全部
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="mal">男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="femal">女
+                                </label>
+                            </span>
+                        </div>
+
+                        <div>
+                            <span class="smHide" style="margin-right: 20px;">身份</span>
+                            <span>
+                                <label class="radio-inline">
+                                    <input type="radio" name="isArtist" value="default" checked>全部
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="isArtist" value="1">艺术家
+                                </label>
+                            </span>
+                        </div>
+
                         <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+
+                        <div class="btnGroup">
+                            <button class="btn btn-default" type="reset">重置</button>
+                            <button style="background: #9625B0;color: #ffffff;" class="btn" type="submit">查询</button>
+                        </div>
                     </div>
-                </div>
-                <table th:remove="tag" th:fragment="table (name,desc,cols,data)">
+                </form>
+                <table class="table" id="userTable">
                     <tr class="head">
                         <td colspan="9999">
                             <div>
-                                <div th:text="${name}">表格名字</div>
-                                <div th:text="${desc}">表格描述</div>
+                                <div style="color: #ffffff;padding: 8px 0 0 0;font-size: 18px;">用户信息管理</div>
+                                <div style="color: #fff;font-weight: lighter;letter-spacing: 2px;">user information manager</div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <th>id</th>
-                        <th>头像</th>
-                        <th>用户名</th>
-                        <th>账号状态</th>
-                        <th>艺术家</th>
-                        <th>性别</th>
+                        <th width="5%">序号</th>
+                        <th width="10%">id</th>
+                        <th width="10%">头像</th>
+                        <th width="10%">用户名</th>
+                        <th width="10%">账号权限</th>
+                        <th width="5%">艺术家</th>
+                        <th width="5%">性别</th>
+                        <th width="10%">操作</th>
                     </tr>
                 </table>
+                <div style="text-align: right;" id="userTablePagination">
+                    <style>
+                        #userTablePagination li{
+                            color:#7f246d;
+                            cursor: pointer;
+                        }
+                    </style>
+                    <ul style="margin: 0;" class="pagination">
+                        <li class="disabled" id="past"><span>&laquo; 上一页</span></li>
+                        <li id="next"><span>下一页 &raquo;</span></li>
+                    </ul>
+                </div>
+                <!-- 模态框（Modal） -->
+                <style>
+                    .userModal>div{
+                        padding-bottom: 20px;
+                    }
+                    .userModal .ipt{
+                        width: 400px;
+                        margin: 0 auto;
+                    }
+                </style>
+                <form class="modal" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="userModalTitle"></h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="userModal" style="padding: 20px;">
+                                    <div class="input-group ipt">
+                                        <label for="userModalSetName" class="input-group-addon">设置账户</label>
+                                        <input id="userModalSetName" placeholder="请填写新的用户名" name="name" type="text" class="form-control">
+                                    </div>
+
+                                    <div class="input-group ipt">
+                                        <label for="userModalSetPassword" class="input-group-addon">设置密码</label>
+                                        <input id="userModalSetPassword" placeholder="不填写则不会更改" name="password" type="text" class="form-control">
+                                    </div>
+
+                                    <div class="input-group ipt">
+                                        <label for="userModalSetAvatar" class="input-group-addon">设置头像</label>
+                                        <input id="userModalSetAvatar" placeholder="请填写头像地址" name="avatar" type="text" class="form-control">
+                                    </div>
+
+                                    <div class="ipt">
+                                        <span style="margin-right: 20px;">设置性别</span>
+                                        <span>
+                                            <label class="radio-inline">
+                                                <input id="userModalSetSex0" type="radio" name="sex" value="0">男
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input  id="userModalSetSex1" type="radio" name="sex" value="1">女
+                                            </label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ipt">
+                                        <label for="userModalSetAuth">设置权限</label>
+                                        <select name="auth" id="userModalSetAuth" class="form-control">
+                                            <option value="user">普通用户（user）权限</option>
+                                            <option value="admin">超级管理员（admin）权限</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="ipt">
+                                        <label for="userModalSetIsArtist">是否为艺术家</label>
+                                        <select name="isArtist" id="userModalSetIsArtist" class="form-control">
+                                            <option value="0">普通用户</option>
+                                            <option value="1">艺术家</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button style="background: #b7349f;color: #ffffff;" type="submit" class="btn">提交更改</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </form>
+                <script>
+                    !function () {
+                        var limit=Math.floor(($(document).height()-400)/40);
+                        var offset=0;
+                        var $srhUserForm=$('#srhUserForm');
+                        var temp={};
+                        !function(){
+                            for (var i = 0; i < limit; i++) {
+                                $('#userTable').append($('<tr id="userTableTr'+i+'">' +
+                                    '<td>'+(i+1)+'</td>' +
+                                    '<td>id</td>' +
+                                    '<td>http://iamges</td>' +
+                                    '<td>name</td>' +
+                                    '<td>auth</td>' +
+                                    '<td>isArtist</td>' +
+                                    '<td>sex</td>' +
+                                    '<td>' +
+                                    '<div><a class="edit btn btn-default btn-xs">编辑</a></div>' +
+                                    '</td>' +
+                                    '</tr>'));
+                            }
+                            $('#userTable').append($('<tr></tr>').append($('<td colspan="8"></td>').append($('#userTablePagination'))))
+                        }();
+                        $('#userTable').on('click','.edit',function () {
+                            console.log(this);
+                            var tr=$(this).parent().parent().parent();
+                            var td=tr.find('td');
+                            temp.userModel={data:{
+                                    id:td[1].innerHTML,
+                                    name:td[3].innerHTML,
+                                    auth:td[4].innerHTML,
+                                    avatar:td[2].innerHTML,
+                                    sex:td[6].innerHTML==='男'?'0':'1',
+                                    isArtist:td[5].innerHTML==='是'?'1':'0'
+                                }
+                            };
+                            var data=temp.userModel.data;
+                            $('#userModalTitle').html(data.id+' 的信息编辑');
+                            $('#userModalSetName').val(data.name);
+                            $('#userModalSetAvatar').val(data.avatar);
+                            $('#userModalSetAuth').val(data.auth);
+                            if(data.sex==='0'){
+                                $('#userModalSetSex0')[0].checked=true;
+                            }else {
+                                $('#userModalSetSex1')[0].checked=true;
+                            }
+                            $('#userModalSetIsArtist').val(data.isArtist==='1'?1:0);
+                            $('#userModal').modal('show');
+                        });
+                        $srhUserForm.submit(function (e) {
+                            e.preventDefault();
+                            var data=$(this).serializeArray();
+                            data.push({name:'offset', value:offset});
+                            data.push({name:'limit', value:limit});
+                            $.ajax({
+                                url:'admin/user/list',
+                                datatype:'json',
+                                data:data,
+                                type:'post',
+                                success:function (json) {
+                                    if(json.code===200){
+                                        json=json.data;
+                                        for (var i = 0; i < limit; i++) {
+                                            var user=json[i];
+                                            var td=$('#userTableTr'+i).find('td');
+                                            if(user){
+                                                td.parent().attr('data-id',user.id);
+                                                $(td[0]).css('color','#666');
+                                                $(td[1]).html(user.id);
+                                                $(td[2]).html(user.avatar);
+                                                $(td[3]).html(user.name);
+                                                $(td[4]).html(user.auth);
+                                                $(td[5]).html(user.isArtist===0?"否":"是");
+                                                $(td[6]).html(user.sex===0?'男':'女');
+                                                $(td[7]).find(">div").show();
+                                            }else {
+                                                $(td[0]).css('color','#fff');
+                                                $(td[1]).html('');
+                                                $(td[2]).html('');
+                                                $(td[3]).html('');
+                                                $(td[4]).html('');
+                                                $(td[5]).html('');
+                                                $(td[6]).html('');
+                                                $(td[7]).find(">div").hide();
+                                            }
+
+                                        }
+                                    }
+                                }
+                            })
+                        });
+
+                        $srhUserForm.submit();
+
+                        $('#userTablePagination').on('click','li',function () {
+                            if(this.id==='next'){
+                                offset=offset+limit;
+                            }else {
+                                offset=offset-limit;
+                            }
+                            if(offset<=0){
+                                $('#userTablePagination #past').addClass('disabled');
+                                offset=0;
+                            }else {
+                                $('#userTablePagination #past').removeClass('disabled');
+                            }
+                            $srhUserForm.submit();
+                        });
+
+                        $('#userModal').submit(function (e) {
+                            e.preventDefault();
+                            var dataArr=$(this).serializeArray();
+                            var data={};
+                            var before=temp.userModel.data;
+                            for (var i = 0; i < dataArr.length; i++) {
+                                data[dataArr[i].name]=dataArr[i].value;
+                            }
+                            if(data.name===before.name){
+                                delete data.name
+                            }
+                            if(data.avatar===before.avatar){
+                                delete data.avatar
+                            }
+                            if(data.sex===before.sex){
+                                delete data.sex
+                            }
+                            if(data.auth===before.auth){
+                                delete data.auth
+                            }
+                            if(data.isArtist===before.isArtist){
+                                delete data.isArtist
+                            }
+                            if(!data.password){
+                                delete data.password
+                            }else {
+                                data.password=md5(data.password);
+                            }
+                            console.log(before);
+                            console.log(data);
+                            if(Object.keys(data).length===0){
+                                alert("没有做任何变更，无法提交");
+                                return;
+                            }
+                            data.id=before.id;
+                            $.ajax({
+                                url:'admin/user/update',
+                                type:'post',
+                                datatype:'json',
+                                data:data,
+                                success:function () {
+                                    $('#userModal').modal('hide');
+                                    $srhUserForm.submit();
+                                }
+                            })
+                        })
+                    }();
+                </script>
             </div>
             <div id="art">
-                art
+                <style>
+                    #art{
+                        padding: 20px;
+                    }
+                </style>
+                <form id="srhArtForm" style="padding-bottom: 40px;padding-top: 20px;">
+                    <div class="srhNav">
+
+                        <div class="input-group">
+                            <label for="srhByArtId" class="input-group-addon">作品id</label>
+                            <input id="srhByArtId" name="artId" type="text" class="form-control">
+                        </div>
+
+
+                        <div class="input-group">
+                            <label for="srhByArtName" class="input-group-addon">作品名</label>
+                            <input id="srhByArtName" name="artName" type="text" class="form-control">
+                        </div>
+
+                        <div>
+                            <select name="by" class="form-control">
+                                <option value="">默认排序</option>
+                                <option value="id">按id排序</option>
+                                <option value="score">按评分排序</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <select name="order" class="form-control">
+                                <option value="">默认顺序展示</option>
+                                <option value="desc">倒序</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="srhNav">
+
+                        <div class="input-group">
+                            <label for="srhByArtId" class="input-group-addon">作者id</label>
+                            <input id="asrhByArtId" name="artistId" type="text" class="form-control">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="srhByArtist" class="input-group-addon">作者名</label>
+                            <input id="srhByArtist" name="artistName" type="text" class="form-control">
+                        </div>
+
+                        <div></div>
+
+                        <div class="btnGroup">
+                            <button class="btn btn-default" type="reset">重置</button>
+                            <button style="background: #9625B0;color: #ffffff;" class="btn" type="submit">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <table class="table" id="artTable">
+                    <tr class="head">
+                        <td colspan="9999">
+                            <div>
+                                <div style="color: #ffffff;padding: 8px 0 0 0;font-size: 18px;">艺术作品信息管理</div>
+                                <div style="color: #fff;font-weight: lighter;letter-spacing: 2px;">artwork information manager</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="5%">序号</th>
+                        <th width="10%">艺术品ID</th>
+                        <th width="10%">名称</th>
+                        <th width="10%">艺术家</th>
+                        <th width="10%">简介</th>
+                        <th width="5%">审核</th>
+                        <th width="5%">评分</th>
+                        <th width="10%">操作</th>
+                    </tr>
+                </table>
+                <style>
+                    #artModal .input-group{
+                        width: 400px;
+                        margin: 0 auto 30px;
+                    }
+                </style>
+                <form class="modal" id="artModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">XXX艺术作品的详细信息</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group ">
+                                    <span class="input-group-addon">艺术品名/name</span>
+                                    <input  class="form-control" type="text">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">艺术家/artist</span>
+                                    <input  class="form-control" type="text">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">审核状态/review</span>
+                                    <div class="form-control" style="padding: 0;">
+                                        <select class="form-control" style="padding: 0;border:none;margin: 0;outline: none;box-shadow: none">
+                                            <option value="0">待审核</option>
+                                            <option value="1">已通过</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="form-group">
+                                        <span >文字简介/information</span>
+                                        <textarea class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button style="background: #b7349f;color: #ffffff;" type="submit" class="btn">提交更改</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </form>
+                <script>
+                    !function () {
+                        var limit=Math.floor(($(document).height()-400)/40);
+                        var offset=0;
+                        var $artTable=$('#artTable');
+                        var $modal=$('#artModal');
+                        $('#srhArtForm').submit(function (e) {
+                            e.preventDefault();
+                            var dataArr=$(this).serializeArray();
+                            var data={};
+                            for (var i = 0; i < dataArr.length; i++) {
+                                if(dataArr[i].value){
+                                    data[dataArr[i].name]=dataArr[i].value
+                                }
+                            }
+                            data.offset=offset;
+                            data.limit=limit;
+                            console.log(data);
+                            $.ajax({
+                                url:'/admin/art/list',
+                                data:data,
+                                type:'post',
+                                datatype:'json',
+                                success:function (json) {
+                                    console.log(json);
+                                }
+                            })
+                        });
+                        !function(){
+                            for (var i = 0; i < limit; i++) {
+                                $artTable.append($('<tr id="userTableTr'+i+'">' +
+                                    '<td>'+(i+1)+'</td>' +
+                                    '<td>id</td>' +
+                                    '<td>http://iamges</td>' +
+                                    '<td>name</td>' +
+                                    '<td>auth</td>' +
+                                    '<td>isArtist</td>' +
+                                    '<td>sex</td>' +
+                                    '<td>' +
+                                    '<div><a class="edit btn btn-default btn-xs">编辑</a></div>' +
+                                    '</td>' +
+                                    '</tr>'));
+                            }
+                            $artTable.append($('<tr></tr>').append($('<td colspan="8"></td>').append($('#userTablePagination').clone())))
+                        }();
+                        $artTable.on('click','.edit',function () {
+                            $modal.modal('show');
+                        })
+                    }();
+                </script>
             </div>
         </div>
     </div>

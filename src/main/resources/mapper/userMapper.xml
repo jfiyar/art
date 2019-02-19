@@ -12,4 +12,39 @@
         INSERT INTO USER (name,pwd) VALUES (#{name},#{pwd})
     </insert>
 
+    <select id="findUserList" resultType="com.jfiy.art.entity.User" parameterType="HashMap">
+        select * from user where true
+        <if test="id!=null">
+          and id=#{id}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="auth!=null">
+            and auth=#{auth}
+        </if>
+        <if test="sex!=null">
+            and sex=#{sex}
+        </if>
+        <if test="isArtist!=null">
+            and isArtist=1
+        </if>
+        <if test="order!=null">
+            order by id desc
+        </if>
+        limit  #{limit} offset #{offset}
+    </select>
+
+    <update id="updateUser">
+        update user <trim prefix="set" suffixOverrides=",">
+        <if test="name!=null">name=#{name},</if>
+        <if test="password!=null">pwd=#{password},</if>
+        <if test="auth!=null">auth=#{auth},</if>
+        <if test="avatar!=null">avatar=#{avatar},</if>
+        <if test="sex!=null">sex=#{sex},</if>
+        <if test="isArtist!=null">isArtist=#{isArtist},</if>
+    </trim>  where id=#{id}
+    </update>
+
+
 </mapper>

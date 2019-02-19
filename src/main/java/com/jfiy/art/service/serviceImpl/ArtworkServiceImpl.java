@@ -35,4 +35,9 @@ public class ArtworkServiceImpl implements ArtworkService {
             put("limit",limit);
         }});
     }
+
+    @Override
+    public List<Artwork> getArtList(HashMap map) {
+        return artworkMapper.findArtList(map);
+    }
 }

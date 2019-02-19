@@ -34,8 +34,8 @@ public class ResultFormatter implements ResponseBodyAdvice {
                 map.put("code",500);
                 map.put("message",e[1]);
             }else {
-                map.put("code",500);
-                map.put("message",e);
+                map.put("code",200);
+                map.put("data",o);
             }
         }else {
             map.put("code",200);

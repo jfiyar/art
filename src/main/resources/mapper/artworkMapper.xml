@@ -12,4 +12,25 @@
         select * from artwork order by id desc limit #{limit} offset #{offset}
     </select>
 
+    <select id="findArtList" parameterType="HashMap" resultType="com.jfiy.art.entity.Artwork">
+        select * from artwork where TRUE
+        <if test="artId!=null">
+            and id=#{artId}
+        </if>
+        <if test="artName!=null">
+            and name=#{artName}
+        </if>
+        <if test="artistId!=null">
+            and artist=#{artistId}
+        </if>
+        <choose>
+            <when test="by=='id'">order by id</when>
+            <when test="by=='score'">order by score</when>
+        </choose>
+        <if test="order!=null">
+            <if test="by==null">order by id </if>desc
+        </if>
+        limit #{limit} offset #{offset}
+    </select>
+
 </mapper>
