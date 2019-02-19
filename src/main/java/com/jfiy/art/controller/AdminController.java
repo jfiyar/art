@@ -58,9 +58,8 @@ public class AdminController {
     }
 
     @PostMapping("/art/update")
-    public List updateArtInfo(String delArr){
-        System.out.println(delArr);
-        return null;
+    public void updateArtInfo(@RequestParam HashMap hashMap,String delArr){
+
     }
     @PostMapping("/art/upload")
     public List uploadArtMedia(){
