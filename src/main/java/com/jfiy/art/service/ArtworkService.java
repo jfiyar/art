@@ -15,5 +15,5 @@ public interface ArtworkService {
     HashMap getArtById(int id);
     void updateArtworkInfo(HashMap hashMap);
     void deleteArtworkMedia(String id);
-    void uploadArtworkMedia(MultipartFile multipartFile);
+    void uploadArtworkMedia(String id,MultipartFile multipartFile);
 }

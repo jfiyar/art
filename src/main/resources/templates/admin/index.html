@@ -861,6 +861,8 @@
                         }();
                         $artTable.on('click','.edit',function () {
                             var td=$(this).parent().parent().parent().find('td');
+                            uploads=[];
+                            $modal.find('.image').html('');
                             modalData={
                                 id:$(td[1]).html(),
                                 name:$(td[2]).html(),
@@ -927,16 +929,17 @@
                             var file=e.target.files[0];
                             var formData=new FormData();
                             formData.append('file',file);
+                            formData.append('artwork_id',modalData.id);
                             uploads.push(formData);
-                            console.log(file);
                             var reader=new FileReader();
                             reader.readAsDataURL(file);
                             reader.onload=function (arg) {
-                                console.log(arg);
+                                // console.log(arg);
                                 $modal.find('.image').append($('<div class="img upload upload'+uploads.length+'"><img src="'+arg.target.result+'"></div>'))
                             }
                         });
                         $modal.submit(function (e) {
+                            $modal.modal('hide');
                             e.preventDefault();
                             var dataArr=$modal.serializeArray();
                             var param={};
@@ -964,15 +967,16 @@
                             if(param.delArr){
                                 param.delArr=param.delArr.toString();
                             }
+                            param.id=modalData.id;
 
-                            console.log(param);
+                            console.log('更新参数',param);
                             $.ajax({
                                 url:'/admin/art/update',
                                 data:param,
                                 datatype:'json',
                                 type:'post',
-                                success:function (data) {
-                                    console.log(data);
+                                success:function () {
+                                    $artForm.submit();
                                 }
                             });
                             for (var i = 0; i < uploads.length; i++) {
@@ -986,7 +990,6 @@
                                     }
                                 }
                                 if(!notUpload){
-                                    console.log('uploading',upload);
                                     $.ajax({
                                         url:'admin/art/upload',
                                         type:'post',

@@ -7,8 +7,12 @@ import com.jfiy.art.entity.User;
 import com.jfiy.art.service.ArtworkService;
 import com.jfiy.art.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +34,11 @@ public class AdminController {
     @PostMapping("/user/update")
     public void update(@RequestParam HashMap<String,Object> queryMap,int id){
         queryMap.put("id",id);
-        System.out.println(queryMap.get("sex"));
+//        System.out.println(queryMap.get("sex"));
         if(queryMap.get("sex")!=null){
             queryMap.put("sex",Integer.valueOf((String) queryMap.get("sex")));
         }
-        System.out.println(JSON.toJSONString(queryMap));
+//        System.out.println(JSON.toJSONString(queryMap));
         userService.updateUser(queryMap);
     }
 
@@ -42,13 +46,13 @@ public class AdminController {
     public List art(@RequestParam HashMap<String,Object> queryMap, int offset, int limit){
         queryMap.put("offset",offset);
         queryMap.put("limit",limit);
-        System.out.println(JSON.toJSONString(queryMap));
+//        System.out.println(JSON.toJSONString(queryMap));
         return artworkService.getArtList(queryMap);
     }
 
     @PostMapping("/art/info")
     public HashMap getArtInfo(int id){
-        System.out.println(id);
+//        System.out.println(id);
         return artworkService.getArtById(id);
     }
 
@@ -59,10 +63,14 @@ public class AdminController {
 
     @PostMapping("/art/update")
     public void updateArtInfo(@RequestParam HashMap hashMap,String delArr){
-
+        artworkService.updateArtworkInfo(hashMap);
+        artworkService.deleteArtworkMedia(delArr);
     }
     @PostMapping("/art/upload")
-    public List uploadArtMedia(){
-        return null;
+    public void uploadArtMedia(@RequestParam MultipartFile file, HttpServletRequest request){
+        String id=request.getParameter("artwork_id");
+        System.out.println(id);
+        System.out.println(file.getOriginalFilename());
+        artworkService.uploadArtworkMedia(id,file);
     }
 }

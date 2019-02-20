@@ -46,4 +46,28 @@
         select info from artwork where id=#{1}
     </select>
 
+    <insert useGeneratedKeys="true" keyProperty="id" id="addArtMedia" parameterType="HashMap">
+        insert into artwork_media (artwork_id, type, url) values (#{artwork_id},#{type},#{url})
+    </insert>
+
+    <update id="updateArtMedia" parameterType="HashMap">
+        update artwork_media <set>
+        <if test="artwork_id!=null">artwork_id=#{artwork_id},</if>
+        <if test="type!=null">type=#{type},</if>
+        <if test="url!=null">url=#{url},</if>
+    </set> where id=#{id}
+    </update>
+    <update id="updateArt" parameterType="HashMap">
+    update artwork <set>
+        <if test="name!=null">name=#{name}</if>
+        <if test="review!=null">review=#{review}</if>
+        <if test="info!=null">info=#{info}</if>
+        <if test="artist!=null">artist=#{artist}</if>
+where id=#{id}
+    </set>
+    </update>
+    <delete id="removeArtMediaById">
+        delete from artwork_media where id=#{1}
+    </delete>
+
 </mapper>
