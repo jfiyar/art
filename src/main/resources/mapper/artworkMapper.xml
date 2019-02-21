@@ -5,11 +5,10 @@
     <select id="findArtworkByUser" resultType="com.jfiy.art.entity.Artwork" parameterType="com.jfiy.art.entity.User">
         select * from artwork where artist=#{id}
     </select>
-    <select id="findArtworkByScore" resultType="com.jfiy.art.entity.Artwork" parameterType="HashMap">
-        select * from artwork order by score limit #{limit} offset #{offset}
-    </select>
-    <select id="findArtworkByTime" resultType="com.jfiy.art.entity.Artwork" parameterType="HashMap">
-        select * from artwork order by id desc limit #{limit} offset #{offset}
+    <select id="findArtworkByScore" resultType="HashMap" parameterType="HashMap">
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a order by score desc limit #{limit} offset #{offset}   </select>
+    <select id="findArtworkByTime" resultType="HashMap" parameterType="HashMap">
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a order by id desc limit #{limit} offset #{offset}
     </select>
 
     <select id="findArtList" parameterType="HashMap" resultType="HashMap">
@@ -69,5 +68,9 @@ where id=#{id}
     <delete id="removeArtMediaById">
         delete from artwork_media where id=#{1}
     </delete>
+
+    <select id="findArtRecommendList" resultType="HashMap" parameterType="int">
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a  limit 10 offset #{1}
+    </select>
 
 </mapper>

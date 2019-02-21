@@ -65,3 +65,17 @@ INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES 
 INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (7, '与众同222', '123123', 'user', null, 0, 0);
 INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (9, '与众同2222', '123123', 'user', null, 0, 0);
 INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (11, '1233', '4297f44b13955235245b2497399d7a93', 'user', null, 0, 0);
+
+delimiter //
+create procedure per2()
+begin
+  declare num int;
+  set num=1;
+  while num < 10000 do
+  insert into artwork values (num+100,'test name',16,'test info',1,3.0);
+  insert into artwork_media (artwork_id, type, url) values (num+100,default,'/upload/37.jpg');
+  set num=num+1;
+  end while;
+end
+//
+call per2();

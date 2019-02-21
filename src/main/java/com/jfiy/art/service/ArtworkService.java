@@ -9,11 +9,13 @@ import java.util.List;
 
 public interface ArtworkService {
     List<Artwork> getArtworkByUser(User user);
-    List<Artwork> getArtworkByScore(int offset,int limit);
-    List<Artwork> getArtworkByTime(int offset,int limit);
+    List<HashMap> getArtworkByScore(int offset,int limit);
+    List<HashMap> getArtworkByTime(int offset,int limit);
     List<HashMap> getArtList(HashMap map);
     HashMap getArtById(int id);
     void updateArtworkInfo(HashMap hashMap);
     void deleteArtworkMedia(String id);
     void uploadArtworkMedia(String id,MultipartFile multipartFile);
+
+    List getRecommendList(int offset);
 }

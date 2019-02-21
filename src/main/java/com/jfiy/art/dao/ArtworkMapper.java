@@ -13,8 +13,8 @@ import java.util.List;
 public interface ArtworkMapper {
 
     List<Artwork> findArtworkByUser(User user);
-    List<Artwork> findArtworkByScore(HashMap map);
-    List<Artwork> findArtworkByTime(HashMap map);
+    List<HashMap> findArtworkByScore(HashMap map);
+    List<HashMap> findArtworkByTime(HashMap map);
     List<HashMap> findArtList(HashMap map);
     List<HashMap> findArtMediaById(int id);
     String findArtInfoById(int id);
@@ -22,5 +22,6 @@ public interface ArtworkMapper {
     void updateArtMedia(HashMap hashMap);
     void removeArtMediaById(String id);
     void updateArt(HashMap hashMap);
+    List<HashMap> findArtRecommendList(int offset);
 
 }

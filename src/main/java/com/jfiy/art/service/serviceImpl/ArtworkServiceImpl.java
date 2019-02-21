@@ -31,7 +31,7 @@ public class ArtworkServiceImpl implements ArtworkService {
     }
 
     @Override
-    public List<Artwork> getArtworkByScore(int offset, int limit) {
+    public List<HashMap> getArtworkByScore(int offset, int limit) {
         return artworkMapper.findArtworkByScore(new HashMap<String,Integer>(){{
             put("offset",offset);
             put("limit",limit);
@@ -39,7 +39,7 @@ public class ArtworkServiceImpl implements ArtworkService {
     }
 
     @Override
-    public List<Artwork> getArtworkByTime(int offset, int limit) {
+    public List<HashMap> getArtworkByTime(int offset, int limit) {
         return artworkMapper.findArtworkByTime(new HashMap<String,Integer>(){{
             put("offset",offset);
             put("limit",limit);
@@ -117,5 +117,11 @@ public class ArtworkServiceImpl implements ArtworkService {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List getRecommendList(int offset) {
+        System.out.println(offset);
+        return artworkMapper.findArtRecommendList(offset);
     }
 }

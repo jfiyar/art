@@ -1,6 +1,7 @@
 package com.jfiy.art.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.jfiy.art.entity.User;
 import com.jfiy.art.service.ArtworkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class PageController implements ErrorController {
         if(user!=null&&user.getAuth().equals("admin")){
             return "admin/index";
         }
-        model.addAttribute("byScore",artworkService.getArtworkByScore(0,3));
-        model.addAttribute("byTime",artworkService.getArtworkByTime(0,3));
+        System.out.println(JSON.toJSONString(artworkService.getArtworkByScore(0,4)));
+        model.addAttribute("byScore",artworkService.getArtworkByScore(0,4));
+        model.addAttribute("byTime",artworkService.getArtworkByTime(0,4));
         return "index";
     }
     @GetMapping(value = "/register")
@@ -48,18 +50,7 @@ public class PageController implements ErrorController {
     public String modify() {
         return "modify";
     }
-    @GetMapping(value = "/star")
-    public String star() {
-        return "star";
-    }
-    @GetMapping(value = "/review")
-    public String review() {
-        return "review";
-    }
-    @GetMapping(value = "/type")
-    public String type() {
-        return "type";
-    }
+
     @GetMapping(value = "/artwork")
     public String artwork(Model model,HttpSession session) {
         model.addAttribute("list",artworkService.getArtworkByUser((User)session.getAttribute("user")));
