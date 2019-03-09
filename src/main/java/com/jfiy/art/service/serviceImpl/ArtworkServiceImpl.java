@@ -103,6 +103,7 @@ public class ArtworkServiceImpl implements ArtworkService {
                 put("url","loading...");
             }};
             artworkMapper.addArtMedia(map);
+            System.out.println(map.toString());
             String url= map.get("id").toString() + suffixName;
             File dest = new File(filePath +url);
             try {
