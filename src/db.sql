@@ -37,7 +37,7 @@ create table artwork_comment
   reply     int                                 null,
   user_id   int                                 not null,
   content   text                                null,
-  timestamp timestamp default CURRENT_TIMESTAMP not null,
+  timestamp datetime default CURRENT_TIMESTAMP not null,
   art_id    int                                 null
 )
   charset = utf8;
