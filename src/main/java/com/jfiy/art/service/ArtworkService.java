@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ArtworkService {
-    List<Artwork> getArtworkByUser(User user);
+    List<HashMap> getArtworkByUser(User user);
     List<HashMap> getArtworkByScore(int offset,int limit);
     List<HashMap> getArtworkByTime(int offset,int limit);
     List<HashMap> getArtList(HashMap map);
@@ -18,4 +18,23 @@ public interface ArtworkService {
     void uploadArtworkMedia(String id,MultipartFile multipartFile);
 
     List getRecommendList(int offset);
+
+    HashMap addArt(HashMap hashMap);
+
+    HashMap getArtInfoById(String id);
+
+    List<HashMap> getMediaListByArtId(String id);
+    List<HashMap> getCommentListByArtId(String id);
+
+    void addRecommend(HashMap hashMap);
+
+    void uploadArtistAvatar(String s, MultipartFile file);
+
+    HashMap getArtist(String id);
+
+    void removeCommend(String id);
+
+    void scoreIncr(String id);
+
+    HashMap getSysInfo();
 }

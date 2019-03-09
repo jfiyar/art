@@ -1,27 +1,32 @@
-create database artworkcms;
-use artworkcms;
+drop database art;
+create database art;
+use art;
 create table artist
 (
-  user_id    int           null,
-  nation     varchar(32)   null,
-  birthday   timestamp     null,
-  profession varchar(32)   null,
-  info       varchar(255)  null,
-  revire     int default 0 not null,
+  user_id    int                                 not null,
+  nation     varchar(32)                         null,
+  birthday   timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+  profession varchar(32)                         null,
+  info       text                                null,
+  review     int       default 0                 not null,
+  avatar     varchar(255)                        null,
   constraint artist_user_id_uindex
     unique (user_id)
 )
   charset = utf8;
 
+alter table artist
+  add primary key (user_id);
+
 create table artwork
 (
   id     int auto_increment
     primary key,
-  name   varchar(32)      not null,
-  artist int              null,
-  info   longtext         null,
-  review int    default 0 not null,
-  score  double default 0 not null
+  name   varchar(32)   not null,
+  artist int           null,
+  info   longtext      null,
+  review int default 0 not null,
+  score  int default 0 not null
 )
   charset = utf8;
 
@@ -31,18 +36,20 @@ create table artwork_comment
     primary key,
   reply     int                                 null,
   user_id   int                                 not null,
-  content   varchar(255)                        null,
-  timestamp timestamp default CURRENT_TIMESTAMP not null
+  content   text                                null,
+  timestamp datetime default CURRENT_TIMESTAMP not null,
+  art_id    int                                 null
 )
   charset = utf8;
 
 create table artwork_media
 (
-  artwork_id int          not null,
-  type       varchar(16)  not null,
-  url        varchar(255) null
-)
-  charset = utf8;
+  id         int auto_increment
+    primary key,
+  artwork_id int                         null,
+  type       varchar(32) default 'image' null,
+  url        varchar(255)                null
+);
 
 create table user
 (
@@ -59,23 +66,17 @@ create table user
 )
   charset = utf8;
 
-INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (1, 'admin', '123123', 'user', null, 0, 0);
-INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (2, '与众不同', '123123', 'user', null, 0, 0);
-INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (6, '与众同', '123123', 'user', null, 0, 0);
-INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (7, '与众同222', '123123', 'user', null, 0, 0);
-INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (9, '与众同2222', '123123', 'user', null, 0, 0);
-INSERT INTO artworkcms.user (id, name, pwd, auth, avatar, sex, isArtist) VALUES (11, '1233', '4297f44b13955235245b2497399d7a93', 'user', null, 0, 0);
+insert into user (name, pwd, auth, isArtist) values ('admin','4297f44b13955235245b2497399d7a93','admin',1);
 
-delimiter //
-create procedure per2()
-begin
-  declare num int;
-  set num=1;
-  while num < 10000 do
-  insert into artwork values (num+100,'test name',16,'test info',1,3.0);
-  insert into artwork_media (artwork_id, type, url) values (num+100,default,'/upload/37.jpg');
-  set num=num+1;
-  end while;
-end
-//
-call per2();
+# create
+#   definer = root@localhost procedure per2()
+# begin
+#   declare num int;
+#   set num = 1;
+#   while num < 10000 do
+#   insert into artwork values (num + 100, 'test name', 16, 'test info', 1, 3.0);
+#   insert into artwork_media (artwork_id, type, url) values (num + 100, default, '/upload/37.jpg');
+#   set num = num + 1;
+#   end while;
+# end;
+

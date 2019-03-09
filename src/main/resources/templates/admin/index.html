@@ -75,10 +75,10 @@
                 <span class="glyphicon glyphicon-home"></span>
                 <span>首页</span>
             </li>
-            <li id="sysBtn" key="sys">
-                <span class="glyphicon glyphicon-cog"></span>
-                <span>系统管理</span>
-            </li>
+            <!--<li id="sysBtn" key="sys">-->
+                <!--<span class="glyphicon glyphicon-cog"></span>-->
+                <!--<span>系统管理</span>-->
+            <!--</li>-->
             <li id="userBtn" key="user">
                 <span class="glyphicon glyphicon-user"></span>
                 <span>用户管理</span>
@@ -138,22 +138,37 @@
                         display: flex;
                         justify-content: space-between;
                         padding: 60px 20px 0;
+                        max-width: 1000px;
                     }
                     .card>div{
                         max-width: 280px;
-                        width: 23%;
+                        width: 30%;
                         background: #fff;
                         border-radius: 10px;
                         box-shadow: 2px 2px 4px #ccc;
                         height: 160px;
+                        line-height: 160px;
+                        text-align: center;
+                        color: #ffffff;
                     }
 
                 </style>
                 <div class="card">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                    <div style="background: #5fcf6e;">
+                        <span style="font-size: 40px;">用户/</span>
+                        <span th:text="${sys.get('user')}"></span>
+                        <span>人</span>
+                    </div>
+                    <div style="background: #ff464d;">
+                        <span style="font-size: 40px;">艺术品/</span>
+                        <span th:text="${sys.get('art')}"></span>
+                        <span>件</span>
+                    </div>
+                    <div style="background: #5075fa;">
+                        <span style="font-size: 40px;">评论/</span>
+                        <span th:text="${sys.get('commend')}"></span>
+                        <span>条</span>
+                    </div>
                 </div>
             </div>
             <div id="sys">
@@ -324,6 +339,7 @@
                             <div>
                                 <div style="color: #ffffff;padding: 8px 0 0 0;font-size: 18px;">用户信息管理</div>
                                 <div style="color: #fff;font-weight: lighter;letter-spacing: 2px;">user information manager</div>
+                                <div id="addUser" class="btn" style="position: absolute;right: 20px;top: 16px;color: #ffffff;font-weight: bold;">+ 添加</div>
                             </div>
                         </td>
                     </tr>
@@ -333,7 +349,6 @@
                         <th width="10%">头像</th>
                         <th width="10%">用户名</th>
                         <th width="10%">账号权限</th>
-                        <th width="5%">艺术家</th>
                         <th width="5%">性别</th>
                         <th width="10%">操作</th>
                     </tr>
@@ -438,7 +453,6 @@
                                     '<td>http://iamges</td>' +
                                     '<td>name</td>' +
                                     '<td>auth</td>' +
-                                    '<td>isArtist</td>' +
                                     '<td>sex</td>' +
                                     '<td>' +
                                     '<div><a class="edit btn btn-default btn-xs">编辑</a></div>' +
@@ -496,9 +510,8 @@
                                                 $(td[2]).html(user.avatar);
                                                 $(td[3]).html(user.name);
                                                 $(td[4]).html(user.auth);
-                                                $(td[5]).html(user.isArtist===0?"否":"是");
-                                                $(td[6]).html(user.sex===0?'男':'女');
-                                                $(td[7]).find(">div").show();
+                                                $(td[5]).html(user.sex===0?'男':'女');
+                                                $(td[6]).find(">div").show();
                                             }else {
                                                 $(td[0]).css('color','#fff');
                                                 $(td[1]).html('');
@@ -506,8 +519,7 @@
                                                 $(td[3]).html('');
                                                 $(td[4]).html('');
                                                 $(td[5]).html('');
-                                                $(td[6]).html('');
-                                                $(td[7]).find(">div").hide();
+                                                $(td[6]).find(">div").hide();
                                             }
 
                                         }
@@ -742,6 +754,7 @@
                                         <select name="review" class="form-control" style="padding: 0;border:none;margin: 0;outline: none;box-shadow: none">
                                             <option value="0">待审核</option>
                                             <option value="1">已通过</option>
+                                            <option value="-1">未过审</option>
                                         </select>
                                     </div>
                                 </div>
@@ -831,7 +844,7 @@
                                                 $(td[1]).html(art.id);
                                                 $(td[2]).html(art.name);
                                                 $(td[3]).html(art.artistName).attr('id',art.artist);
-                                                $(td[4]).html(art.review);
+                                                $(td[4]).html(art.review===1?'通过':art.review===-1?'未过审':'待审核');
                                                 $(td[5]).html(art.score);
                                             }else {
                                                 td.css('opacity',0);
@@ -868,7 +881,7 @@
                                 name:$(td[2]).html(),
                                 artistId:td[3].id,
                                 artistName:$(td[3]).html(),
-                                review:$(td[4]).html()==='通过'?'1':'0',
+                                review:$(td[4]).html()==='通过'?'1':$(td[4]).html()==='未过审'?'-1':'0',
                                 score:$(td[5]).html()
                             };
                             console.log(modalData);
@@ -891,7 +904,7 @@
                                         $modal.find('.info').html(data.info);
                                         var $media=$modal.find('.media');
                                         var $image=$media.find('.image').html('');
-                                        for (let i = 0; i < data.media.length; i++) {
+                                        for (var i = 0; i < data.media.length; i++) {
                                             var m=data.media[i];
                                             if(m.type==='image'){
                                                 $image.append($('<div data-id="'+m.id+'" class="img"><img src="'+m.url+'"></div>'));
@@ -944,7 +957,7 @@
                             var dataArr=$modal.serializeArray();
                             var param={};
                             console.log(modalData);
-                            for (let i = 0; i < dataArr.length; i++) {
+                            for (var i = 0; i < dataArr.length; i++) {
                                 if(dataArr[i].value&&dataArr[i].value!==modalData[dataArr[i].name]){
                                     param[dataArr[i].name]=dataArr[i].value;
                                 }
@@ -958,7 +971,7 @@
                             }
                             var deleteMedias=$('.markDelete');
                             console.log(deleteMedias);
-                            for (let i = 0; i < deleteMedias.length; i++) {
+                            for (var i = 0; i < deleteMedias.length; i++) {
                                 if(!param.delArr){
                                     param.delArr=[];
                                 }
@@ -1026,7 +1039,7 @@
                         });
                         function pushSug(arr) {
                             var box=$('.sugBox').html('').show();
-                            for (let i = 0; i < arr.length; i++) {
+                            for (var i = 0; i < arr.length; i++) {
                                 box.append($('<li class="list-group-item"></li>').html(arr[i].name+'  id:'+arr[i].id+' ')
                                     .append($('<span data-name="'+arr[i].name+'" data-id="'+arr[i].id+'" style="float: right;" class="btn btn-xs btn-default">︎ ↖︎ 设置</span>')))
                             }
@@ -1037,5 +1050,68 @@
         </div>
     </div>
 </section>
+<form class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+            </div>
+            <style>
+                .addUserForm>div{
+                    padding: 10px;
+                }
+            </style>
+            <div  class="modal-body addUserForm">
+                <div class="input-group">
+                    <span class="input-group-addon">用户名</span>
+                    <input name="username" type="text" class="form-control">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">密码</span>
+                    <input name="password" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary">立即添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</form>
 </body>
+<script>
+    $('#addUser').click(function () {
+        $("#addUserModal").modal('show');
+    });
+    $('#addUserModal').submit(function (e) {
+        e.preventDefault();
+        var form=$(this);
+        var arr=form.serializeArray();
+        for (var i = 0; i < arr.length; i++) {
+            if(!arr[i].value){
+                alert("表单不能留空");
+                return;
+            }
+            if(arr[i].name==='password'){
+                arr[i].value=md5(arr[i].value);
+            }
+        }
+        $.ajax({
+            url:'/open/register',
+            type:'post',
+            datatype:'json',
+            data:arr,
+            success:function (resp) {
+                if(resp.code===200){
+                    form.modal('hide');
+                    $('#srhUserForm').submit();
+                }else {
+                    alert(resp.message)
+                }
+            }
+        })
+
+    })
+</script>
 </html>

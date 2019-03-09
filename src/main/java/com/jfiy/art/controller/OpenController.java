@@ -17,9 +17,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/open")
 public class OpenController {
-    @Autowired UserService userService;
+    private final UserService userService;
+    private final ArtworkService artworkService;
+
     @Autowired
-    ArtworkService artworkService;
+    public OpenController(UserService userService, ArtworkService artworkService) {
+        this.userService = userService;
+        this.artworkService = artworkService;
+    }
+
     @PostMapping("/login")
     public Object login(HttpSession session,String name,String pwd) throws Exception {
         return userService.login(session,name,pwd);
@@ -32,4 +38,6 @@ public class OpenController {
     public List recommendList(int offset){
         return artworkService.getRecommendList(offset);
     }
+
+
 }

@@ -1,7 +1,6 @@
 package com.jfiy.art.dao;
 
 
-import com.jfiy.art.entity.Artwork;
 import com.jfiy.art.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface ArtworkMapper {
 
-    List<Artwork> findArtworkByUser(User user);
+    List<HashMap> findArtworkByUser(User user);
     List<HashMap> findArtworkByScore(HashMap map);
     List<HashMap> findArtworkByTime(HashMap map);
     List<HashMap> findArtList(HashMap map);
@@ -24,4 +23,23 @@ public interface ArtworkMapper {
     void updateArt(HashMap hashMap);
     List<HashMap> findArtRecommendList(int offset);
 
+    void addArtwork(HashMap hashMap);
+
+    HashMap getArtInfoById(String id);
+    List<HashMap> getMediaListByArtId(String id);
+    List<HashMap> getCommentListBuArtId(String id);
+
+    void addRecommend(HashMap hashMap);
+
+    HashMap<String,Object> getArtistById(String userId);
+
+    void insertArtist(HashMap<String, Object> stringObjectHashMap);
+
+    void updateArtistByUserId(HashMap<String, Object> stringObjectHashMap);
+
+    void removeCommend(String id);
+
+    void scoreIncr(String id);
+
+    HashMap getSysInfo();
 }

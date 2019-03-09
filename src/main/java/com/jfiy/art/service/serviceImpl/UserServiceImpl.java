@@ -20,7 +20,9 @@ public class UserServiceImpl implements UserService {
         user.setName(name);
         user.setPwd(pwd);
         user=userMapper.findUserByNameAndPwd(user);
-        session.setAttribute("user",user);
+        if(session.getAttribute("user")==null){
+            session.setAttribute("user",user);
+        }
         HashMap<String,Object> map=new HashMap<>();
         if(user!=null){
             map.put("id", user.getId());
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
         try{
             userMapper.addUser(user);
             user = userMapper.findUserByNameAndPwd(user);
+            userMapper.addArtist(user.getId()+"");
             session.setAttribute("user",user);
             return user;
         }catch (Exception e){
@@ -84,5 +87,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<HashMap> getUserSugByIdOrName(String keyword) {
         return userMapper.findUserForSug(keyword);
+    }
+
+    @Override
+    public void updateArtist(HashMap hashMap) {
+        userMapper.updateArtist(hashMap);
+    }
+
+    @Override
+    public HashMap getArtistById(String id) {
+        return userMapper.getArtistById(id);
     }
 }

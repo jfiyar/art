@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${info.get('name')}">Title</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+        body{
+            margin: 0;
+            background: #eeeeee;
+        }
+        .banner{
+            height: 40vh;
+            background-size: cover;
+            box-shadow: 0 3px 3px #000;
+        }
+        .bannerMask{
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.54);
+            color: #ffffff;
+            position: relative;
+        }
+        .mediaBox{
+            display: flex;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        .mediaBox>img{
+            height: 200px;
+            margin: 20px;
+            border-radius:20px;
+            box-shadow:3px 3px 3px #000;
+        }
+        .commend{
+            background: #ffffff;
+            padding: 20px;
+        }
+        .noCommend{
+            padding: 30px;
+            text-align: center;
+            color: #aaaaaa;
+        }
+        .list{
+            padding: 5px 0;
+            border-bottom: 1px solid #efefef;
+            margin-bottom: 20px;
+        }
+        .reply{
+            display: none;
+            margin: 10px;
+            border-left: 4px solid rgba(0, 0, 0, 0.05);
+            padding: 10px;
+            background: rgba(0,0,0,0.05);
+            border-bottom: none;
+        }
+        .avatar{
+            height: 200px;
+            border:2px solid rgba(0, 0, 0, 0.42);
+            margin-left: 20px;
+            border-radius:30px;
+            box-shadow:3px 3px 3px #000;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <style>
+        .nav{color: #ffffff;position: absolute;top: 0;width: 100%;height: 100px;z-index: 99;transition: 600ms;}
+        .nav .ipt{border-color: #fff;}
+        .nav input{color: #ffffff;}
+        .nav-scroll-not-top .ipt{border-color: #444;}
+        .nav-scroll-not-top input{color: #444;}
+    </style>
+    <div class="nav">
+        <div style="position: absolute;width: 100%;max-width: 1400px;margin: 0 auto;left: 0;right: 0;padding-top: 30px;font-weight: lighter;font-size: 20px;">
+            <!-- 左侧图标 -->
+            <div data-page="homepage" class="nav-menu-item" style="width: 200px;text-align: center;float: left;cursor: pointer;">
+                <a style="color: #ffffff;" href="/">
+                    <div><span class="glyphicon glyphicon-book"></span> 艺术网</div>
+                    <div>artwork website</div>
+                </a>
+            </div>
+            <!-- 右侧导航 -->
+            <style>.header-nav>div{cursor: pointer;
+                margin-left: 50px;}</style>
+            <div class="header-nav" style="float: right;display: flex;justify-content: flex-end; width: 800px;">
+
+                <div class="ipt" style="display: inline-block;border: 1px solid;height: 40px;">
+                    <label for="srh">
+                        <input id="srh" type="text" style="border: none;outline: none;background: none;">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </label>
+                </div>
+
+
+                <div style="display: inline-block;">
+                    <th:block th:if="${session.user!=null}">
+                        <div style="display: inline-block;" class="dropdown">
+                                <span class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <span th:text="${session.user.getName()}"> </span>
+                                </span>
+                            <a href="/logout">
+                                <span> 注销</span>
+                            </a>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${session.user==null}">
+                        <a  href="/login">去登录</a> /
+                        <a href="/register">去注册</a>
+                    </th:block>
+                </div>
+
+            </div>
+            <!-- 导航 end -->
+        </div>
+    </div>
+</div>
+<div class="banner" th:style="'background-image:url('+${info.get('url')}+')'">
+    <div class="bannerMask">
+        <div style="position: absolute;bottom: 20px;left: 20px;width:1000px;">
+            <img style="float: left;" th:src="${'/upload/'+info.get('avatar')}" class="avatar" alt="">
+            <div style="float: left;width: 80%;margin-left: 20px;">
+                <a th:href="'/artist/'+${info.get('artist')}" style="display: block;margin-top: 10px;font-size: 20px;color: #ffffff;" th:text="${info.get('artist_name')}"></a>
+                <p style="margin-top: 20px;" th:text="${info.get('info')}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="mediaBox">
+        <img  th:each="item:${media}" th:src="${item.get('url')}" alt="">
+    </div>
+</div>
+<div class="commend">
+    <div class="noCommend" th:if="${commend.size()==0}">评论区空空如也～</div>
+    <div class="list reply" th:class="'list'+${item.get('reply')==0?'':' reply'}" th:data-reply="${item.get('reply')}" th:id="${item.get('id')}" th:each="item:${commend}">
+        <a th:text="${item.get('username')}"></a>在 <a th:text="${item.get('timestamp')}"></a> <span class="tip">评论：</span>
+        <span th:text="${item.get('content')}"></span>
+        <div th:if="${session.user!=null}" style="text-align: right;cursor: pointer;">
+            <a style="color: #ff464d;" th:if="${session.user.getId()+''==item.get('user_id')+''}" class="deleteBtn" th:data-id="${item.get('id')}">删除</a>
+            <a class="replyBtn" th:data-id="${item.get('id')}">回复</a>
+        </div>
+    </div>
+    <div th:if="${session.user==null}" style="text-align: center;padding: 20px;border-top: 1px solid #efefef;color:#888">
+        您还没有<a href="/login">登录</a>，赶紧<a href="/login">登录</a>或<a href="/register">注册</a>，发表精彩评论吧～
+    </div>
+    <form th:if="${session.user!=null}" id="sendForm" class="input-group">
+        <input id="content" type="text" class="form-control">
+        <span class="input-group-addon" style="background: #009aff;color: #ffffff;">
+            <button style="background: none;outline: none;border:none;height: 100%;width: 100%;color: #ffffff;" type="submit">
+                <span class="glyphicon glyphicon-send"></span> 发送
+            </button>
+        </span>
+    </form>
+</div>
+<script>
+    $('.reply').each(function () {
+        var p=$('#'+$(this).attr('data-reply'));
+        $(this).find('.tip').html('回复：');
+        if(p.length!==0){
+            p.append($(this).show());
+        }
+    });
+    $('.replyBtn').click(function () {
+       $('#content').val('回复@'+$(this).attr('data-id')+'&rp;').focus();
+    });
+    $('.deleteBtn').click(function () {
+        $.ajax({
+            url:'/api/commend/delete',
+            type:'post',
+            datatype:'json',
+            data:{
+                id:$(this).attr('data-id')
+            },
+            success:function () {
+                window.location.reload();
+            }
+        })
+    });
+    $('#sendForm').submit(function (e) {
+        e.preventDefault();
+        var data={};
+        data.content=$("#content").val();
+        data.reply=0;
+        if(data.content.substr(0,3)==="回复@"){
+            var arr=data.content.split("&rp;");
+            data.reply=arr[0].split('@')[1];
+            data.content=arr[1];
+        }
+        data.id=window.location.pathname.split("/").pop();
+        $.ajax({
+            url:'/api/commend',
+            type:'post',
+            datatype:'json',
+            data:data,
+            success:function () {
+                window.location.reload();
+            }
+
+        })
+    })
+</script>
+</body>
+</html>

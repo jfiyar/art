@@ -18,5 +18,9 @@ public interface UserMapper {
     List<HashMap> findUserForSug(String keyword);
 
 
+    void updateArtist(HashMap hashMap);
 
+    void addArtist(String id);
+
+    HashMap getArtistById(String id);
 }

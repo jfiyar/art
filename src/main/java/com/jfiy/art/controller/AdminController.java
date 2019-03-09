@@ -63,8 +63,6 @@ public class AdminController {
     @PostMapping("/art/upload")
     public void uploadArtMedia(@RequestParam MultipartFile file, HttpServletRequest request){
         String id=request.getParameter("artwork_id");
-        System.out.println(id);
-        System.out.println(file.getOriginalFilename());
         artworkService.uploadArtworkMedia(id,file);
     }
 }

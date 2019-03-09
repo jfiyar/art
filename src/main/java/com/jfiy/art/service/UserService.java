@@ -13,4 +13,8 @@ public interface UserService {
     List<User> getUserList(HashMap<String,Object> queryMap);
     void updateUser(HashMap<String,Object> queryMap);
     List<HashMap> getUserSugByIdOrName(String keyword);
+
+    void updateArtist(HashMap hashMap);
+
+    HashMap getArtistById(String id);
 }
