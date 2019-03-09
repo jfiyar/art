@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html lang="cn"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>艺术家简介及其艺术作品在线展示系统</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</head>
+<style>
+    ul,li{list-style: none;margin: 0;padding: 0;}
+    a{color:inherit}
+    body{font-family:"PingFang SC","Microsoft Yahei","Microsoft Sans Serif", sans-serif;margin: 0;background: #efefef url("../static/img/loopBg.jpg");}
+</style>
+<body th:style="'background: url('+'/img/loopBg.jpg'+')'"><!--  -->
+<!-- header -->
+<section style="height: 40vh;">
+    <!-- 灰色背景 -->
+    <div style="width: 100%;height: 100%;">
+        <!-- 轮播 -->
+        <style>
+            #myCarousel .item{height: 40vh;width: 100%;background-size: cover}
+            #myCarousel .item::after{content: " ";display: block;position: absolute;width: 100%;height: 40vh;background: rgba(0, 0, 0, 0.56);}
+        </style>
+        <div
+                id="myCarousel" style="width: 100%;position: absolute;border-bottom: 1px solid #9f9f9f;
+                    left: 0;right: 0;box-shadow:0 5px 4px #000;border-radius: 0 0 20px 20px;overflow: hidden;"
+                class="carousel slide carousel-fade homepage-model"
+        >
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0"
+                    class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active" th:style="'background-image: url(/img/banner1.jpg)'" style="background-image: url('../static/img/banner1.jpg')"></div>
+                <div class="item" th:style="'background-image: url(/img/banner2.jpg)'" style="background-image: url('../static/img/banner2.jpg');"></div>
+                <div class="item" th:style="'background-image: url(/img/banner3.jpg)'" style="background-image: url('../static/img/banner3.jpg');"></div>
+            </div>
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <!-- 内容容器 -->
+        <style>
+            .nav{color: #ffffff;position: fixed;top: 0;width: 100%;height: 100px;z-index: 99;transition: 600ms;}
+            .nav .ipt{border-color: #fff;}
+            .nav input{color: #ffffff;}
+            .nav-scroll-not-top{background: #fff;
+                color: #444444;border-bottom: 1px solid #fff;box-shadow: 0 6px 6px rgba(0, 0, 0, 0.42);}
+            .nav-scroll-not-top .ipt{border-color: #444;}
+            .nav-scroll-not-top input{color: #444;}
+            .nav-menu-item-active{font-size: 30px;font-weight: bold;}
+        </style>
+        <div class="nav">
+            <div style="position: absolute;width: 100%;max-width: 1400px;margin: 0 auto;left: 0;right: 0;padding-top: 30px;font-weight: lighter;font-size: 20px;">
+                <!-- 左侧图标 -->
+                <div data-page="homepage" class="nav-menu-item" style="width: 200px;text-align: center;float: left;cursor: pointer;">
+                    <div><span class="glyphicon glyphicon-book"></span> 艺术网</div>
+                    <div>artwork website</div>
+                </div>
+                <!-- 右侧导航 -->
+                <style>.header-nav>div{cursor: pointer;
+                    margin-left: 50px;}</style>
+                <div class="header-nav" style="float: right;display: flex;justify-content: flex-end; width: 800px;">
+
+                    <div class="ipt" style="display: inline-block;border: 1px solid;height: 40px;">
+                        <label for="srh">
+                            <input id="srh" type="text" style="border: none;outline: none;background: none;">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </label>
+                    </div>
+
+                    <div id="homepage-nav" data-page="homepage" class="nav-menu-item-active nav-menu-item" style="display: inline-block;">
+                        <span class="glyphicon glyphicon-home"></span> 首页
+                    </div>
+
+                    <!--<div style="display: inline-block;">-->
+                    <!--<span class="glyphicon glyphicon-th-list"></span> 分类-->
+                    <!--</div>-->
+
+                    <div id="star-page-nav" data-page="star-page" class="nav-menu-item" th:if="${session.user!=null}" style="display: inline-block;">
+                        <span class="glyphicon glyphicon-bookmark"></span> 我的作品
+                    </div>
+
+                    <div style="display: inline-block;">
+                        <th:block th:if="${session.user!=null}">
+                            <div style="display: inline-block;" class="dropdown">
+                                <span class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <span th:text="${session.user.getName()}"> </span>
+                                </span>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="#">消息通知</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
+                                    </li>
+                                    <li role="presentation" class="divider"></li>
+                                    <li role="presentation">
+                                        <a style="color: #8a0000;" role="menuitem" tabindex="-1" href="/logout">
+                                            <span class="glyphicon glyphicon-log-out"></span>
+                                            <span> 注销登录</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${session.user==null}">
+                            <a  href="/login">去登录</a> /
+                            <a href="/register">去注册</a>
+                        </th:block>
+                    </div>
+
+                </div>
+                <!-- 导航 end -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- header end -->
+<section class="homepage-model" id="box" style="display: flex;justify-content:space-evenly;flex-wrap: wrap;">
+    <style>
+        .art-item{position: relative;overflow: hidden;margin: 20px;border:2px solid #aaa;box-shadow: 2px 2px 3px #000 ;border-radius: 10px;}
+        .art-item p{margin-bottom: 0;}
+        .art-item .info{max-height: 80px;overflow: hidden;position: relative;line-height: 20px;font-weight: lighter;text-shadow: 1px 1px 1px #000;}
+        .art-item .info:after{content: "...";display: block;position: absolute;right: 0;bottom: 0;}
+        .art-item>img{display: block;height: 300px;width: auto;background: #ffffff;}
+        .art-item:hover>div{display: block;}
+        .art-item>div{display: none;position: absolute;bottom: 0;width: 100%;background: rgba(0, 0, 0, 0.54);padding: 10px;color: #ffffff;}
+        .art-title-tag{display: inline-block;background: rgb(201,201,201);padding: 6px 40px;border-radius: 30px;border:4px solid #ffffff;
+            box-shadow:3px 3px 3px #000;font-weight: bold;font-size: 18px;color: #73cdff;text-shadow: 0 1px 2px #000;}
+
+    </style>
+    <div id="art-item-fragment" th:style="'display:none'" style="display: none;">
+        <a href="#" th:fragment="artTemplate (src,name,artist,info,score)" class="art-item">
+            <img class="url" th:src="${src}" src="../static/img/2.jpg" alt="2">
+            <div>
+                <p>
+                    <span class="name" th:text="${name}">title</span>
+                    <span class="score" th:text="${score}">score</span>
+                </p>
+                <p class="artist" th:text="${artist}">artist</p>
+                <p class="info" th:text="${info}">this is my xia ji ba write,you are not use free to attention this.</p>
+            </div>
+        </a>
+    </div>
+    <div
+            style="width: 100%;height: 30px;text-align: center;padding: 20px;margin-bottom: 30px;"
+    >
+        <div style="color: gold;" class="art-title-tag">排行榜</div>
+    </div>
+    <th:block th:each="art,state:${byScore}">
+        <div th:replace="::artTemplate(${art.get('url')},${art.get('name')},${art.get('artist_name')},${art.get('info')},${art.get('score')})"></div>
+    </th:block>
+    <div style="width: 100%;text-align: center;">
+        <div class="art-title-tag">最新更新</div>
+    </div>
+    <th:block th:each="art,state:${byTime}">
+        <div th:replace="::artTemplate(${art.get('url')},${art.get('name')},${art.get('artist_name')},${art.get('info')},${art.get('score')})"></div>
+    </th:block>
+    <div style="width: 100%;text-align: center;">
+        <div style="color: #ffffff;" class="art-title-tag">推荐</div>
+    </div>
+    <script>
+        var loading=false;
+        var end=false;
+        var offset=0;
+        var page='homepage';
+        !function(){
+            var homeScroll=0,starScroll=0;
+            var $nav=$('.nav-menu-item').on('click',function () {
+                page=this.getAttribute('data-page');
+                $nav.removeClass('nav-menu-item-active');
+                $('#'+page+'-nav').addClass('nav-menu-item-active');
+                var homepageModel=$('.homepage-model'),
+                    starPageModel=$('.star-page-model'),
+                    nav=$('.nav');
+                if(page==='star-page'){
+                    homeScroll=$(window).scrollTop();
+                    homepageModel.hide();
+                    starPageModel.show();
+                    $(window).scrollTop(starScroll);
+                    nav.addClass("nav-scroll-not-top");
+                }else {
+                    starScroll=$(window).scrollTop();
+                    starPageModel.hide();
+                    homepageModel.show();
+                    nav.css({
+                        height:'',
+                        background:''
+                    });
+                    $(window).scrollTop(homeScroll);
+                    $(window).scroll();
+                }
+            });
+        }();
+        $(window).scroll(function(){
+            var scrollTop = $(this).scrollTop();
+            var windowHeight = $(this).height();
+            var scrollHeight = $(document).height();
+            if(scrollTop<100&&page==='homepage'){
+                $('.nav').removeClass("nav-scroll-not-top");
+            }else {
+                $('.nav').addClass("nav-scroll-not-top");
+            }
+            if(scrollTop+windowHeight+2>=scrollHeight&&page==='homepage'){
+                console.log(loading);
+                if(end){
+                    console.log("no more");
+                    return;
+                }
+                if(loading){
+                    return;
+                }
+                loading=true;
+                $.ajax({
+                    type:'get',
+                    datatype:'json',
+                    data:{offset:offset},
+                    url:'/open/art/list',
+                    success:function (data) {
+                        loading=false;
+                        console.log(data);
+                        offset+=10;
+                        if(data.code===200){
+                            data=data.data;
+                            if(data.length===0){
+                                end=true;
+                            }
+                            var $box=$('#box');
+                            var $art=$('#art-item-fragment').find('>a');
+                            for (var i = 0; i < data.length; i++) {
+                                var $artClone=$art.clone(),
+                                    art=data[i];
+                                $artClone.find('.url').attr('src',art.url);
+                                $artClone.find('.name').html(art.name);
+                                $artClone.find('.score').html(art.score);
+                                $artClone.find('.info').html(art.info);
+                                $box.append($artClone);
+                            }
+                        }
+                    }
+                })
+            }
+        });
+        $(window).scroll();
+    </script>
+</section>
+<section class="star-page-model">
+
+</section>
+</body>
+</html>

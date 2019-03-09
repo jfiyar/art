@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jfiy.art.dao.ArtworkMapper">
 
-    <select id="findArtworkByUser" resultType="com.jfiy.art.entity.Artwork" parameterType="com.jfiy.art.entity.User">
-        select * from artwork where artist=#{id}
+    <select id="findArtworkByUser" resultType="HashMap" parameterType="com.jfiy.art.entity.User">
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.artist=#{id}
     </select>
     <select id="findArtworkByScore" resultType="HashMap" parameterType="HashMap">
-        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a order by score desc limit #{limit} offset #{offset}   </select>
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.review=1 order by score desc limit #{limit} offset #{offset}   </select>
     <select id="findArtworkByTime" resultType="HashMap" parameterType="HashMap">
-        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a order by id desc limit #{limit} offset #{offset}
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.review=1 order by id desc limit #{limit} offset #{offset}
     </select>
 
     <select id="findArtList" parameterType="HashMap" resultType="HashMap">
@@ -35,14 +35,15 @@
         <if test="order!=null">
             <if test="by==null">order by id </if>desc
         </if>
-        limit #{limit} offset #{offset}
+        <if test="limit!=null">limit #{limit} offset #{offset}</if>
+
     </select>
 
     <select id="findArtMediaById" resultType="HashMap" parameterType="int">
         select * from  artwork_media where artwork_id=#{1}
     </select>
     <select id="findArtInfoById" resultType="String" parameterType="int">
-        select info from artwork where id=#{1}
+        select info from artwork where id=#{1} and review=1
     </select>
 
     <insert useGeneratedKeys="true" keyProperty="id" id="addArtMedia" parameterType="HashMap">
@@ -58,19 +59,65 @@
     </update>
     <update id="updateArt" parameterType="HashMap">
     update artwork <set>
-        <if test="name!=null">name=#{name}</if>
-        <if test="review!=null">review=#{review}</if>
-        <if test="info!=null">info=#{info}</if>
-        <if test="artist!=null">artist=#{artist}</if>
-where id=#{id}
+        <if test="name!=null">name=#{name},</if>
+        <if test="review!=null">review=#{review},</if>
+        <if test="info!=null">info=#{info},</if>
+        <if test="artist!=null">artist=#{artist},</if>
     </set>
+        where id=#{id}
     </update>
     <delete id="removeArtMediaById">
         delete from artwork_media where id=#{1}
     </delete>
 
     <select id="findArtRecommendList" resultType="HashMap" parameterType="int">
-        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a  limit 10 offset #{1}
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.review=1 limit 10 offset #{1}
     </select>
 
+    <insert id="addArtwork" useGeneratedKeys="true" keyProperty="id" parameterType="HashMap">
+        insert into artwork ( name, artist, info) values (#{name},#{artist},#{info})
+    </insert>
+
+    <select id="getArtInfoById" parameterType="String" resultType="HashMap">
+        select b.avatar,a.*,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a left join artist b on a.artist=b.user_id where a.id=#{0} and a.review=1
+    </select>
+    <select id="getMediaListByArtId" resultType="HashMap" parameterType="String">
+        select * from artwork_media where artwork_id=#{0}
+    </select>
+
+    <select id="getCommentListBuArtId" resultType="HashMap" parameterType="String">
+        select *,user.name as username from artwork_comment left join user on user_id=user.id where art_id=#{0}
+    </select>
+
+    <insert id="addRecommend" parameterType="HashMap">
+insert into artwork_comment (reply, user_id, content, timestamp, art_id)values (#{reply},#{user},#{content},default,#{id});
+    </insert>
+
+    <select id="getArtistById" resultType="HashMap" parameterType="String">
+        select * from artist where user_id=#{0}
+    </select>
+    <insert id="insertArtist" parameterType="HashMap">
+        insert into artist (user_id) values (#{user_id});
+    </insert>
+    <update id="updateArtistByUserId" parameterType="HashMap">
+        update artist <set>
+        <if test="avatar!=null">avatar=#{avatar},</if>
+        <if test="nation!=null">nation=#{nation},</if>
+        <if test="birthday!=null">birthday=#{birthday},</if>
+        <if test="profession!=null">profession=#{profession},</if>
+        <if test="info!=null">info=#{info},</if>
+        <if test="review!=null">review=#{review},</if>
+    </set> where user_id=#{user_id}
+    </update>
+
+    <delete id="removeCommend" parameterType="String">
+        delete from artwork_comment where id=#{0}
+    </delete>
+
+    <update id="scoreIncr" parameterType="String">
+        update artwork set score=score+1 where id=#{id}
+    </update>
+    <select id="getSysInfo" resultType="HashMap">
+        select (select count(*) from user) as user,(select count(*) from artwork) as art,(select count(*) from artwork_comment) as commend
+    </select>
 </mapper>

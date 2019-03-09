@@ -1,12 +1,9 @@
 package com.jfiy.art.service.serviceImpl;
 
-import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.jfiy.art.dao.ArtworkMapper;
 import com.jfiy.art.entity.Artwork;
 import com.jfiy.art.entity.User;
 import com.jfiy.art.service.ArtworkService;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
@@ -16,7 +13,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +21,7 @@ public class ArtworkServiceImpl implements ArtworkService {
     @Autowired
     ArtworkMapper artworkMapper;
     @Override
-    public List<Artwork> getArtworkByUser(User user) {
+    public List<HashMap> getArtworkByUser(User user) {
 //        System.out.println(user.getName());
         return artworkMapper.findArtworkByUser(user);
     }
@@ -83,7 +79,6 @@ public class ArtworkServiceImpl implements ArtworkService {
     @Override
     public void uploadArtworkMedia(String id,MultipartFile file) {
         String fileName = file.getOriginalFilename();
-        System.out.println("上传的文件名为：" + fileName);
         // 获取文件的后缀名
         String suffixName;
         if (fileName != null) {
@@ -123,5 +118,86 @@ public class ArtworkServiceImpl implements ArtworkService {
     public List getRecommendList(int offset) {
         System.out.println(offset);
         return artworkMapper.findArtRecommendList(offset);
+    }
+
+    @Override
+    public HashMap addArt(HashMap hashMap) {
+        artworkMapper.addArtwork(hashMap);
+        return hashMap;
+    }
+
+    @Override
+    public HashMap getArtInfoById(String id) {
+        return artworkMapper.getArtInfoById(id);
+    }
+
+    @Override
+    public List<HashMap> getMediaListByArtId(String id) {
+        return artworkMapper.getMediaListByArtId(id);
+    }
+
+    @Override
+    public List<HashMap> getCommentListByArtId(String id) {
+        return artworkMapper.getCommentListBuArtId(id);
+    }
+
+    @Override
+    public void addRecommend(HashMap hashMap) {
+        artworkMapper.addRecommend(hashMap);
+    }
+
+    @Override
+    public void uploadArtistAvatar(String userId, MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        // 获取文件的后缀名
+        if(fileName==null){
+            return;
+        }
+        String suffixName=fileName.substring(fileName.lastIndexOf("."));
+        // 文件上传后的路径
+        try {
+            File path = new File(ResourceUtils.getURL("classpath:").getPath());
+            File upload = new File(path.getAbsolutePath(),"static/upload/");
+            String filePath = upload.getAbsolutePath()+"/";
+            String url= userId+Math.random() + suffixName;
+            if(artworkMapper.getArtistById(userId)==null){
+                artworkMapper.insertArtist(new HashMap<String,Object>(){{
+                    put("user_id",userId);
+                }});
+            }
+            artworkMapper.updateArtistByUserId(new HashMap<String,Object>(){{
+                put("avatar",url);
+                put("user_id",userId);
+            }});
+
+            File dest = new File(filePath +url);
+            try {
+                file.transferTo(dest);
+            } catch (IllegalStateException | IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public HashMap getArtist(String id) {
+        return artworkMapper.getArtistById(id);
+    }
+
+    @Override
+    public void removeCommend(String id) {
+        artworkMapper.removeCommend(id);
+    }
+
+    @Override
+    public void scoreIncr(String id) {
+        artworkMapper.scoreIncr(id);
+    }
+
+    @Override
+    public HashMap getSysInfo() {
+        return artworkMapper.getSysInfo();
     }
 }

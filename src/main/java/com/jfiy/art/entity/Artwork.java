@@ -9,6 +9,7 @@ public class Artwork {
   private String info;
   private long review;
   private double score;
+  private String avatar;
 
 
   public long getId() {
@@ -64,4 +65,11 @@ public class Artwork {
     this.score = score;
   }
 
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
 }
