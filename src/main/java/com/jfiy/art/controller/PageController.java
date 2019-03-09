@@ -75,11 +75,17 @@ public class PageController implements ErrorController {
     }
     @GetMapping("/art/{id}")
     public String artInfo(@PathVariable String id,Model model) {
-        artworkService.scoreIncr(id);
-        model.addAttribute("info",artworkService.getArtInfoById(id));
-        model.addAttribute("media",artworkService.getMediaListByArtId(id));
-        model.addAttribute("commend",artworkService.getCommentListByArtId(id));
-        return "art";
+        HashMap info=artworkService.getArtInfoById(id);
+        if(info!=null){
+            artworkService.scoreIncr(id);
+            model.addAttribute("info",info);
+            model.addAttribute("media",artworkService.getMediaListByArtId(id));
+            model.addAttribute("commend",artworkService.getCommentListByArtId(id));
+            return "art";
+        }else {
+            return "reviewing";
+        }
+
     }
 
     @GetMapping("/artist/{id}")
