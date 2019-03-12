@@ -75,10 +75,10 @@
                 <span class="glyphicon glyphicon-home"></span>
                 <span>首页</span>
             </li>
-            <!--<li id="sysBtn" key="sys">-->
-                <!--<span class="glyphicon glyphicon-cog"></span>-->
-                <!--<span>系统管理</span>-->
-            <!--</li>-->
+            <li id="reviewBtn" key="sys">
+                <span class="glyphicon glyphicon-cog"></span>
+                <span>艺术家审核</span>
+            </li>
             <li id="userBtn" key="user">
                 <span class="glyphicon glyphicon-user"></span>
                 <span>用户管理</span>
@@ -86,6 +86,10 @@
             <li id="artBtn" key="art">
                 <span class="glyphicon glyphicon-picture"></span>
                 <span>艺术作品管理</span>
+            </li>
+            <li id="commendBtn" key="art">
+                <span class="glyphicon glyphicon-picture"></span>
+                <span>评论管理</span>
             </li>
         </ul>
     </div>
@@ -134,11 +138,14 @@
             <div id="home">
                 <style>
                     .card{
-                        margin: 0 auto;
                         display: flex;
-                        justify-content: space-between;
-                        padding: 60px 20px 0;
-                        max-width: 1000px;
+                        justify-content: center;
+                        flex-wrap: wrap;
+                        background: #ffffff;
+                        padding: 20px;
+                        border-top: 10px solid #e211ff;
+                        box-shadow:0 2px 1px #aaa;
+                        margin: 0 20px 40px;
                     }
                     .card>div{
                         max-width: 280px;
@@ -150,10 +157,14 @@
                         line-height: 160px;
                         text-align: center;
                         color: #ffffff;
+                        margin: 20px;
+                        cursor: pointer;
                     }
 
                 </style>
+                <div style="padding-top: 40px;"></div>
                 <div class="card">
+                    <header style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;">系统信息</header>
                     <div style="background: #5fcf6e;">
                         <span style="font-size: 40px;">用户/</span>
                         <span th:text="${sys.get('user')}"></span>
@@ -168,6 +179,19 @@
                         <span style="font-size: 40px;">评论/</span>
                         <span th:text="${sys.get('commend')}"></span>
                         <span>条</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <header style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;">审核</header>
+                    <div style="background: #d815fa;">
+                        <span style="font-size: 40px;">艺术家/</span>
+                        <span th:text="${sys.get('review')}"></span>
+                        <span>位</span>
+                    </div>
+                    <div style="background: #d815fa;">
+                        <span style="font-size: 40px;">作品/</span>
+                        <span th:text="${sys.get('review')}"></span>
+                        <span>件</span>
                     </div>
                 </div>
             </div>
@@ -1111,7 +1135,6 @@
                 }
             }
         })
-
     })
 </script>
 </html>
