@@ -37,9 +37,6 @@ public class PageController implements ErrorController {
             model.addAttribute("sys",artworkService.getSysInfo());
             return "admin/index";
         }
-        if(user!=null&&user.getAuth().equals("referee")){
-            return "referee/index";
-        }
         model.addAttribute("byScore",artworkService.getArtworkByScore(0,5));
         model.addAttribute("byTime",artworkService.getArtworkByTime(0,5));
         if(user!=null){
@@ -52,7 +49,6 @@ public class PageController implements ErrorController {
             }
             model.addAttribute("myArt",artworkService.getArtworkByUser(user));
             model.addAttribute("artist",artist);
-
         }
         return "index";
     }
