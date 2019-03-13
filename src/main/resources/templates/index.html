@@ -90,7 +90,9 @@
                     <!--</div>-->
 
                     <div id="star-page-nav" data-page="star-page" class="nav-menu-item" th:if="${session.user!=null}" style="display: inline-block;">
-                        <span class="glyphicon glyphicon-bookmark"></span> 我的作品
+                        <span class="glyphicon glyphicon-bookmark"></span>
+                        <span th:if="${session.user.getIsArtist()==1}">我的作品</span>
+                        <span th:if="${session.user.getIsArtist()==0}">申请认证</span>
                     </div>
 
                     <div style="display: inline-block;">
@@ -279,7 +281,7 @@
         $(window).scroll();
     </script>
 </section>
-<section th:if="${session.user!=null}" class="star-page-model" style="margin-top: -40vh;padding-top: 120px;display: none;">
+<section th:if="${session.user!=null}" class="star-page-model" style="min-height: 1000px;margin-top: -40vh;padding-top: 120px;display: none;">
     <style>
         #uploadModalForm .input-group{
             width: 400px;
@@ -448,7 +450,7 @@
         </div><!-- /.modal-dialog -->
     </form>
 
-    <div style="text-align: center;">
+    <div th:if="${session.user.getIsArtist()==1}" style="text-align: center;">
         <div id="showUploadModal" style="color: #fff;cursor: pointer;" class="art-title-tag">+ 点击上传</div>
     </div>
     <script>
