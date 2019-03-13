@@ -201,4 +201,9 @@ public class ArtworkServiceImpl implements ArtworkService {
     public HashMap getSysInfo() {
         return artworkMapper.getSysInfo();
     }
+
+    @Override
+    public List<HashMap> srhArt(String s) {
+        return artworkMapper.srhArt(s);
+    }
 }

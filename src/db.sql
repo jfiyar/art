@@ -1,6 +1,5 @@
-drop database art;
-create database art;
-use art;
+
+
 create table artist
 (
   user_id    int                                 not null,

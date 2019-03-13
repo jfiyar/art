@@ -42,4 +42,6 @@ public interface ArtworkMapper {
     void scoreIncr(String id);
 
     HashMap getSysInfo();
+
+    List<HashMap> srhArt(String s);
 }

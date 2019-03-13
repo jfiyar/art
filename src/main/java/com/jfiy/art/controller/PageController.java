@@ -93,6 +93,13 @@ public class PageController implements ErrorController {
         model.addAttribute("art",artworkService.getArtworkByUser(user));
         return "artist";
     }
+    @GetMapping("/srh")
+    public String srh(String word,Model model) {
+        model.addAttribute("user",userService.getUserSugByIdOrName("%"+word+"%"));
+        model.addAttribute("art",artworkService.srhArt("%"+word+"%"));
+        model.addAttribute("word",word);
+        return "srh";
+    }
 
     @GetMapping(value = "/error")
     public String forbidden(HttpServletRequest request) {

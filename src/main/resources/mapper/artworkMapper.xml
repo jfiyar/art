@@ -120,4 +120,7 @@ insert into artwork_comment (reply, user_id, content, timestamp, art_id)values (
     <select id="getSysInfo" resultType="HashMap">
         select (select count(*) from user) as user,(select count(*) from artist where review=0) as reviewArtist,(select count(*) from artwork) as art,(select count(*) from artwork where review=0) as review,(select count(*) from artwork_comment) as commend
     </select>
+    <select id="srhArt" parameterType="String" resultType="HashMap">
+        select * from artwork where name like #{0} or id like #{0} or info like #{0}
+    </select>
 </mapper>

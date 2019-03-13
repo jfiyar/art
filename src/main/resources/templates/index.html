@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="cn"  xmlns:th="http://www.thymeleaf.org">
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>艺术家简介及其艺术作品在线展示系统</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
@@ -77,7 +77,7 @@
                     <div class="ipt" style="display: inline-block;border: 1px solid;height: 40px;">
                         <label for="srh">
                             <input id="srh" type="text" style="border: none;outline: none;background: none;">
-                            <span class="glyphicon glyphicon-search"></span>
+                            <span id="srhClicker" class="glyphicon glyphicon-search"></span>
                         </label>
                     </div>
 
@@ -560,4 +560,9 @@
     <a>2019届 毕业设计</a>
 </footer>
 </body>
+<script>
+    $("#srhClicker").click(function () {
+        window.location.href="/srh?word="+$("#srh").val()
+    })
+</script>
 </html>

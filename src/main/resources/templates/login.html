@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,8 +8,11 @@
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body th:style="${'background-image:url(img/load.jpg)'}">
 <style>
+    body{
+        background-size: cover;
+    }
     form{
         width: 400px;
         height: 200px;
