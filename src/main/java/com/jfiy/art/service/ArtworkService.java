@@ -37,4 +37,6 @@ public interface ArtworkService {
     void scoreIncr(String id);
 
     HashMap getSysInfo();
+
+    List<HashMap> srhArt(String s);
 }

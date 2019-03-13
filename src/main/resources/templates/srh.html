@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title th:text="${word}+' 的搜索结果'">搜索</title>
+    <style>
+        .box>div{
+            margin-top: 20px;
+            background: #ffffff;
+            padding: 20px;
+        }
+    </style>
 </head>
-<body>
-$END$
+<body style="background: #f7f7f7;">
+<div style="max-width: 800px;margin: 0 auto;">
+    <form style="width: 300px;height: 30px;border: 1px solid #2090ff;" action="/srh">
+        <input style="border:none;outline: none;height: 100%;padding-left: 10px;width:230px;float: left;background: none;" th:value="${word}" type="text" name="word">
+        <button style="border:none;outline: none;height: 100%;width: 60px;float: left;background: #2090ff;color: #ffffff;" type="submit">搜索</button>
+    </form>
+    <div class="box">
+        <div th:if="${u.get('auth')!='admin'}" th:each="u:${user}">
+            <a th:href="'/artist/'+${u.get('id')}">
+                <span th:text="${'艺术家：'+u.get('name')}"></span>
+            </a>
+        </div>
+        <div th:each="a:${art}">
+            <a th:href="'/art/'+${a.get('id')}">
+                <span th:text="'艺术作品：'+${a.get('name')}"></span>
+                <p th:text="${a.get('info')}"></p>
+            </a>
+        </div>
+    </div>
+</div>
 </body>
 </html>
