@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户登陆</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.js"></script>
+    <link rel="stylesheet" href="../static/css/register.css" th:href="@{'/css/register.css'}">
+    <style>
+        .input-group-addon{
+            min-width: 80px;
+        }
+    </style>
+</head>
+<body>
+
+<div style="display: flex;position: fixed;width: 100%;height: 100%;justify-content: center;align-items: center">
+    <form action="/open/register" id="form-register" autocomplete="off" style="margin:0;width: 500px;">
+        <a href="/" style="text-decoration: none;">
+            <div data-page="homepage" class="nav-menu-item" style="width: 100%;
+        text-shadow:0 2px 2px #000;padding-bottom: 20px;
+        text-align: center;cursor: pointer;color:#fff;font-size: 90px;">
+                <div><span style="position: relative;top: 15px;" class="glyphicon glyphicon-book"></span> 艺术网</div>
+                <div style="font-size: 54px;margin-top: -20px;">artwork website</div>
+            </div>
+        </a>
+        <input type="password" name="password" style="display: none;">
+        <input type="text" name="username" style="display: none;">
+        <div class="input-group">
+            <span class="input-group-addon">用户名</span>
+            <input autocomplete="off" type="text" id="username" class="form-control" placeholder="请输入用户名">
+        </div>
+        <br>
+        <input type="text" name="username" style="display: none;">
+        <div class="input-group">
+            <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+            <input autocomplete="off"  onfocus="this.type='password'" id="password" class="form-control" placeholder="请输入密码">
+        </div>
+        <br>
+        <input type="text" name="username" style="display: none;">
+        <div class="input-group">
+            <span class="input-group-addon">确认密码</span>
+            <input onfocus="this.type='password'" autocomplete="off" id="repeat-password" class="form-control" placeholder="请再次输入密码">
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">生日</span>
+            <input autocomplete="off" type="date" id="birthday" class="form-control" placeholder="国籍">
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">职业</span>
+            <input autocomplete="off" id="profession" class="form-control">
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">国籍</span>
+            <input autocomplete="off" id="nation" class="form-control" placeholder="国籍">
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">简介</span>
+            <textarea autocomplete="off" id="info" rows="8" class="form-control" placeholder="50字以上"></textarea>
+        </div>
+        <br>
+        <button type="submit" style="background:#b71090;border-color: #002991" class="btn btn-danger btn-block">注册</button>
+        <div style="padding-top: 10px;">
+            <a style="float: left;padding-left: 0;color: #ffffff;font-size: 16px;" href="/register">普通用户注册</a>
+            <a href="/login" style="float: right;padding-left: 0;color: #ffffff;font-size: 16px;">登录</a>
+        </div>
+    </form>
+</div>
+<script>
+    var $registerForm=$("#form-register");
+    var $username=$("#username");
+    var $password=$("#password");
+    var $repeat_password=$("#repeat-password"),
+        $birthday=$("#birthday"),
+        $profession=$("#profession"),
+        $nation=$("#nation"),
+        $info=$("#info");
+    function valueIsNull($el){
+        $el=$el.val();
+        return $el.trim()===""||$el===null;
+    }
+    $registerForm.submit(function (event) {
+        event.preventDefault();
+        if(valueIsNull($username)){
+            alert("用户名不能为空");
+            return;
+        }
+        if(valueIsNull($password)){
+            alert("密码不能为空");
+            return;
+        }
+        if($username.val().length>32||$username.val()<2){
+            alert("昵称长度必须2-32位字符");
+            return;
+        }
+        if($password.val()!==$repeat_password.val()){
+            alert("两次输入的密码不一致");
+            return;
+        }
+        if(valueIsNull($birthday)){
+            alert("生日不能为空");
+            return;
+        }
+        if(valueIsNull($profession)){
+            alert("职业不能为空");
+            return;
+        }
+        if(valueIsNull($nation)){
+            alert("国籍不能为空");
+            return;
+        }
+        if(valueIsNull($info)){
+            alert("简介不能为空");
+            return;
+        }
+        if($info.val().length<50){
+            alert("简介不能少于50字");
+            return;
+        }
+
+        $.ajax({
+            method:'post',
+            url:"/open/artist-register",
+            datatype:'json',
+            data:{
+                username:$username.val(),
+                password:md5($password.val()),
+                birthday:$birthday.val(),
+                profession:$profession.val(),
+                nation:$nation.val(),
+                info:$info.val()
+            },
+            success:function (data) {
+                console.log(data);
+                if(data.code===200){
+                    window.location.href="/";
+                }else {
+                    alert(data.message)
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>

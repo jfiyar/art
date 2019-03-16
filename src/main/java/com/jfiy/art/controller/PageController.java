@@ -39,6 +39,7 @@ public class PageController implements ErrorController {
         }
         model.addAttribute("byScore",artworkService.getArtworkByScore(0,5));
         model.addAttribute("byTime",artworkService.getArtworkByTime(0,5));
+        model.addAttribute("topArtist",artworkService.findTopArtist());
         if(user!=null){
             HashMap artist=artworkService.getArtist(user.getId()+"");
             if(artist!=null&&artist.get("birthday")!=null){
@@ -55,6 +56,10 @@ public class PageController implements ErrorController {
     @GetMapping(value = "/register")
     public String register() {
         return "register";
+    }
+    @GetMapping(value = "/artist-register")
+    public String artistRegister() {
+        return "artist-register";
     }
     @GetMapping(value = "/login")
     public String login() {
@@ -94,10 +99,27 @@ public class PageController implements ErrorController {
         return "artist";
     }
     @GetMapping("/srh")
-    public String srh(String word,Model model) {
-        model.addAttribute("user",userService.getUserSugByIdOrName("%"+word+"%"));
-        model.addAttribute("art",artworkService.srhArt("%"+word+"%"));
+    public String srh(String word,Model model,String type) {
         model.addAttribute("word",word);
+        if(word.equals("")){
+            return "srh";
+        }
+        switch (type) {
+            case "all":
+                model.addAttribute("user", userService.srhArtist("%" + word + "%"));
+                model.addAttribute("art", artworkService.srhArt("%" + word + "%"));
+                break;
+            case "user":
+                model.addAttribute("user", userService.srhArtist("%" + word + "%"));
+                break;
+            case "art":
+                model.addAttribute("art", artworkService.srhArt("%" + word + "%"));
+                break;
+            default:
+                model.addAttribute("user", userService.srhArtist("%" + word + "%"));
+                model.addAttribute("art", artworkService.srhArt("%" + word + "%"));
+                break;
+        }
         return "srh";
     }
 

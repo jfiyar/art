@@ -9,50 +9,40 @@
     <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.js"></script>
     <link rel="stylesheet" href="../static/css/register.css" th:href="@{'/css/register.css'}">
-    <script>
-        function isNull(string){
-            return string.trim() === "" || string === null;
-        }
-        $(function () {
-            var loginForm=$("#login-form");
-            var usernameInput=$("#user-name-label");
-            var passwordInput=$("#user-password-label");
-            loginForm.submit(function (event) {
-                event.preventDefault();
-                var username=usernameInput.val();
-                var password=passwordInput.val();
-                if(isNull(username)){
-                    alert('用户名不能为空');
-                }else if(isNull(password)){
-                    alert('密码不能为空');
-                }else {
-                    loginForm.submit();
-                }
-            })
-        });
-    </script>
 </head>
 <body>
 
-<form action="/open/register" id="form-register">
+<form action="/open/register" id="form-register" autocomplete="off">
+    <a href="/" style="text-decoration: none">
+        <div data-page="homepage" class="nav-menu-item" style="width: 100%;
+        text-shadow:0 2px 2px #000;padding-bottom: 20px;
+        text-align: center;cursor: pointer;color:#fff;font-size: 90px;">
+            <div><span style="position: relative;top: 15px;" class="glyphicon glyphicon-book"></span> 艺术网</div>
+            <div style="font-size: 54px;margin-top: -20px;">artwork website</div>
+        </div>
+    </a>
+    <input type="password" name="password" style="display: none;">
+    <input type="text" name="username" style="display: none;">
     <div class="input-group">
         <span class="input-group-addon">用户名</span>
-        <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名">
+        <input autocomplete="off" type="text" id="username" class="form-control" placeholder="请输入用户名">
     </div>
     <br>
     <div class="input-group">
         <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
-        <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码">
+        <input autocomplete="off"  onfocus="this.type='password'" id="password" class="form-control" placeholder="请输入密码">
     </div>
     <br>
     <div class="input-group">
         <span class="input-group-addon">确认密码</span>
-        <input type="password" id="repeat-password" class="form-control" placeholder="请再次输入密码">
+        <input onfocus="this.type='password'" autocomplete="off" id="repeat-password" class="form-control" placeholder="请再次输入密码">
     </div>
     <br>
-    <br>
-    <button type="submit" class="btn btn-success">注册</button>
-    <a href="./index.html" th:href="@{'/'}" class="toHomepage">已有账户？去登录</a>
+    <button type="submit" style="background:#b71090;border-color: #002991" class="btn btn-danger btn-block">注册</button>
+    <div style="padding-top: 10px;">
+        <a style="float: left;padding-left: 0;color: #ffffff;font-size: 16px;" href="/artist-register">注册艺术家</a>
+        <a href="/login" style="float: right;padding-left: 0;color: #ffffff;font-size: 16px;">登录</a>
+    </div>
 </form>
 <script>
     var $registerForm=$("#form-register");

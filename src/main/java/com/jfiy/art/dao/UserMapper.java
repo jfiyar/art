@@ -23,4 +23,8 @@ public interface UserMapper {
     void addArtist(String id);
 
     HashMap getArtistById(String id);
+
+    List<HashMap> getArtist(HashMap hashMap);
+
+    List<HashMap> srhArtist(String s);
 }

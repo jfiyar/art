@@ -20,7 +20,7 @@ public class AdminController {
     @Autowired
     ArtworkService artworkService;
     @PostMapping("/user/list")
-    public List list(@RequestParam HashMap<String,Object> queryMap,int offset,int limit){
+    public List<com.jfiy.art.entity.User> list(@RequestParam HashMap<String,Object> queryMap, int offset, int limit){
         queryMap.put("offset",offset);
         queryMap.put("limit",limit);
         return userService.getUserList(queryMap);
@@ -37,7 +37,7 @@ public class AdminController {
     }
 
     @PostMapping("/art/list")
-    public List art(@RequestParam HashMap<String,Object> queryMap, int offset, int limit){
+    public List<HashMap> art(@RequestParam HashMap<String,Object> queryMap, int offset, int limit){
         queryMap.put("offset",offset);
         queryMap.put("limit",limit);
 //        System.out.println(JSON.toJSONString(queryMap));
@@ -51,7 +51,7 @@ public class AdminController {
     }
 
     @GetMapping("/user/sug")
-    public List getUserSug(String keyword){
+    public List<HashMap> getUserSug(String keyword){
         return userService.getUserSugByIdOrName(keyword);
     }
 
@@ -64,5 +64,38 @@ public class AdminController {
     public void uploadArtMedia(@RequestParam MultipartFile file, HttpServletRequest request){
         String id=request.getParameter("artwork_id");
         artworkService.uploadArtworkMedia(id,file);
+    }
+    @PostMapping("/artist")
+    public List<HashMap> review(@RequestParam HashMap<String, Object> hashMap, int offset, int limit){
+        hashMap.put("offset",offset);
+        hashMap.put("limit",limit);
+        return userService.getArtist(hashMap);
+    }
+    @GetMapping("/artist/update")
+    public void updateArtist(@RequestParam HashMap hashMap,String review,int user_id){
+        if(review!=null&&review.equals("1")){
+            userService.updateUser(new HashMap<String,Object>(){{
+                put("id",user_id);
+                put("isArtist",review);
+            }});
+        }
+        userService.updateArtist(hashMap);
+    }
+    @GetMapping("/art/type")
+    public List<HashMap> artType(){
+        return artworkService.findAllType();
+    }
+    @GetMapping("/art/type/update")
+    public void artTypeUpdate(@RequestParam HashMap hashMap){
+        artworkService.updateArtType(hashMap);
+    }
+    @GetMapping("/art/type/add")
+    public HashMap typeAdd(@RequestParam HashMap hashMap){
+        artworkService.addArtType(hashMap);
+        return hashMap;
+    }
+    @GetMapping("/art/type/remove")
+    public void artTypeRemove(@RequestParam HashMap hashMap){
+        artworkService.removeArtType(hashMap);
     }
 }

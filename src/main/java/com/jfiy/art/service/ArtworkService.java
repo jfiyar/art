@@ -1,5 +1,6 @@
 package com.jfiy.art.service;
 
+import com.jfiy.art.entity.Art;
 import com.jfiy.art.entity.Artwork;
 import com.jfiy.art.entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,4 +40,15 @@ public interface ArtworkService {
     HashMap getSysInfo();
 
     List<HashMap> srhArt(String s);
+    List<HashMap> findAllType();
+
+    void updateArtType(HashMap hashMap);
+
+    void addArtType(HashMap hashMap);
+
+    void removeArtType(HashMap hashMap);
+
+    List<Art> findArtByType(String[] types);
+
+    List<HashMap> findTopArtist();
 }

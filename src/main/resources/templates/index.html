@@ -54,12 +54,15 @@
         <!-- 内容容器 -->
         <style>
             .nav{color: #ffffff;position: fixed;top: 0;width: 100%;height: 100px;z-index: 99;transition: 600ms;text-shadow: 0 2px 2px #000}
-            .nav .ipt{border-color: #fff;}
-            .nav input{color: #ffffff;}
+            .nav .ipt{
+                line-height: 38px;
+                border:1px solid rgba(0, 0, 0, 0.3);
+                color: rgba(255, 255, 255, 0.51);
+                padding: 0 10px;
+                border-radius:20px;
+                font-size: 16px;}
             .nav-scroll-not-top{background: #fff;
                 color: #444444;border-bottom: 1px solid #fff;box-shadow: 0 6px 6px rgba(0, 0, 0, 0.42);text-shadow: none;}
-            .nav-scroll-not-top .ipt{border-color: #444;}
-            .nav-scroll-not-top input{color: #444;}
             .nav-menu-item-active{font-size: 30px;font-weight: bold;}
         </style>
         <div class="nav">
@@ -72,24 +75,37 @@
                 <!-- 右侧导航 -->
                 <style>.header-nav>div{cursor: pointer;
                     margin-left: 50px;}</style>
-                <div class="header-nav" style="float: right;display: flex;justify-content: flex-end; width: 800px;">
-
-                    <div class="ipt" style="display: inline-block;border: 1px solid;height: 40px;">
-                        <label for="srh">
-                            <input id="srh" type="text" style="border: none;outline: none;background: none;">
-                            <span id="srhClicker" class="glyphicon glyphicon-search"></span>
-                        </label>
+                <div class="header-nav" style="float: right;display: flex;justify-content: flex-end;">
+                    <div class="ipt" style="display: inline-block;height: 40px;background: rgba(255,255,255,0.52);">
+                        <form action="/srh" id="topSrhForm">
+                            <label for="srh" class="input-group">
+                                <select name="type" style="background: none;outline: none;border:none">
+                                    <option value="all">全部</option>
+                                    <option value="user">用户</option>
+                                    <option value="art">作品</option>
+                                </select>
+                                <input name="word" id="srh" type="text" style="border: none;outline: none;background: none;">
+                                <button style="background: none;outline: none;border:none;" type="submit" id="srhClicker"><span class="glyphicon glyphicon-search"></span></button>
+                            </label>
+                        </form>
+                        <script>
+                            $('#topSrhForm').submit(function (e) {
+                                if(!$('#srh').val().trim()){
+                                    e.preventDefault();
+                                }
+                            })
+                        </script>
                     </div>
 
                     <div id="homepage-nav" data-page="homepage" class="nav-menu-item-active nav-menu-item" style="display: inline-block;">
                         <span class="glyphicon glyphicon-home"></span> 首页
                     </div>
 
-                    <!--<div style="display: inline-block;">-->
-                    <!--<span class="glyphicon glyphicon-th-list"></span> 分类-->
-                    <!--</div>-->
+                    <div id="type-page-nav" data-page="type-page" class="nav-menu-item" style="display: inline-block;">
+                    <span class="glyphicon glyphicon-th-list"></span> 分类
+                    </div>
 
-                    <div id="star-page-nav" data-page="star-page" class="nav-menu-item" th:if="${session.user!=null}" style="display: inline-block;">
+                    <div th:if="${(session.user!=null)&&(session.user.getIsArtist()==1)}" id="star-page-nav" data-page="star-page" class="nav-menu-item" style="display: inline-block;">
                         <span class="glyphicon glyphicon-bookmark"></span>
                         <span th:if="${session.user.getIsArtist()==1}">我的作品</span>
                         <span th:if="${session.user.getIsArtist()==0}">申请认证</span>
@@ -163,11 +179,53 @@
     <div
             style="width: 100%;height: 30px;text-align: center;padding: 20px;margin-bottom: 30px;"
     >
-        <div style="color: gold;" class="art-title-tag">排行榜</div>
+        <div style="color: gold;" class="art-title-tag">热门作品</div>
     </div>
     <th:block th:each="art,state:${byScore}">
         <div th:replace="::artTemplate(${art.get('id')},${art.get('url')},${art.get('name')},${art.get('artist_name')},${art.get('info')},${art.get('score')})"></div>
     </th:block>
+    <div
+            style="width: 100%;height: 30px;text-align: center;padding: 20px;margin-bottom: 30px;"
+    >
+        <div style="color: gold;" class="art-title-tag">人气艺术家</div>
+    </div>
+    <style>
+        .artistCard{
+            width: 200px;
+            height: 300px;
+            background-color: #cecece;
+            margin: 20px;
+            border:#fff solid 2px;
+            box-shadow:0 2px 2px #999;
+            background-size: cover;
+            position: relative;
+            color:#fff;
+            letter-spacing: 1px;
+            font-weight: lighter;
+            text-shadow: 0 1px 1px #000;
+        }
+        .artistCard:hover{
+            color: #ffffff;
+        }
+        .artistCard:hover>div{
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .artistCard>div{
+            transition:300ms;
+            position: absolute;
+            bottom: 0;
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
+    <a th:style="'background-image:url(/upload/'+${a.get('avatar')}+')'" class="artistCard" th:href="${'/artist/'+a.get('id')}" th:each="a:${topArtist}">
+        <div>
+            <div>人气值：<span th:text="${a.get('hot')}"></span></div>
+            <div>艺术家：<span th:text="${a.get('username')}"></span></div>
+            <div>状态：<span th:text="${a.get('state')}"></span></div>
+        </div>
+    </a>
+
     <div style="width: 100%;text-align: center;">
         <div class="art-title-tag">最新更新</div>
     </div>
@@ -204,18 +262,21 @@
                 $('#'+page+'-nav').addClass('nav-menu-item-active');
                 var homepageModel=$('.homepage-model'),
                     starPageModel=$('.star-page-model'),
+                    typePageModal=$('.type-page-modal'),
                     nav=$('.nav');
                 if(page==='star-page'){
                     homeScroll=$(window).scrollTop();
                     homepageModel.hide();
                     starPageModel.show();
+                    typePageModal.hide();
                     $(window).scrollTop(starScroll);
                     nav.addClass("nav-scroll-not-top");
                     window.sessionStorage.setItem("active","star");
-                }else {
+                }else if(page==='homepage'){
                     starScroll=$(window).scrollTop();
                     starPageModel.hide();
                     homepageModel.show();
+                    typePageModal.hide();
                     window.sessionStorage.removeItem("active");
                     nav.css({
                         height:'',
@@ -223,6 +284,16 @@
                     });
                     $(window).scrollTop(homeScroll);
                     $(window).scroll();
+                }else if(page==='type-page'){
+                    starPageModel.hide();
+                    homepageModel.hide();
+                    typePageModal.show();
+                    window.sessionStorage.removeItem("active");
+                    nav.addClass("nav-scroll-not-top");
+                    nav.css({
+                        height:'',
+                        background:''
+                    });
                 }
             });
         }();
@@ -281,6 +352,146 @@
         $(window).scroll();
     </script>
 </section>
+
+<section class="type-page-modal" style="margin-top: calc(-40vh + 100px);display: none;">
+    <div style="max-width: 1200px;margin: 0 auto;padding-top: 30px;">
+        <style>
+            #typeBox{
+                border:#aaa 1px dotted;
+                border-radius: 10px;
+                background: #fff;
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+            #typeBox .btn{
+                margin:10px 20px;
+            }
+            .type-avatar{
+                width: 80px;
+                height: 80px;
+                float: left;
+                background-size: cover;
+                background-position: center center;
+                border-radius:10px;
+                border:4px solid #85dd8d;
+            }
+            .type-media-box img{
+                max-width:100%;
+                height:auto;
+                margin: 10px 0;
+                box-shadow: 0 2px 2px #999;
+            }
+            .type-media-box{
+                border-bottom: 1px solid #eee;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+            .type-info{
+                float: left;
+                width: calc(100% - 80px);
+            }
+            .type-info>div:nth-child(1){
+                font-size: 26px;
+                font-weight: bold;
+            }
+            .type-info>div:nth-child(2){
+                font-size: 24px;
+                margin-top: 6px;
+                margin-left: 10px;
+            }
+            #artBox a{
+                text-decoration: none;
+                color:inherit;
+            }
+            .art-info{
+                padding: 10px;
+                text-indent: 48px;
+                font-size: 24px;
+            }
+        </style>
+        <div id="typeBox">
+
+        </div>
+        <div style="min-height: 600px;border-radius: 10px;background: #ffffff;padding: 20px;">
+            <div id="chooseTip" style="line-height: 300px;text-align: center;font-size: 40px;letter-spacing: 3px;color: #aaaaaa;">点击标签选择分类</div>
+            <div style="display: none;line-height: 300px;text-align: center;font-size: 40px;letter-spacing: 3px;color: #aaaaaa;" id="isEmpty">
+                哎呀，空空如也呢~
+            </div>
+            <div id="artBox">
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $.ajax({
+            url:'/open/art/type',
+            success:function (resp) {
+                var box=$("#typeBox");
+                for (var i = 0; i < resp.data.length; i++) {
+                    var type=resp.data[i];
+                    box.append($('<span class="btn btn-default"></span>').html(type.name).attr("data-id",type.id))
+                }
+            }
+        });
+        +function () {
+            var data={};
+            $("#typeBox").on("click",".btn",function(){
+                var tag=$(this);
+                var id=tag.attr("data-id");
+                var selectedClass="btn-success";
+                var box=$("#artBox").html("");
+                if(tag.hasClass(selectedClass)){
+                    tag.removeClass(selectedClass);
+                    delete data[id];
+                }else {
+                    tag.addClass(selectedClass);
+                    data[id]=null;
+                }
+                $("#isEmpty").hide();
+                var keys=Object.keys(data);
+                if(keys.length===0){
+                    $("#chooseTip").show();
+                    return;
+                }else {
+                    $("#chooseTip").hide();
+                }
+                $.ajax({
+                    url:"/open/art/byType",
+                    data:{type:keys.toString()},
+                    success:function (resp) {
+                        console.log(resp);
+                        var list=resp.data;
+                        if(list.length===0){
+                            $("#isEmpty").show();
+                            return;
+                        }
+                        for (var i = 0; i < list.length; i++) {
+                            var art=list[i];
+                            var mediaBox=$('<div class="type-media-box"></div>');
+                            for (var j = 0; j < art.media.length; j++) {
+                                var m=art.media[j];
+                                mediaBox.append($('<img src="'+m.url+'">'))
+                            }
+                            box.append($('<a href="/art/'+art.id+'"></a>').append(
+                                $('<div></div>').append(
+                                    $('<div class="type-avatar"></div>').css("background-image","url('/upload/"+art.avatar+"')"),
+                                    $('<div class="type-info"></div>').append(
+                                        $('<div></div>').append('《'+art.name+'》','<div style="float: right">'+art.score+'次点击</div>'),
+                                        $('<div></div>').append('艺术家：'+art.artistName,'<div style="float: right;">'+art.time+'上传</div>')
+                                    ),
+                                    '<div style="clear: both"></div>'
+                                ),
+                                $('<div class="art-info"></div>').html(art.info),
+                                mediaBox
+                            ));
+                        }
+                    }
+                })
+            })
+        }();
+    </script>
+</section>
+
 <section th:if="${session.user!=null}" class="star-page-model" style="min-height: 1000px;margin-top: -40vh;padding-top: 120px;display: none;">
     <style>
         #uploadModalForm .input-group{
@@ -373,10 +584,17 @@
 
     <div style="display: flex;width: 1000px;background: #ffffff;border-radius:20px;margin: 0 auto 30px;box-shadow:3px 3px 3px #000; ">
         <div style="width: 200px;">
-            <div style="background: #ccc;height: 300px;text-align: center;width: 100%;border-radius:20px;position: relative;">
+            <div style="background: #ccc;height: 300px;text-align: center;width: 100%;border-radius:20px;position: relative;left: 20px;top: 20px;">
                 <a class="file btn btn-default" style="display: block;margin: 0 auto;width: 200px;position: relative;">
                     <span class="glyphicon glyphicon-user"  style="font-size: 180px;line-height: 285px;color: #aaaaaa;display: inline-block;height: 100%;"></span>
-                    <img th:if="${artist.get('avatar')!=null}" th:src="'/upload/'+${artist.get('avatar')}" style="position: absolute;width: 100%;height: 100%;left: 0;top: 0;">
+                    <style>
+                        .uploadAvatar{
+                            position: absolute;width: 100%;height: 100%;left: 0;top: 0;
+                            background-size: cover;
+                        }
+                    </style>
+                    <div class="uploadAvatar" th:if="${artist.get('avatar')!=null}"
+                         th:style="'background-image:url(/upload/'+${artist.get('avatar')}+')'"></div>
                     <input type="file" id="changeAvatar">
                 </a>
             </div>
@@ -402,8 +620,10 @@
         <div th:if="${session.user!=null}" style="width: 750px;margin-left: 50px;min-height: 300px;">
             <h2><span th:text="${session.user.getName()}"></span> <span th:text="${session.user.getSex()==0?'男':'女'}"></span>
                 <button id="editUserInfo" class="btn btn-xs btn-primary" style="float: right;font-size: 16px;margin-right: 20px;">编辑</button></h2>
+            <h3 th:text="'创作状态：'+${artist.get('state')}"></h3>
             <h3 th:text="${artist.get('birthday')!=null?'出生年月：'+artist.get('birthday'):'出生年月：未知'}"></h3>
-            <h4 th:text="${artist.get('profession')}"></h4>
+            <h4 th:text="'专业：'+${artist.get('profession')}"></h4>
+            <h4 th:text="'籍贯：'+${artist.get('nation')}"></h4>
             <h4 style="padding: 10px;line-height: 1.3;" th:text="${artist.get('info')}"></h4>
         </div>
     </div>
@@ -421,6 +641,10 @@
                         <input name="username" class="form-control" type="text" th:placeholder="${session.user.getName()}" th:value="${session.user.getName()}">
                     </label>
                     <label class="input-group">
+                        <span class="input-group-addon">创作状态</span>
+                        <input id="state" name="state" class="form-control" type="text" th:value="${artist.get('state')}" th:placeholder="${artist.get('state')}">
+                    </label>
+                    <label class="input-group">
                         <span class="input-group-addon">性别</span>
                         <div class="form-control">
                             <select name="sex" style="width: 100%;height: 100%;border:none;outline: none;background: none;">
@@ -436,6 +660,10 @@
                     <label class="input-group">
                         <span class="input-group-addon">职业</span>
                         <input name="profession" class="form-control" type="text" th:value="${artist.get('profession')}">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">籍贯</span>
+                        <input name="nation" class="form-control" type="text" th:value="${artist.get('nation')}">
                     </label>
                     <label class="input-group">
                         <span class="input-group-addon">个人简介</span>
@@ -560,9 +788,4 @@
     <a>2019届 毕业设计</a>
 </footer>
 </body>
-<script>
-    $("#srhClicker").click(function () {
-        window.location.href="/srh?word="+$("#srh").val()
-    })
-</script>
 </html>

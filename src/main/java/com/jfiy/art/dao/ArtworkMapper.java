@@ -1,6 +1,7 @@
 package com.jfiy.art.dao;
 
 
+import com.jfiy.art.entity.Art;
 import com.jfiy.art.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -27,6 +28,7 @@ public interface ArtworkMapper {
 
     HashMap getArtInfoById(String id);
     List<HashMap> getMediaListByArtId(String id);
+    List<HashMap> getMediaListByArtIntId(int id);
     List<HashMap> getCommentListBuArtId(String id);
 
     void addRecommend(HashMap hashMap);
@@ -44,4 +46,16 @@ public interface ArtworkMapper {
     HashMap getSysInfo();
 
     List<HashMap> srhArt(String s);
+
+    List<HashMap> findAllType();
+
+    void updateArtType(HashMap hashMap);
+
+    void addArtType(HashMap hashMap);
+
+    void removeArtType(HashMap hashMap);
+
+    List<Art> findArtByType(HashMap hashMap);
+
+    List<HashMap> findTopArtist();
 }

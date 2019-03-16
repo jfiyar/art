@@ -98,4 +98,14 @@ public class UserServiceImpl implements UserService {
     public HashMap getArtistById(String id) {
         return userMapper.getArtistById(id);
     }
+
+    @Override
+    public List<HashMap> getArtist(HashMap hashMap) {
+        return userMapper.getArtist(hashMap);
+    }
+
+    @Override
+    public List<HashMap> srhArtist(String s) {
+        return userMapper.srhArtist(s);
+    }
 }

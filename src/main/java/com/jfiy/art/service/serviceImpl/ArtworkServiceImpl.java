@@ -1,6 +1,7 @@
 package com.jfiy.art.service.serviceImpl;
 
 import com.jfiy.art.dao.ArtworkMapper;
+import com.jfiy.art.entity.Art;
 import com.jfiy.art.entity.Artwork;
 import com.jfiy.art.entity.User;
 import com.jfiy.art.service.ArtworkService;
@@ -205,5 +206,37 @@ public class ArtworkServiceImpl implements ArtworkService {
     @Override
     public List<HashMap> srhArt(String s) {
         return artworkMapper.srhArt(s);
+    }
+
+    @Override
+    public List<HashMap> findAllType() {
+        return artworkMapper.findAllType();
+    }
+
+    @Override
+    public void updateArtType(HashMap hashMap) {
+        artworkMapper.updateArtType(hashMap);
+    }
+
+    @Override
+    public void addArtType(HashMap hashMap) {
+        artworkMapper.addArtType(hashMap);
+    }
+
+    @Override
+    public void removeArtType(HashMap hashMap) {
+        artworkMapper.removeArtType(hashMap);
+    }
+
+    @Override
+    public List<Art> findArtByType(String[] types) {
+        return artworkMapper.findArtByType(new HashMap(){{
+            put("list",types);
+        }});
+    }
+
+    @Override
+    public List<HashMap> findTopArtist() {
+        return artworkMapper.findTopArtist();
     }
 }

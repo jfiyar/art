@@ -15,7 +15,7 @@
     }
     form{
         width: 400px;
-        height: 200px;
+        height: 400px;
         position: fixed;
         margin: auto;
         top: 0;
@@ -28,7 +28,14 @@
     }
 </style>
 <form id="form" action="/">
-
+    <a href="/" style="text-decoration: none">
+        <div data-page="homepage" class="nav-menu-item" style="width: 100%;
+        text-shadow:0 2px 2px #000;padding-bottom: 20px;
+        text-align: center;cursor: pointer;color:#fff;font-size: 90px;">
+            <div><span style="position: relative;top: 15px;" class="glyphicon glyphicon-book"></span> 艺术网</div>
+            <div style="font-size: 54px;margin-top: -20px;">artwork website</div>
+        </div>
+    </a>
     <label for="name" class="input-group">
         <span class="input-group-addon">用户</span>
         <input type="text" id="name" class="form-control" placeholder="请输入用户名">
@@ -40,9 +47,9 @@
         <input type="password" id="pwd" class="form-control" placeholder="请输入密码">
     </label>
 
-    <p style="float: right;"><a href="/retrieve">找回密码</a></p>
-    <button class="btn btn-block btn-primary" type="submit">登录</button>
-    <p style="float: right;"><a href="/register">注册</a></p>
+    <!--<p style="float: right;"><a href="/retrieve">找回密码</a></p>-->
+    <button class="btn btn-block btn-warning" type="submit">登录</button>
+    <p style="float: right;padding-top: 6px;"><a style=" color: #fff;opacity: .7;" href="/register">注册</a></p>
 </form>
 <script>
     var form = document.getElementById("form");

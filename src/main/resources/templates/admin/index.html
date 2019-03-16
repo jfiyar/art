@@ -14,6 +14,23 @@
         margin: 0;
         background: #f3f3f3;
     }
+    #reviewTable td{
+        text-align: center;
+    }
+    .artist_avatar{
+        height:120px;
+        width:80px;
+        background: #ddd;
+        background-size: cover;
+        display: inline-block;
+    }
+    .artist_info{
+        padding: 20px 0;
+        width:50%;
+        line-height: 2;
+        letter-spacing: 1px;
+        word-break: break-word;
+    }
 </style>
 <section>
     <style>
@@ -71,25 +88,25 @@
             ARTWORK CMS
         </div>
         <ul class="menu" id="menu">
-            <li id="homeBtn" key="home">
+            <li class="page-nav" id="homeBtn" key="home">
                 <span class="glyphicon glyphicon-home"></span>
                 <span>首页</span>
             </li>
-            <li id="reviewBtn" key="sys">
+            <li class="page-nav" id="reviewBtn" key="review">
                 <span class="glyphicon glyphicon-cog"></span>
                 <span>艺术家审核</span>
             </li>
-            <li id="userBtn" key="user">
+            <li class="page-nav" id="userBtn" key="user">
                 <span class="glyphicon glyphicon-user"></span>
                 <span>用户管理</span>
             </li>
-            <li id="artBtn" key="art">
+            <li class="page-nav" id="artBtn" key="art">
                 <span class="glyphicon glyphicon-picture"></span>
                 <span>艺术作品管理</span>
             </li>
-            <li id="commendBtn" key="art">
-                <span class="glyphicon glyphicon-picture"></span>
-                <span>评论管理</span>
+            <li class="page-nav" id="typeBtn" key="type">
+                <span class="glyphicon glyphicon-th-large"></span>
+                <span>艺术品类型管理</span>
             </li>
         </ul>
     </div>
@@ -98,7 +115,7 @@
             $('#'+(sessionStorage.getItem('indexTriggerKey')||'home')+'Btn').trigger('click');
         });
         !function () {
-            $('#menu').on('click','li',function () {
+            $('body').on('click',".page-nav",function () {
                 var key=$(this).attr('key');
                 var $active=$('.active');
                 if(key===$active.attr('key')){
@@ -106,9 +123,9 @@
                 }
                 $('#pages>div').hide();
                 $active.removeClass('active');
-                $(this).addClass('active');
+                $("#"+this.getAttribute("key")+"Btn").addClass('active');
                 $('#'+key).show();
-                $('#pageIndex').html($(this).find('span').html());
+                // $('#pageIndex').html($(this).find('span').html());
                 sessionStorage.setItem('indexTriggerKey',key);
             })
         }();
@@ -126,7 +143,7 @@
     </style>
     <div class="right">
         <div style="padding: 20px 20px 0 20px;">
-            <span id="pageIndex">首页</span>
+            <!--<span id="pageIndex">首页</span>-->
             <div style="float: right;">
                 <span th:text="${session.user.getName()}">逆臣</span>
                 <span>欢迎登录</span>
@@ -165,35 +182,172 @@
                 <div style="padding-top: 40px;"></div>
                 <div class="card">
                     <header style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;">系统信息</header>
-                    <div style="background: #5fcf6e;">
+                    <div class="page-nav" key="user" style="background: #5fcf6e;">
                         <span style="font-size: 40px;">用户/</span>
                         <span th:text="${sys.get('user')}"></span>
                         <span>人</span>
                     </div>
-                    <div style="background: #ff464d;">
+                    <div class="page-nav" key="art" style="background: #ff464d;">
                         <span style="font-size: 40px;">艺术品/</span>
                         <span th:text="${sys.get('art')}"></span>
                         <span>件</span>
                     </div>
-                    <div style="background: #5075fa;">
-                        <span style="font-size: 40px;">评论/</span>
-                        <span th:text="${sys.get('commend')}"></span>
-                        <span>条</span>
+                    <div  class="page-nav" key="type" style="background: #5075fa;">
+                        <span style="font-size: 40px;">类型/</span>
+                        <span th:text="${sys.get('type')}"></span>
+                        <span>种</span>
                     </div>
                 </div>
                 <div class="card">
-                    <header style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;">审核</header>
-                    <div style="background: #d815fa;">
+                    <header style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;">待审核</header>
+                    <div  class="page-nav" key="review" style="background: #d815fa;">
                         <span style="font-size: 40px;">艺术家/</span>
-                        <span th:text="${sys.get('review')}"></span>
+                        <span th:text="${sys.get('reviewArtist')}"></span>
                         <span>位</span>
                     </div>
-                    <div style="background: #d815fa;">
+                    <div class="page-nav" key="art" style="background: #d815fa;">
                         <span style="font-size: 40px;">作品/</span>
                         <span th:text="${sys.get('review')}"></span>
                         <span>件</span>
                     </div>
                 </div>
+            </div>
+            <div id="review" style="margin: 20px;">
+                <span>
+                    <label>
+                        <span>每页</span>
+                        <input value="5" id="reviewLimit" type="number">
+                        <span>条数据</span>
+                    </label>
+                    <button id="reviewPast">上一页</button>
+                    <label>
+                        <span>第</span>
+                        <input value="1" id="reviewPage" type="number">
+                        <span>页</span>
+                    </label>
+                    <button id="reviewNext">下一页</button>
+                </span>
+                <form style="display: inline-block;" id="srhArtistForm">
+                    <label>
+                        <span>审核状态</span>
+                        <select id="review_state">
+                            <option value="-1">全部</option>
+                            <option value="0">待审核</option>
+                            <option value="1">已通过</option>
+                            <option value="2">未通过</option>
+                            <option value="3">已封禁</option>
+                        </select>
+                    </label>
+                    <button type="submit">检索</button>
+                </form>
+                <table class="table-striped" id="reviewTable">
+
+                </table>
+                <script>
+                    $("#reviewTable").on("click",".artist-pass",function () {
+                        $.ajax({
+                            url:"admin/artist/update",
+                            data:{user_id:this.getAttribute('data-id'),review:1},
+                            datatype:'json',
+                            success:function () {
+                                $("#srhArtistForm").submit();
+                            }
+                        })
+                    }).on("click",".artist-ban",function () {
+                        $.ajax({
+                            url:"admin/artist/update",
+                            data:{user_id:this.getAttribute('data-id'),review:3},
+                            datatype:'json',
+                            success:function () {
+                                $("#srhArtistForm").submit();
+                            }
+                        })
+                    }).on("click",".artist-unban",function () {
+                        $.ajax({
+                            url:"admin/artist/update",
+                            data:{user_id:this.getAttribute('data-id'),review:1},
+                            datatype:'json',
+                            success:function () {
+                                $("#srhArtistForm").submit();
+                            }
+                        })
+                    });
+                    var reviewForm=$("#srhArtistForm").submit(function (e) {
+                        e.preventDefault();
+                        var limit=$("#reviewLimit").val();
+                        var offset=($("#reviewPage").val()-1);
+                        if(limit<1) limit=1;
+                        if(offset<0) offset=0;
+                        var data={
+                            limit:limit,
+                            offset:offset
+                        };
+                        var review=$("#review_state").val();
+                        if(review!=='-1'){
+                            data.review=review;
+                        }
+                        $.ajax({
+                            type:"post",
+                            url:"/admin/artist",
+                            data:data,
+                            datatype:"json",
+                            success:function (resp) {
+                                if(resp.code!==200){
+                                    alert(resp.message);
+                                    return;
+                                }
+                                var tb=$("#reviewTable").html(""),
+                                    data=resp.data;
+                                tb.append($('<tr></tr>').append(
+                                    '<th>头像</th>',
+                                    '<th>艺术家名</th>',
+                                    '<th>简介</th>',
+                                    '<th>出生日期</th>',
+                                    '<th>职业</th>',
+                                    '<th>国籍</th>',
+                                    '<th>审核状态</th>',
+                                    '<th>操作</th>'
+                                ));
+                                for (var i = 0; i < data.length; i++) {
+                                    var artist=data[i],reviewText;
+                                    switch (artist.review){
+                                        case 0:reviewText="待审核";break;
+                                        case 1:reviewText="已通过";break;
+                                        case 2:reviewText="未通过";break;
+                                        case 3:reviewText="已封禁";break;
+                                    }
+                                    tb.append($('<tr></tr>').append(
+                                        $('<td></td>').html($('<div class="artist_avatar"></div>').css('background-image','url("/upload/'+artist.avatar+'")')),
+                                        $('<td></td>').html(artist.name),
+                                        $('<td class="artist_info"></td>').html(artist.info),
+                                        $('<td></td>').html(artist.birthday),
+                                        $('<td></td>').html(artist.profession),
+                                        $('<td></td>').html(artist.nation),
+                                        $('<td class="review" data-review="'+artist.review+'"></td>').html(reviewText),
+                                        $('<td></td>').append(
+                                            artist.review===0?'<span data-id="'+artist.user_id+'" class="btn btn-success artist-pass">通过</span><span data-id="'+artist.user_id+'" class="btn btn-danger artist-ban">拒绝</span>':
+                                                '已通过')
+                                    ));
+                                }
+                            }
+                        })
+                    }).submit();
+                    $("#reviewPast").click(function () {
+                        var page=$("#reviewPage");
+                        var n=page.val();
+                        n--;
+                        n<1&&(n=1);
+                        page.val(n);
+                        reviewForm.submit();
+                    });
+                    $("#reviewNext").click(function () {
+                        var page=$("#reviewPage");
+                        var n=page.val();
+                        n++;
+                        page.val(n);
+                        reviewForm.submit();
+                    });
+                </script>
             </div>
             <div id="sys">
                 <style>
@@ -444,13 +598,6 @@
                                         </select>
                                     </div>
 
-                                    <div class="ipt">
-                                        <label for="userModalSetIsArtist">是否为艺术家</label>
-                                        <select name="isArtist" id="userModalSetIsArtist" class="form-control">
-                                            <option value="0">普通用户</option>
-                                            <option value="1">艺术家</option>
-                                        </select>
-                                    </div>
                                 </div>
 
 
@@ -494,8 +641,7 @@
                                     name:td[3].innerHTML,
                                     auth:td[4].innerHTML,
                                     avatar:td[2].innerHTML,
-                                    sex:td[6].innerHTML==='男'?'0':'1',
-                                    isArtist:td[5].innerHTML==='是'?'1':'0'
+                                    sex:td[5].innerHTML==='男'?'0':'1',
                                 }
                             };
                             var data=temp.userModel.data;
@@ -508,7 +654,6 @@
                             }else {
                                 $('#userModalSetSex1')[0].checked=true;
                             }
-                            $('#userModalSetIsArtist').val(data.isArtist==='1'?1:0);
                             $('#userModal').modal('show');
                         });
                         $srhUserForm.submit(function (e) {
@@ -704,6 +849,7 @@
                         <th width="10%">名称</th>
                         <th width="10%">艺术家</th>
                         <!--<th width="10%">简介</th>-->
+                        <th width="5%">分类</th>
                         <th width="5%">审核</th>
                         <th width="5%">评分</th>
                         <th width="10%">操作</th>
@@ -783,6 +929,13 @@
                                     </div>
                                 </div>
                                 <div class="input-group">
+                                    <span class="input-group-addon">类型/type</span>
+                                    <div class="form-control" style="padding: 0;">
+                                        <select name="type" id="artTypeSelector" class="form-control" style="padding: 0;border:none;margin: 0;outline: none;box-shadow: none">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="input-group">
                                     <div class="form-group">
                                         <span >文字简介/information</span>
                                         <textarea name="info" class="form-control info" rows="3"></textarea>
@@ -850,7 +1003,6 @@
                             if(data.artName){
                                 data.artName='%'+data.artName+'%'
                             }
-                            console.log(data);
                             $.ajax({
                                 url:'/admin/art/list',
                                 data:data,
@@ -868,8 +1020,9 @@
                                                 $(td[1]).html(art.id);
                                                 $(td[2]).html(art.name);
                                                 $(td[3]).html(art.artistName).attr('id',art.artist);
-                                                $(td[4]).html(art.review===1?'通过':art.review===-1?'未过审':'待审核');
-                                                $(td[5]).html(art.score);
+                                                $(td[4]).html(art.typeName).attr('data-type-id',art.type);
+                                                $(td[5]).html(art.review===1?'通过':art.review===-1?'未过审':'待审核');
+                                                $(td[6]).html(art.score);
                                             }else {
                                                 td.css('opacity',0);
                                             }
@@ -887,6 +1040,7 @@
                                     '<td>星空下的眼尾画</td>' +
                                     '<td id="100">超级艺术家</td>' +
                                     // '<td>简介的信息很多，很多很多很多很很多很多很多很很多很多很多很很多很多很多很很多很多很多很...</td>' +
+                                    '<td>分类</td>' +
                                     '<td>通过</td>' +
                                     '<td >5.0</td>' +
                                     '<td>' +
@@ -905,8 +1059,9 @@
                                 name:$(td[2]).html(),
                                 artistId:td[3].id,
                                 artistName:$(td[3]).html(),
-                                review:$(td[4]).html()==='通过'?'1':$(td[4]).html()==='未过审'?'-1':'0',
-                                score:$(td[5]).html()
+                                type:$(td[4]).attr("data-type-id"),
+                                review:$(td[5]).html()==='通过'?'1':$(td[4]).html()==='未过审'?'-1':'0',
+                                score:$(td[6]).html()
                             };
                             console.log(modalData);
                             $modal.find('.modal-title').html('id '+modalData.id+' 的详细信息');
@@ -914,6 +1069,13 @@
                             $modal.find('input[name="artistName"]').attr('placeholder',modalData.artistName+'/id:'+modalData.artistId).val('');
                             $modal.find('.score').html(modalData.score);
                             $modal.find('select').val(modalData.review);
+                            var typeBox=$("#artTypeSelector").html("");
+                            console.log(window.type);
+                            typeBox.append($('<option></option>').val("0").html("请选择分类"));
+                            for(var k in window.type){
+                                typeBox.append($('<option></option>').val(k).html(window.type[k]));
+                            }
+                            typeBox.val(modalData.type);
                             $modal.modal('show');
                             $.ajax({
                                 url:'/admin/art/info',
@@ -1068,6 +1230,113 @@
                                     .append($('<span data-name="'+arr[i].name+'" data-id="'+arr[i].id+'" style="float: right;" class="btn btn-xs btn-default">︎ ↖︎ 设置</span>')))
                             }
                         }
+                    }();
+                </script>
+            </div>
+            <div id="type" style="margin: 20px;">
+                <style>
+                    #typeBox .btn{
+                        margin: 20px;
+                    }
+                    #typeBox{
+                        background: #ffffff;
+                        margin-top: 20px;
+                        border:1px #aaa dotted;
+                        border-radius: 10px;
+                    }
+                </style>
+                <form id="addArtTypeForm">
+                    <label>
+                        <span>类型名称</span>
+                        <input id="artTypeName" type="text">
+                    </label>
+                    <button type="submit">新增</button>
+                </form>
+                <div id="typeBox">
+
+                </div>
+                <script>
+                    +function () {
+                        $("#addArtTypeForm").submit(function (e) {
+                            e.preventDefault();
+                            var name=$("#artTypeName").val();
+                            if(!name.trim()){
+                                alert("type名不能为空");
+                                return;
+                            }
+                            $.ajax({
+                                url:'/admin/art/type/add',
+                                data:{name:name},
+                                datatype:"json",
+                                success:function (resp) {
+                                    if(resp.code!==200){
+                                        alert(name+" 类型名不可用");
+                                        return;
+                                    }
+                                    var tag=resp.data;
+                                    window.type[tag.id]=tag.name;
+                                    $("#typeBox").append($('<span data-id="'+tag.id+'" class="btn btn-warning"></span>').html(tag.name));
+                                    $("#artTypeName").val("")
+                                }
+                            })
+                        });
+                        $("#typeBox").on("click",".btn",function () {
+                            var id=this.getAttribute("data-id");
+                            var newName=prompt("请输入新的标签名",this.innerHTML);
+                            var that=$(this);
+                            console.log(newName);
+                            if(newName===""){
+                                if(confirm("确认删除类型\""+this.innerHTML+"\"?")){
+                                    $.ajax({
+                                        url:"/admin/art/type/remove",
+                                        data:{id:id},
+                                        datatype:'json',
+                                        success:function (resp) {
+                                            if(resp.code!==200){
+                                                alert("删除失败，系统异常");
+                                                return;
+                                            }
+                                            that.hide(300);
+                                            delete window.type[id];
+                                        }
+                                    })
+                                }
+                                return;
+                            }
+                            if(this.innerHTML===newName||newName===null){
+                                return;
+                            }
+                            $(this).addClass("disabled");
+                            var that=$(this);
+                            $.ajax({
+                                url:'/admin/art/type/update',
+                                datatype:'json',
+                                data:{id:id,name:newName},
+                                success:function (resp) {
+                                    that.removeClass("disabled");
+                                    if(resp.code!==200){
+                                        alert(newName+" 类型名不可用");
+                                        return;
+                                    }
+                                    window.type[id]=newName;
+                                    that.html(newName);
+                                }
+                            })
+                        });
+                        $.ajax({
+                            url:"/admin/art/type",
+                            datatype:'json',
+                            success:function(resp){
+                                var box=$("#typeBox").html(""),
+                                    list=resp.data;
+                                window.type={};
+                                for (var i = 0; i < list.length; i++) {
+                                    var tag=list[i];
+                                    window.type[tag.id]=tag.name;
+                                    box.append($('<span data-id="'+tag.id+'" class="btn btn-warning"></span>').html(tag.name))
+                                }
+                            }
+                        })
                     }();
                 </script>
             </div>

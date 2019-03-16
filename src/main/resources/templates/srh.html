@@ -3,31 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${word}+' 的搜索结果'">搜索</title>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <style>
+        body{
+            font-size: 16px;
+        }
         .box>div{
             margin-top: 20px;
             background: #ffffff;
             padding: 20px;
         }
+        a{
+            color:blue;
+            text-decoration: none;
+        }
+        a:hover{
+            color: blue;
+        }
     </style>
 </head>
-<body style="background: #f7f7f7;">
-<div style="max-width: 800px;margin: 0 auto;">
-    <form style="width: 300px;height: 30px;border: 1px solid #2090ff;" action="/srh">
-        <input style="border:none;outline: none;height: 100%;padding-left: 10px;width:230px;float: left;background: none;" th:value="${word}" type="text" name="word">
-        <button style="border:none;outline: none;height: 100%;width: 60px;float: left;background: #2090ff;color: #ffffff;" type="submit">搜索</button>
-    </form>
-    <div class="box">
-        <div th:if="${u.get('auth')!='admin'}" th:each="u:${user}">
-            <a th:href="'/artist/'+${u.get('id')}">
-                <span th:text="${'艺术家：'+u.get('name')}"></span>
-            </a>
+<body style="background: #fff;">
+<div style="border-bottom: 1px solid #eee;width: 100%;position: fixed;top: 0;background: #ffffff;">
+    <style>
+        .nav{color: #888;width: 100%;height: 100px;z-index: 99;transition: 600ms;}
+        .nav .ipt{
+            line-height: 38px;
+            border:1px solid rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.51);
+            padding: 0 10px;
+            border-radius:20px;
+            font-size: 16px;}
+        .logo{
+            color: #b71090;
+        }
+        .logo:hover{
+            text-decoration: none;
+            color: #6a0b53;
+        }
+    </style>
+    <div class="nav">
+        <div style="position: absolute;width: 100%;max-width: 1000px;margin: 0 auto;left: 0;right: 0;padding-top: 30px;font-weight: lighter;font-size: 20px;">
+            <!-- 左侧图标 -->
+            <div data-page="homepage" class="nav-menu-item" style="width: 200px;text-align: center;float: left;cursor: pointer;">
+                <a class="logo" href="/">
+                    <div><span class="glyphicon glyphicon-book"></span> 艺术网</div>
+                    <div>artwork website</div>
+                </a>
+            </div>
+            <!-- 右侧导航 -->
+            <style>.header-nav>div{cursor: pointer;
+                margin-left: 50px;}</style>
+            <div class="header-nav" style="float: right;display: flex;justify-content: flex-end; width: 600px;">
+
+                <div class="ipt" style="display: inline-block;height: 40px;background: rgba(255,255,255,0.52);">
+                    <form action="/srh">
+                        <label for="srh" class="input-group">
+                            <select name="type" style="background: none;outline: none;border:none">
+                                <option value="all">全部</option>
+                                <option value="user">用户</option>
+                                <option value="art">作品</option>
+                            </select>
+                            <input th:value="${word}" name="word" id="srh" type="text" style="border: none;outline: none;background: none;">
+                            <button style="background: none;outline: none;border:none;" type="submit" id="srhClicker"><span class="glyphicon glyphicon-search"></span></button>
+                        </label>
+                    </form>
+                </div>
+
+                <div style="display: inline-block;">
+                    <th:block th:if="${session.user!=null}">
+                        <div style="display: inline-block;" class="dropdown">
+                                <span class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <span th:text="${session.user.getName()}"> </span>
+                                </span>
+                            <a href="/logout">
+                                <span> 注销</span>
+                            </a>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${session.user==null}">
+                        <a style="font-size: 14px;color: #b71090;" href="/login">去登录 /</a>
+                        <a style="font-size: 14px;color: #b71090;" href="/register">去注册</a>
+                    </th:block>
+                </div>
+
+            </div>
+            <!-- 导航 end -->
         </div>
-        <div th:each="a:${art}">
-            <a th:href="'/art/'+${a.get('id')}">
-                <span th:text="'艺术作品：'+${a.get('name')}"></span>
-                <p th:text="${a.get('info')}"></p>
-            </a>
+    </div>
+</div>
+<div style="background: #ffffff;">
+    <div style="max-width: 1000px;margin: 0 auto;padding-top: 100px;">
+        <div class="box">
+            <div style="text-align: center;font-size: 30px;font-weight: lighter;color: #999999;line-height: 200px;" th:if="${user==null&&art==null||user.size()==0&&art.size()==0}">
+                没有查到数据，换个关键词试试~
+            </div>
+            <div th:each="u:${user}">
+                <div>
+                    <div>
+                        <img th:src="${'/upload/'+u.get('avatar')}" style="height:100px;float: left;padding-right: 10px;">
+                        <div>
+                            <div>
+                                <div style="color: blue;">
+                                    <a th:href="'/artist/'+${u.get('id')}">
+                                        <span th:style="'color:'+${u.get('sex')==0?'#008FFF':'#FF5E8F'}" class="glyphicon glyphicon-user"></span>
+                                        <span>艺术家：</span>
+                                        <span th:text="${u.get('name')}"></span>
+                                    </a>
+                                    <span style="float: right;font-size: 14px;color: #000">
+                                        <span style="color: #00cf00;" class="glyphicon glyphicon-ok"></span>
+                                        已认证
+                                    </span>
+                                </div>
+                                <div style="font-size: 14px;color: #000000;margin: 5px 0;">
+                                    <span>创作状态：</span>
+                                    <span th:text="${u.get('state')}"></span>
+                                </div>
+                            </div>
+                            <div style="font-size: 12px;color: #888888;">
+                                性别：<span th:text="${u.get('sex')==0?'男':'女'}"></span>
+                                | 籍贯：<span th:text="${u.get('nation')}"></span>
+                                | 职业：<span th:text="${u.get('profession')}"></span>
+                                | 出生日期：<span th:text="${u.get('birthday')}"></span>
+                            </div>
+                            <div style="font-size: 14px;line-height: 24px;padding: 10px;letter-spacing: 1px;color: #000000;">
+                                简介：<span style="font-weight: lighter;" th:text="${u.get('info')}"></span>
+                            </div>
+                            <div style="text-align: right;border-bottom: 1px solid #f4f4f4;padding-bottom: 10px;">
+                                <a style="font-size: 12px;padding-bottom: 10px;color: #aaaaaa;" href="/">信息由 艺术网 artwork website 提供</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:each="a:${art}">
+                <a th:href="'/art/'+${a.get('artId')}" style="float: left;">
+                    <img th:src="${a.get('url')}" style="padding-right: 10px;height: 120px;">
+                </a>
+                <div>
+                    <a th:href="'/art/'+${a.get('artId')}">艺术品：<span th:text="${a.get('artName')}"></span></a>
+                    <span style="float: right;font-size: 14px;color: #000">
+                        <span style="color: #00cf00;" class="glyphicon glyphicon-ok"></span>
+                        已认证
+                    </span>
+                </div>
+                <div style="font-size: 14px;color: #999999;padding: 5px 0;">
+                    类型：<span th:text="${a.get('type')}"></span>
+                    <a style="color: #000" th:href="'/artist/'+${a.get('artistId')}" th:text="'所属艺术家：'+${a.get('artistName')}"></a>
+                </div>
+                <div style="font-size: 14px;line-height: 24px;letter-spacing: 1px;color: #000000;">
+                    简介：<span style="font-weight: lighter;" th:text="${a.get('info')}"></span>
+                </div>
+                <div style="clear: both;border-bottom: 1px solid #f4f4f4;padding-bottom: 10px;">
+                    <div style="text-align: right;color: #999999;font-size: 14px;">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        <span th:text="${a.get('score')}"></span>次浏览
+                    </div>
+                    <div style="text-align: right;">
+                        <a style="font-size: 12px;padding-bottom: 10px;color: #aaaaaa;" href="/">信息由 艺术网 artwork website 提供</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${!(user==null&&art==null||user.size()==0&&art.size()==0)}" style="text-align: center;color: #999999;font-size: 14px;">
+                没有更多数据啦~
+            </div>
         </div>
     </div>
 </div>

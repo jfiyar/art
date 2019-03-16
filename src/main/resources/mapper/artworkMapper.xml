@@ -3,7 +3,7 @@
 <mapper namespace="com.jfiy.art.dao.ArtworkMapper">
 
     <select id="findArtworkByUser" resultType="HashMap" parameterType="com.jfiy.art.entity.User">
-        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.artist=#{id}
+            select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.artist=#{id}
     </select>
     <select id="findArtworkByScore" resultType="HashMap" parameterType="HashMap">
         select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.review=1 order by score desc limit #{limit} offset #{offset}   </select>
@@ -12,7 +12,7 @@
     </select>
 
     <select id="findArtList" parameterType="HashMap" resultType="HashMap">
-        select artwork.id,artwork.name,artwork.review,artwork.score,artwork.artist,user.name as artistName from artwork,user where artwork.artist = user.id
+        select artwork.type,t.name as typeName,artwork.id,artwork.name,artwork.review,artwork.score,artwork.artist,user.name as artistName from artwork left join type t on t.id=artwork.type,user where artwork.artist = user.id
         <if test="artId!=null">
             and artwork.id=#{artId}
         </if>
@@ -63,6 +63,7 @@
         <if test="review!=null">review=#{review},</if>
         <if test="info!=null">info=#{info},</if>
         <if test="artist!=null">artist=#{artist},</if>
+        <if test="type!=null">type=#{type},</if>
     </set>
         where id=#{id}
     </update>
@@ -79,9 +80,12 @@
     </insert>
 
     <select id="getArtInfoById" parameterType="String" resultType="HashMap">
-        select b.avatar,a.*,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a left join artist b on a.artist=b.user_id where a.id=#{0} and a.review=1
+        select type.name as typeName,b.avatar,a.*,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a left join type on type.id=a.type left join artist b on a.artist=b.user_id where a.id=#{0} and a.review=1
     </select>
     <select id="getMediaListByArtId" resultType="HashMap" parameterType="String">
+        select * from artwork_media where artwork_id=#{0}
+    </select>
+    <select id="getMediaListByArtIntId" resultType="HashMap" parameterType="int">
         select * from artwork_media where artwork_id=#{0}
     </select>
 
@@ -118,9 +122,67 @@ insert into artwork_comment (reply, user_id, content, timestamp, art_id)values (
         update artwork set score=score+1 where id=#{id}
     </update>
     <select id="getSysInfo" resultType="HashMap">
-        select (select count(*) from user) as user,(select count(*) from artist where review=0) as reviewArtist,(select count(*) from artwork) as art,(select count(*) from artwork where review=0) as review,(select count(*) from artwork_comment) as commend
+        select (select count(*) from user) as user,(select count(*) from artist where review=0) as reviewArtist,(select count(*) from artwork) as art,(select count(*) from artwork where review=0) as review,(select count(*) from type) as type
     </select>
     <select id="srhArt" parameterType="String" resultType="HashMap">
-        select * from artwork where name like #{0} or id like #{0} or info like #{0}
+        select
+            a.id artId,
+            a.name artName,
+            a.artist artistId,
+            u.name artistName,
+            a.score score,
+            a.info info,
+            t.name type,
+            m.url url,
+            c.content commend
+        from artwork a
+            left join artwork_media m on m.artwork_id=a.id
+            left join artwork_comment c on c.art_id=a.id
+            left join type t on t.id=a.type
+            left join user u on u.id=a.artist
+        where review=1 and (a.name like #{0} or a.info like #{0}) group by a.artist
+    </select>
+    <select id="findAllType" resultType="HashMap">
+        select * from type order by id
+    </select>
+    <update id="updateArtType" parameterType="HashMap">
+        update type set name=#{name} where id=#{id};
+    </update>
+    <insert id="addArtType" parameterType="HashMap" useGeneratedKeys="true" keyProperty="id">
+        insert into type (name) values (#{name})
+    </insert>
+    <delete id="removeArtType" parameterType="HashMap">
+        delete from type where id=#{id}
+    </delete>
+
+    <resultMap id="artMap" type="com.jfiy.art.entity.Art">
+        <id property="id" column="id"/>
+        <id property="artist" column="artist"/>
+        <id property="artistName" column="artistName"/>
+        <id property="avatar" column="avatar"/>
+        <id property="score" column="score"/>
+        <id property="info" column="info"/>
+        <collection property="media" column="id" javaType="java.util.List" ofType="com.jfiy.art.entity.Media" select="com.jfiy.art.dao.ArtworkMapper.getMediaListByArtId"  >
+            <id property="id" column="id"/>
+        </collection>
+    </resultMap>
+    <select id="findArtByType" parameterType="HashMap" resultMap="artMap">
+        select
+        user.name artistName,
+        artwork.info info,
+        artwork.id id,
+        artwork.artist artist,
+        artist.avatar avatar,
+        artwork.name name,
+        artwork.score score,
+        artwork.time time
+        from artwork left join artist on artwork.artist=artist.user_id left join user on user.id=artist.user_id
+        where artwork.review=1 and  artwork.type in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="findTopArtist" resultType="HashMap">
+        select u.name username,u.id,f.hot,a.avatar,a.state from (select *,sum(score) as hot from artwork group by artist order by hot desc limit 5) f left join user u on u.id=f.artist left join artist a on a.user_id=u.id;
     </select>
 </mapper>

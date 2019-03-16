@@ -55,18 +55,29 @@
         <if test="nation!=null">nation=#{nation},</if>
         <if test="birthday!=null">birthday=#{birthday},</if>
         <if test="nation!=null">nation=#{nation},</if>
-        <if test="profession!=null">profession=#{nation},</if>
+        <if test="profession!=null">profession=#{profession},</if>
         <if test="info!=null">info=#{info},</if>
         <if test="review!=null">review=#{review},</if>
         <if test="avatar!=null">avatar=#{avatar},</if>
+        <if test="state!=null">state=#{state},</if>
     </set> where user_id=#{user_id}
     </update>
 
     <insert id="addArtist" parameterType="String">
-        insert into artist (user_id) values (#{0})
+        insert into artist (user_id,review) values (#{0},-1)
     </insert>
 
     <select id="getArtistById" parameterType="String" resultType="HashMap">
         select artist.*,user.name,user.sex from artist left join user on user.id=artist.user_id where user_id=#{0}
+    </select>
+
+    <select id="getArtist" parameterType="HashMap" resultType="HashMap">
+        select a.*,u.name,u.sex from artist a left join user u on a.user_id=u.id  where true
+        <if test="review!=null">and review=#{review}</if>
+        <if test="review==null">and review=0 or review=1 or review=2 or review=3</if>
+        limit #{limit} offset #{offset}
+    </select>
+    <select id="srhArtist" parameterType="String" resultType="HashMap">
+        select * from artist a left join user u on a.user_id=u.id where review=1 and u.name like #{0}
     </select>
 </mapper>

@@ -17,4 +17,8 @@ public interface UserService {
     void updateArtist(HashMap hashMap);
 
     HashMap getArtistById(String id);
+
+    List<HashMap> getArtist(HashMap hashMap);
+
+    List<HashMap> srhArtist(String s);
 }
