@@ -60,10 +60,10 @@
                 <div class="ipt" style="display: inline-block;height: 40px;background: rgba(255,255,255,0.52);">
                     <form action="/srh">
                         <label for="srh" class="input-group">
-                            <select name="type" style="background: none;outline: none;border:none">
-                                <option value="all">全部</option>
-                                <option value="user">用户</option>
-                                <option value="art">作品</option>
+                            <select name="type" th:value="${type}" style="background: none;outline: none;border:none">
+                                <option th:selected="${type=='all'}" value="all">全部</option>
+                                <option th:selected="${type=='user'}" value="user">用户</option>
+                                <option th:selected="${type=='art'}" value="art">作品</option>
                             </select>
                             <input th:value="${word}" name="word" id="srh" type="text" style="border: none;outline: none;background: none;">
                             <button style="background: none;outline: none;border:none;" type="submit" id="srhClicker"><span class="glyphicon glyphicon-search"></span></button>
@@ -97,9 +97,13 @@
 <div style="background: #ffffff;">
     <div style="max-width: 1000px;margin: 0 auto;padding-top: 100px;">
         <div class="box">
-            <div style="text-align: center;font-size: 30px;font-weight: lighter;color: #999999;line-height: 200px;" th:if="${user==null&&art==null||user.size()==0&&art.size()==0}">
-                没有查到数据，换个关键词试试~
-            </div>
+            <th:block th:if="${user==null&&art==null}">
+                <div
+                        style="text-align: center;font-size: 30px;font-weight: lighter;color: #999999;line-height: 200px;"
+                >
+                    没有查到数据，换个关键词试试~
+                </div>
+            </th:block>
             <div th:each="u:${user}">
                 <div>
                     <div>
@@ -166,7 +170,7 @@
                     </div>
                 </div>
             </div>
-            <div th:if="${!(user==null&&art==null||user.size()==0&&art.size()==0)}" style="text-align: center;color: #999999;font-size: 14px;">
+            <div  style="text-align: center;color: #999999;font-size: 14px;">
                 没有更多数据啦~
             </div>
         </div>
