@@ -1,3 +1,6 @@
+drop database art;
+create database art;
+use art;
 create table artist
 (
   user_id    int                                 not null
@@ -12,7 +15,7 @@ create table artist
   state      varchar(255)                        null,
   constraint artist_user_id_uindex
   unique (user_id)
-)
+)charset utf8
   engine = InnoDB;
 
 create table artwork
@@ -38,7 +41,7 @@ create table artwork_comment
   content   text                               null,
   timestamp datetime default CURRENT_TIMESTAMP not null,
   art_id    int                                null
-)
+)charset utf8
   engine = InnoDB;
 
 create table artwork_media
@@ -58,7 +61,7 @@ create table type
   name varchar(32) not null,
   constraint type_name_uindex
   unique (name)
-)
+)charset utf8
   engine = InnoDB;
 
 create table user
@@ -73,7 +76,7 @@ create table user
   isArtist tinyint(1) default '0'     not null,
   constraint user_name_uindex
   unique (name)
-)
+)charset utf8
   engine = InnoDB;
 
 

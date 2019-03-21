@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<div style="display: flex;position: fixed;width: 100%;height: 100%;justify-content: center;align-items: center">
+<div style="display: flex;width: 100%;height: 100%;justify-content: center;align-items: center">
     <form action="/open/register" id="form-register" autocomplete="off" style="margin:0;width: 500px;">
         <a href="/" style="text-decoration: none;">
             <div data-page="homepage" class="nav-menu-item" style="width: 100%;
@@ -124,6 +124,7 @@
             alert("简介不能少于50字");
             return;
         }
+
 
         $.ajax({
             method:'post',
