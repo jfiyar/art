@@ -52,7 +52,7 @@ public class ArtworkServiceImpl implements ArtworkService {
     public HashMap getArtById(int id) {
         return new HashMap<String,Object>(){{
             put("media",artworkMapper.findArtMediaById(id));
-            put("info",artworkMapper.findArtInfoById(id));
+            put("info",artworkMapper.getArtInfoById(id+""));
         }};
     }
 
@@ -118,7 +118,6 @@ public class ArtworkServiceImpl implements ArtworkService {
 
     @Override
     public List getRecommendList(int offset) {
-        System.out.println(offset);
         return artworkMapper.findArtRecommendList(offset);
     }
 

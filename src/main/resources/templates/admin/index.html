@@ -626,12 +626,23 @@
                                     '<td>auth</td>' +
                                     '<td>sex</td>' +
                                     '<td>' +
-                                    '<div><a class="edit btn btn-default btn-xs">编辑</a></div>' +
+                                    '<div><a class="edit btn btn-default btn-xs">编辑</a>' +
+                                    '<a class="delete btn btn-danger btn-xs">删除</a></div>' +
                                     '</td>' +
                                     '</tr>'));
                             }
                             $('#userTable').append($('<tr></tr>').append($('<td colspan="8"></td>').append($('#userTablePagination'))))
                         }();
+                        $('#userTable').on('click','.delete',function(){
+                            var tr=$(this).parent().parent().parent();
+                            var id=tr.find('td')[1].innerHTML;
+                            if(confirm("确认删除")){
+                                $.get("/admin/user/delete/"+id,function () {
+                                    $srhUserForm.submit();
+                                })
+                            }
+
+                        });
                         $('#userTable').on('click','.edit',function () {
                             console.log(this);
                             var tr=$(this).parent().parent().parent();
@@ -844,7 +855,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th width="5%">序号</th>
+                        <th width="5%">推荐</th>
                         <th width="10%">艺术品ID</th>
                         <th width="10%">名称</th>
                         <th width="10%">艺术家</th>
@@ -913,6 +924,9 @@
                                     <span class="input-group-addon">艺术家/artist</span>
                                     <input autocomplete="off" id="nameIpt" name="artistName"  class="form-control" type="text">
                                     <ul class="sugBox list-group" style="z-index: 99;display: none;position: absolute;left: 0;top: 40px;background: #ffffff;width: 100%;"></ul>
+                                </div>
+                                <div class="input-group">
+                                    推荐：<input name="recommend" type="checkbox" class="recommend">
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-addon">评分/score</span>
@@ -1017,6 +1031,7 @@
                                             var td=tr.find('td');
                                             if(art){
                                                 td.css('opacity',1);
+                                                $(td[0]).html(art.recommend===1?'已推荐':'');
                                                 $(td[1]).html(art.id);
                                                 $(td[2]).html(art.name);
                                                 $(td[3]).html(art.artistName).attr('id',art.artist);
@@ -1086,8 +1101,10 @@
                                     console.log(data);
                                     if(data.code===200){
                                         data=data.data;
-                                        modalData.info=data.info;
-                                        $modal.find('.info').html(data.info);
+                                        modalData.info=data.info.info;
+                                        modalData.recommend=data.info.recommend;
+                                        $modal.find('.info').html(data.info.info);
+                                        $modal.find('.recommend')[0].checked=data.info.recommend===1;
                                         var $media=$modal.find('.media');
                                         var $image=$media.find('.image').html('');
                                         for (var i = 0; i < data.media.length; i++) {
@@ -1167,6 +1184,9 @@
                                 param.delArr=param.delArr.toString();
                             }
                             param.id=modalData.id;
+                            if(param.recommend){
+                                param.recommend=param.recommend==='on'?1:0;
+                            }
 
                             console.log('更新参数',param);
                             $.ajax({

@@ -32,6 +32,16 @@ public class ApiController {
         this.userServices = userServices;
     }
 
+    @PostMapping("/change_password")
+    public void changePwd(@RequestParam HashMap<String, Object> hashMap, HttpSession session, String oldPwd){
+        User user=(User)session.getAttribute("user");
+        if(oldPwd.equals(user.getPwd())){
+            hashMap.put("id",user.getId());
+            userServices.updateUser(hashMap);
+        }else{
+            throw new Error("旧密码错误");
+        }
+    }
     @PostMapping("/logout")
     public void logout(HttpSession session){
         session.invalidate();

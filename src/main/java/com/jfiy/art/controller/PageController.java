@@ -38,6 +38,7 @@ public class PageController implements ErrorController {
             model.addAttribute("sys",artworkService.getSysInfo());
             return "admin/index";
         }
+        model.addAttribute("art",artworkService.getArtworkByUser(user));
         model.addAttribute("byScore",artworkService.getArtworkByScore(0,5));
         model.addAttribute("byTime",artworkService.getArtworkByTime(0,5));
         model.addAttribute("topArtist",artworkService.findTopArtist());
@@ -49,6 +50,8 @@ public class PageController implements ErrorController {
                 String[] d=data.split(" ");
                 artist.put("birthday",d[0]);
             }
+            model.addAttribute("id",user.getId());
+            model.addAttribute("user",userService.getArtistById(user.getId()+""));
             model.addAttribute("myArt",artworkService.getArtworkByUser(user));
             model.addAttribute("artist",artist);
         }

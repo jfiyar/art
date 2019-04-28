@@ -145,13 +145,19 @@
 </div>
 <div>
     <div class="mediaBox">
-        <img  th:each="item:${media}" th:src="${item.get('url')}" alt="">
+        <img style="transition: 300ms"  th:each="item:${media}" th:src="${item.get('url')}" alt="">
     </div>
+    <script>
+        $('.mediaBox img').click(function () {
+            $('.mediaBox img').css('height','');
+            $(this).css('height',this.offsetHeight===600?'':'600px')
+        })
+    </script>
 </div>
 <div class="commend">
     <div class="noCommend" th:if="${commend.size()==0}">评论区空空如也～</div>
     <div class="list reply" th:class="'list'+${item.get('reply')==0?'':' reply'}" th:data-reply="${item.get('reply')}" th:id="${item.get('id')}" th:each="item:${commend}">
-        <a th:text="${item.get('username')}"></a>在 <a th:text="${item.get('timestamp')}"></a> <span class="tip">评论：</span>
+        <span th:if="${info.get('artist_name')==item.get('username')}">【作者】</span><a th:text="${item.get('username')}"></a>在 <a th:text="${item.get('timestamp')}"></a> <span class="tip">评论：</span>
         <span th:text="${item.get('content')}"></span>
         <div th:if="${session.user!=null}" style="text-align: right;cursor: pointer;">
             <a style="color: #ff464d;" th:if="${session.user.getId()+''==item.get('user_id')+''}" class="deleteBtn" th:data-id="${item.get('id')}">删除</a>

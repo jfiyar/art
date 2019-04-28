@@ -12,7 +12,7 @@
     </select>
 
     <select id="findArtList" parameterType="HashMap" resultType="HashMap">
-        select artwork.type,t.name as typeName,artwork.id,artwork.name,artwork.review,artwork.score,artwork.artist,user.name as artistName from artwork left join type t on t.id=artwork.type,user where artwork.artist = user.id
+        select recommend,artwork.type,t.name as typeName,artwork.id,artwork.name,artwork.review,artwork.score,artwork.artist,user.name as artistName from artwork left join type t on t.id=artwork.type,user where artwork.artist = user.id
         <if test="artId!=null">
             and artwork.id=#{artId}
         </if>
@@ -32,10 +32,10 @@
             <when test="by=='id'">order by artwork.id</when>
             <when test="by=='score'">order by score</when>
         </choose>
+        <if test="limit!=null">limit #{limit} offset #{offset}</if>
         <if test="order!=null">
             <if test="by==null">order by id </if>desc
         </if>
-        <if test="limit!=null">limit #{limit} offset #{offset}</if>
 
     </select>
 
@@ -43,7 +43,7 @@
         select * from  artwork_media where artwork_id=#{1}
     </select>
     <select id="findArtInfoById" resultType="String" parameterType="int">
-        select info from artwork where id=#{1} and review=1
+        select * from artwork where id=#{1} and review=1
     </select>
 
     <insert useGeneratedKeys="true" keyProperty="id" id="addArtMedia" parameterType="HashMap">
@@ -64,6 +64,7 @@
         <if test="info!=null">info=#{info},</if>
         <if test="artist!=null">artist=#{artist},</if>
         <if test="type!=null">type=#{type},</if>
+        <if test="recommend!=null">recommend=#{recommend},</if>
     </set>
         where id=#{id}
     </update>
@@ -72,7 +73,7 @@
     </delete>
 
     <select id="findArtRecommendList" resultType="HashMap" parameterType="int">
-        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.review=1 limit 10 offset #{1}
+        select *,(select u.name from user u where u.id=a.artist) as artist_name,(select url from artwork_media m where m.artwork_id=a.id limit 1) as url from artwork a where a.review=1 and a.recommend=1 limit 10 offset #{1}
     </select>
 
     <insert id="addArtwork" useGeneratedKeys="true" keyProperty="id" parameterType="HashMap">
@@ -183,6 +184,6 @@ insert into artwork_comment (reply, user_id, content, timestamp, art_id)values (
         </foreach>
     </select>
     <select id="findTopArtist" resultType="HashMap">
-        select u.name username,u.id,f.hot,a.avatar,a.state from (select *,sum(score) as hot from artwork group by artist order by hot desc limit 5) f left join user u on u.id=f.artist left join artist a on a.user_id=u.id;
+        select *,(select SUM(score) from artwork where artwork.artist=artist.user_id and artist.review=1) hot from artist left join user on user_id=user.id order by hot desc limit 5
     </select>
 </mapper>

@@ -7,6 +7,11 @@
     <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.js"></script>
+
+    <script>
+        sessionStorage.clear()
+    </script>
 </head>
 <style>
     ul,li{list-style: none;margin: 0;padding: 0;}
@@ -81,7 +86,7 @@
                             <label for="srh" class="input-group">
                                 <select name="type" style="background: none;outline: none;border:none">
                                     <option value="all">全部</option>
-                                    <option value="user">用户</option>
+                                    <option value="user">艺术家</option>
                                     <option value="art">作品</option>
                                 </select>
                                 <input name="word" id="srh" type="text" style="border: none;outline: none;background: none;">
@@ -120,10 +125,10 @@
                                 </span>
                                 <ul style="text-shadow: none" class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="#">消息通知</a>
+                                        <a role="menuitem" tabindex="-1" th:href="'/artist/'+${session.user.getId()}">我的信息</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="#">我的收藏</a>
+                                        <a role="menuitem" tabindex="-1" id="userChangePassword" href="javascript:void(0)">修改密码</a>
                                     </li>
                                     <li role="presentation" class="divider"></li>
                                     <li role="presentation">
@@ -146,6 +151,72 @@
             </div>
         </div>
     </div>
+    <form class="modal fade" id="userChangePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">模态框（Modal）标题</h4>
+                </div>
+                <div class="modal-body">
+                    <label class="input-group">
+                        <span class="input-group-addon">旧的密码</span>
+                        <input name="old" class="form-control" type="password">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">新的密码</span>
+                        <input name="new" class="form-control" type="password">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">确认密码</span>
+                        <input name="reNew" class="form-control" type="password">
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </form>
+    <script>
+        $(function () {
+            $("#userChangePassword").click(function () {
+                $('#userChangePasswordModal').modal('show');
+            });
+            $('#userChangePasswordModal').submit(function (e) {
+                e.preventDefault();
+                var arr=$(this).serializeArray();
+                if(!arr[0].value||!arr[1].value){
+                    alert("请输入密码");
+                    return;
+                }
+                if(arr[1].value.length<6){
+                    alert("密码强度不够");
+                    return;
+                }
+                if(arr[1].value!==arr[2].value){
+                    alert("两次输入的密码不一致");
+                    return;
+                }
+                $.ajax({
+                    method:'post',
+                    url:'/api/change_password',
+                    data:{
+                        oldPwd:md5(arr[0].value),
+                        pwd:md5(arr[1].value)
+                    },
+                    success:function (resp) {
+                        if(resp.code===200){
+                            window.location.href="/logout"
+                        }else {
+                            alert(resp.message)
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 </section>
 <!-- header end -->
 <section class="homepage-model" id="box" style="padding-top: 30px;display: flex;justify-content:space-between;flex-wrap: wrap;max-width: 1200px;margin: 0 auto;">
@@ -153,8 +224,8 @@
         .art-item{transition:300ms;position: relative;overflow: hidden;width:200px;height:240px;background-size: cover;margin: 20px;border:2px solid #fff;box-shadow: 0 1px 2px rgba(0,0,0,0.5)}
         .art-item:hover{box-shadow: 0 3px 3px rgba(0, 0, 0, 0.84);transform: scale(1.05);}
         .art-item p{margin-bottom: 0;}
-        .art-item .info{max-height: 80px;overflow: hidden;position: relative;line-height: 20px;font-weight: lighter;text-shadow: 1px 1px 1px #000;}
-        .art-item .info:after{content: "...";display: block;position: absolute;right: 0;bottom: 0;}
+        .art-item .info2{max-height: 80px;background:none;overflow: hidden;position: relative;line-height: 20px;font-weight: lighter;text-shadow: 1px 1px 1px #000;}
+        .art-item .info2:after{content: "...";display: block;position: absolute;right: 0;bottom: 0;}
         .art-item>img{display: block;height: 300px;width: auto;background: #ffffff;}
         .art-item:hover>div{opacity: 1;}
         .art-item>div{transition:300ms;opacity: 0;bottom: 0;position: absolute;width: 100%;background: rgba(0, 0, 0, 0.54);padding: 10px;color: #ffffff;}
@@ -172,7 +243,7 @@
                     <span class="score" th:text="${score+'次浏览'}">score</span>
                 </p>
                 <p class="artist" th:text="${artist}">artist</p>
-                <p class="info" th:text="${info}">this is my xia ji ba write,you are not use free to attention this.</p>
+                <p class="info2" th:text="${info}">this is my xia ji ba write,you are not use free to attention this.</p>
             </div>
         </a>
     </div>
@@ -221,11 +292,16 @@
     <a th:style="'background-image:url(/upload/'+${a.get('avatar')}+')'" class="artistCard" th:href="${'/artist/'+a.get('id')}" th:each="a:${topArtist}">
         <div>
             <div>人气值：<span th:text="${a.get('hot')}"></span></div>
-            <div>艺术家：<span th:text="${a.get('username')}"></span></div>
+            <div>艺术家：<span th:text="${a.get('name')}"></span></div>
             <div>状态：<span th:text="${a.get('state')}"></span></div>
         </div>
     </a>
-
+    <div style="width: 100%;text-align: center;">
+        <div class="art-title-tag">推荐</div>
+    </div>
+    <th:block th:each="art,state:${byTime}">
+        <div th:replace="::artTemplate(${art.get('id')},${art.get('url')},${art.get('name')},${art.get('artist_name')},${art.get('info')},${art.get('score')})"></div>
+    </th:block>
     <div style="width: 100%;text-align: center;">
         <div class="art-title-tag">最新更新</div>
     </div>
@@ -493,6 +569,65 @@
 </section>
 
 <section th:if="${session.user!=null}" class="star-page-model" style="min-height: 1000px;margin-top: -40vh;padding-top: 120px;display: none;">
+    <style>body{background: #eeeeee;}
+        .avatar{height: 200px;border-radius:100px;border:4px solid #fff;box-shadow:0 3px 3px #000;display: block;margin: 0 auto;position: absolute;left: 0;right: 0;top: -100px;max-width: 200px;background: #ddd;}
+        .info{margin: 20px auto 0 auto;position: relative;border-radius:6px;background: #ffffff;width:calc(100% - 40px);padding:140px 60px 0 60px;}
+        .artList{display: flex;flex-wrap: wrap;margin-bottom: 100px;}
+        .artList>a{width: 160px;height: 240px;margin-right: 40px;background-size: cover;border:4px solid rgb(255, 255, 255);box-shadow:0 3px 3px rgba(0, 0, 0, 0.73);overflow: hidden;}
+        .artList>a:hover .mask{opacity: 1;}
+        .mask{opacity: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.25);color: #ffffff;transition:300ms;}
+        .name{text-align: center;padding-top: 30px;font-size: 20px;font-weight: lighter;}</style>
+    <div th:if="${session.user.getIsArtist()==1}" style="text-align: center;">
+<!--        <div id="showUploadModal" style="color: #fff;cursor: pointer;" class="art-title-tag">+ 点击上传</div>-->
+    </div>
+    <div style="padding-top: 60px;">
+        <div style="position: relative;top: 30px;">
+            <div class="info">
+                <img id="avatar" class="avatar" th:style="'border-color:'+${user.get('sex')+''=='0'?'#0094ff':'#ff2a6e'}" th:src="${'/upload/'+user.get('avatar')}" alt="">
+                <a id="editUserInfo"  style="float: right;font-size: 16px;margin-right: 20px;position: absolute;right: 10px;top: 40px;">编辑</a>
+                <div style="text-align: center;margin-top: -40px;font-size: 30px;letter-spacing: 4px ;padding: 10px;" th:text="${user.get('name')}"><span></span></div>
+                <hr>
+                <div style="font-size: 16px;color: #444444;padding-bottom: 10px;">
+                    位置：<span th:text="${user.get('position')}"></span>，
+                    状态：<span th:text="${user.get('state')}"></span></div>
+                <div style="font-size: 16px;">签名：<span th:text="${user.get('motto')}"></span></div>
+                <hr>
+                <div style="font-size: 16px;color: #444444;">基本信息：</div>
+                <table border="1" bordercolor="#eee" cellpadding="10" class="mtable" style="width: 100%;max-width:1000px;border-color:#eee;line-height: 24px;margin-top: 10px;margin-bottom: 30px;font-size: 16px;">
+                    <tr>
+                        <td>性别：<span th:text="${user.get('sex')=='0'?'男':'女'}"></span></td>
+                        <td>籍贯：<span th:text="${user.get('nation')}"></span></td>
+                        <td>民族：<span th:text="${user.get('country')}"></span></td>
+                        <td>电话：<span th:text="${user.get('tel')}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>职业：<span th:text="${user.get('profession')}"></span></td>
+                        <td>出生日期：<span id="aodnasafan" th:text="${user.get('birthday')}"></span><script>$("#aodnasafan").html($("#aodnasafan").html().split(" ")[0])</script></td>
+                        <td>爱好：<span th:text="${user.get('hobby')}"></span></td>
+                        <td>邮箱：<span th:text="${user.get('email')}"></span></td>
+                    </tr>
+                </table>
+                <div style="font-size: 16px;color: #444444;">个人简介：</div>
+                <div style="line-height: 2;color: #444444;padding-bottom: 50px;text-indent: 40px;font-size: 16px;letter-spacing: 1px;"  th:text="${user.get('info')}"></div>
+            </div>
+        </div>
+    </div>
+    <div style="margin: 60px 20px 20px;padding: 40px;background: #fff;">
+        <div style="padding-bottom: 30px;font-weight: bold;font-size: 30px;color: #666666;">
+            作品列表
+            <div style="text-align: center;">
+                <div id="showUploadModal" style="color: #fff;cursor: pointer;" class="art-title-tag">点击发布</div>
+            </div>
+        </div>
+        <div class="artList" style="margin-bottom: 10px;">
+            <a th:href="${'/art/'+a.get('id')}" th:each="a:${art}" th:style="'background-image:url('+${a.get('url')}+')'">
+                <div class="mask">
+                    <div class="name" th:text="${a.get('name')}"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <style>
         #uploadModalForm .input-group{
             width: 400px;
@@ -581,56 +716,28 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </form>
-
-    <div style="display: flex;width: 1000px;min-height:360px;background: #ffffff;border-radius:20px;margin: 0 auto 30px;box-shadow:3px 3px 3px #000; ">
-        <div style="width: 200px;">
-            <div style="background: #ccc;height: 300px;text-align: center;width: 100%;border-radius:20px;position: relative;left: 20px;top: 20px;">
-                <a class="file btn btn-default" style="display: block;margin: 0 auto;width: 200px;position: relative;">
-                    <span class="glyphicon glyphicon-user"  style="font-size: 180px;line-height: 285px;color: #aaaaaa;display: inline-block;height: 100%;"></span>
-                    <style>
-                        .uploadAvatar{
-                            position: absolute;width: 100%;height: 100%;left: 0;top: 0;
-                            background-size: cover;
-                        }
-                    </style>
-                    <div class="uploadAvatar" th:if="${artist.get('avatar')!=null}"
-                         th:style="'background-image:url(/upload/'+${artist.get('avatar')}+')'"></div>
-                    <input type="file" id="changeAvatar">
-                </a>
-            </div>
-        </div>
-        <script>
-            $('#changeAvatar').change(function (e) {
-                var file=e.target.files[0];
-                var formData=new FormData();
-                formData.append('file',file);
-                $.ajax({
-                    url:'api/artist/avatar',
-                    type:'post',
-                    cache:false,
-                    data:formData,
-                    processData:false,
-                    contentType:false,
-                    success:function () {
-                        window.location.reload();
-                    }
-                });
+    <input type="file" id="changeAvatar" style="display: none;">
+    <script>
+        $('#avatar').click(function () {
+            $('#changeAvatar').trigger("click")
+        });
+        $('#changeAvatar').change(function (e) {
+            var file=e.target.files[0];
+            var formData=new FormData();
+            formData.append('file',file);
+            $.ajax({
+                url:'api/artist/avatar',
+                type:'post',
+                cache:false,
+                data:formData,
+                processData:false,
+                contentType:false,
+                success:function () {
+                    window.location.reload();
+                }
             });
-        </script>
-        <div th:if="${session.user!=null}" style="width: 750px;margin-left: 50px;min-height: 300px;">
-            <h2><span th:text="${session.user.getName()}"></span> <span th:text="${session.user.getSex()==0?'男':'女'}"></span>
-                <button id="editUserInfo" class="btn btn-xs btn-primary" style="float: right;font-size: 16px;margin-right: 20px;">编辑</button></h2>
-            <h3 th:text="'创作状态：'+${artist.get('state')}"></h3>
-            <h3 th:text="${artist.get('birthday')!=null?'出生年月：'+artist.get('birthday'):'出生年月：未知'}"></h3>
-            <h4 th:text="'专业：'+${artist.get('profession')}"></h4>
-            <h4 th:text="'籍贯：'+${artist.get('nation')}"></h4>
-            <h4 id="artistinfo" style="padding: 10px;line-height: 1.3;" th:text="${artist.get('info')}"></h4>
-            <script>
-                var ainfo=$("#artistinfo");
-                ainfo.html(ainfo.html().replace(/\n/g,'<br>'))
-            </script>
-        </div>
-    </div>
+        });
+    </script>
 
     <form class="modal fade" id="editUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -670,6 +777,26 @@
                         <input name="nation" class="form-control" type="text" th:value="${artist.get('nation')}">
                     </label>
                     <label class="input-group">
+                        <span class="input-group-addon">位置</span>
+                        <input name="position" class="form-control" type="text" th:value="${artist.get('position')}">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">名族</span>
+                        <input name="country" class="form-control" type="text" th:value="${artist.get('country')}">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">tel</span>
+                        <input name="tel" class="form-control" type="text" th:value="${artist.get('tel')}">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">email</span>
+                        <input name="email" class="form-control" type="text" th:value="${artist.get('email')}">
+                    </label>
+                    <label class="input-group">
+                        <span class="input-group-addon">爱好</span>
+                        <input name="hobby" class="form-control" type="text" th:value="${artist.get('hobby')}">
+                    </label>
+                    <label class="input-group">
                         <span class="input-group-addon">个人简介</span>
                         <textarea name="info" rows="20" class="form-control"  th:text="${artist.get('info')}"></textarea>
                     </label>
@@ -682,9 +809,7 @@
         </div><!-- /.modal-dialog -->
     </form>
 
-    <div th:if="${session.user.getIsArtist()==1}" style="text-align: center;">
-        <div id="showUploadModal" style="color: #fff;cursor: pointer;" class="art-title-tag">+ 点击上传</div>
-    </div>
+
     <script>
         +function () {
             var $birthday= $('#birthday');
@@ -726,6 +851,9 @@
                         }
                     });
                 };
+                if(uploads.length===0){
+                    return false;
+                }
                 $.ajax({
                     url:'api/art/add',
                     data:form.serialize(),
@@ -776,11 +904,7 @@
             })
         }();
     </script>
-    <div style="display: flex;justify-content: space-around">
-        <th:block th:each="art,state:${myArt}">
-            <div th:replace="::artTemplate(${art.get('id')},${art.get('url')},${art.get('name')},${art.get('artist_name')},${art.get('info')},${art.get('score')})"></div>
-        </th:block>
-    </div>
+
 </section>
 <style>
     a{cursor: pointer;}

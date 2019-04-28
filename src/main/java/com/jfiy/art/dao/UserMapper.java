@@ -27,4 +27,6 @@ public interface UserMapper {
     List<HashMap> getArtist(HashMap hashMap);
 
     List<HashMap> srhArtist(String s);
+
+    void delete(int id);
 }

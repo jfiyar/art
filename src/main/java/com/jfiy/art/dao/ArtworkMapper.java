@@ -17,7 +17,7 @@ public interface ArtworkMapper {
     List<HashMap> findArtworkByTime(HashMap map);
     List<HashMap> findArtList(HashMap map);
     List<HashMap> findArtMediaById(int id);
-    String findArtInfoById(int id);
+    HashMap findArtInfoById(int id);
     void addArtMedia(HashMap hashMap);
     void updateArtMedia(HashMap hashMap);
     void removeArtMediaById(String id);

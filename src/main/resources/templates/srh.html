@@ -35,8 +35,8 @@
             padding: 0 10px;
             border-radius:20px;
             font-size: 16px;}
-        .logo{
-            color: #b71090;
+        .l
+        #b71090;
         }
         .logo:hover{
             text-decoration: none;
@@ -62,7 +62,7 @@
                         <label for="srh" class="input-group">
                             <select name="type" th:value="${type}" style="background: none;outline: none;border:none">
                                 <option th:selected="${type=='all'}" value="all">全部</option>
-                                <option th:selected="${type=='user'}" value="user">用户</option>
+                                <option th:selected="${type=='user'}" value="user">艺术家</option>
                                 <option th:selected="${type=='art'}" value="art">作品</option>
                             </select>
                             <input th:value="${word}" name="word" id="srh" type="text" style="border: none;outline: none;background: none;">

@@ -39,6 +39,7 @@
         update user <trim prefix="set" suffixOverrides=",">
         <if test="name!=null">name=#{name},</if>
         <if test="password!=null">pwd=#{password},</if>
+        <if test="pwd!=null">pwd=#{pwd},</if>
         <if test="auth!=null">auth=#{auth},</if>
         <if test="avatar!=null">avatar=#{avatar},</if>
         <if test="sex!=null">sex=#{sex},</if>
@@ -60,6 +61,12 @@
         <if test="review!=null">review=#{review},</if>
         <if test="avatar!=null">avatar=#{avatar},</if>
         <if test="state!=null">state=#{state},</if>
+        <if test="country!=null">country=#{country},</if>
+        <if test="tel!=null">tel=#{tel},</if>
+        <if test="email!=null">email=#{email},</if>
+        <if test="hobby!=null">hobby=#{hobby},</if>
+        <if test="motto!=null">motto=#{motto},</if>
+        <if test="position!=null">position=#{position},</if>
     </set> where user_id=#{user_id}
     </update>
 
@@ -80,4 +87,8 @@
     <select id="srhArtist" parameterType="String" resultType="HashMap">
         select * from artist a left join user u on a.user_id=u.id where review=1 and u.name like #{0}
     </select>
+
+    <delete id="delete" parameterType="int">
+       delete  from user where id=#{0}
+    </delete>
 </mapper>

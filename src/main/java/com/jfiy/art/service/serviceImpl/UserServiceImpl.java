@@ -108,4 +108,9 @@ public class UserServiceImpl implements UserService {
     public List<HashMap> srhArtist(String s) {
         return userMapper.srhArtist(s);
     }
+
+    @Override
+    public void delete(int id) {
+        userMapper.delete(id);
+    }
 }

@@ -56,7 +56,8 @@ public class AdminController {
     }
 
     @PostMapping("/art/update")
-    public void updateArtInfo(@RequestParam HashMap hashMap,String delArr){
+    public void updateArtInfo(@RequestParam HashMap hashMap,int id,String delArr){
+        hashMap.put("id",id);
         artworkService.updateArtworkInfo(hashMap);
         artworkService.deleteArtworkMedia(delArr);
     }
@@ -93,6 +94,10 @@ public class AdminController {
     public HashMap typeAdd(@RequestParam HashMap hashMap){
         artworkService.addArtType(hashMap);
         return hashMap;
+    }
+    @GetMapping("/user/delete/{id}")
+    public void deleteUser(@PathVariable int id){
+        userService.delete(id);
     }
     @GetMapping("/art/type/remove")
     public void artTypeRemove(@RequestParam HashMap hashMap){
