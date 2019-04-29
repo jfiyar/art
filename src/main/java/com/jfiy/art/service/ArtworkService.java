@@ -35,6 +35,7 @@ public interface ArtworkService {
     //上传艺术家头像
     void uploadArtistAvatar(String s, MultipartFile file);
 
+    //
     HashMap getArtist(String id);
 
     void removeCommend(String id);
