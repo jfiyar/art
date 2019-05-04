@@ -112,5 +112,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(int id) {
         userMapper.delete(id);
+        userMapper.deleteArtist(id);
+        userMapper.deleteArt(id);
     }
 }

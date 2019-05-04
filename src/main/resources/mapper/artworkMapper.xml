@@ -184,6 +184,6 @@ insert into artwork_comment (reply, user_id, content, timestamp, art_id)values (
         </foreach>
     </select>
     <select id="findTopArtist" resultType="HashMap">
-        select *,(select SUM(score) from artwork where artwork.artist=artist.user_id and artist.review=1) hot from artist left join user on user_id=user.id order by hot desc limit 5
+        select *,(select SUM(score) from artwork where artwork.artist=artist.user_id and artist.review=1) hot from artist left join user on user_id=user.id where review=1 order by hot desc limit 5
     </select>
 </mapper>

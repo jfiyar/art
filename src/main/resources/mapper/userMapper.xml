@@ -91,4 +91,10 @@
     <delete id="delete" parameterType="int">
        delete  from user where id=#{0}
     </delete>
+    <delete id="deleteArt" parameterType="int">
+        delete  from artwork where artwork.artist=#{0}
+    </delete>
+    <delete id="deleteArtist" parameterType="int">
+        delete  from artist where user_id=#{0}
+    </delete>
 </mapper>

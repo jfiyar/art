@@ -29,4 +29,8 @@ public interface UserMapper {
     List<HashMap> srhArtist(String s);
 
     void delete(int id);
+
+    void deleteArtist(int id);
+
+    void deleteArt(int id);
 }

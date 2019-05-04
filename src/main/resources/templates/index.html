@@ -263,23 +263,24 @@
     <style>
         .artistCard{
             width: 200px;
-            height: 300px;
-            background-color: #cecece;
-            margin: 20px;
+            height: 180px;
+            background-color: #fff;
+            margin: 80px 20px 20px;
             border:#fff solid 2px;
-            box-shadow:0 2px 2px #999;
+            /*box-shadow:0 2px 2px #999;*/
             background-size: cover;
             position: relative;
-            color:#fff;
+            /*color:#fff;*/
             letter-spacing: 1px;
-            font-weight: lighter;
-            text-shadow: 0 1px 1px #000;
+            /*font-weight: lighter;*/
+            /*text-shadow: 0 1px 1px #000;*/
+            border-radius:6px;
         }
         .artistCard:hover{
             color: #ffffff;
         }
         .artistCard:hover>div{
-            background: rgba(0, 0, 0, 0.3);
+            background: rgb(186, 78, 170);
         }
         .artistCard>div{
             transition:300ms;
@@ -287,9 +288,30 @@
             bottom: 0;
             padding: 10px;
             width: 100%;
+            border-radius: 6px;
+        }
+        .avatarXxx{
+            width: 140px;
+            height: 140px;
+            top: -60px;
+            margin:0 auto;
+            left: 0;
+            right: 0;
+            position: absolute;
+            background-size: cover;
+            border-radius: 50%;
+            border:2px solid #fff;
+            box-shadow:0 2px 3px #333;
+            transition: 300ms;
+        }
+        .artistCard:hover .avatarXxx{
+            transform: scale(1.1);
+            top: -70px;
+            box-shadow:0 1px 8px #aaa;
         }
     </style>
-    <a th:style="'background-image:url(/upload/'+${a.get('avatar')}+')'" class="artistCard" th:href="${'/artist/'+a.get('id')}" th:each="a:${topArtist}">
+    <a class="artistCard" th:href="${'/artist/'+a.get('id')}" th:each="a:${topArtist}">
+        <span class="avatarXxx" th:style="'background-image:url(/upload/'+${a.get('avatar')}+')'"></span>
         <div>
             <div>人气值：<span th:text="${a.get('hot')}"></span></div>
             <div>艺术家：<span th:text="${a.get('name')}"></span></div>
@@ -703,14 +725,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group ">
-                        <span class="input-group-addon">艺术品名/name</span>
+                        <span class="input-group-addon">作品名称</span>
                         <input name="name" class="form-control" type="text">
                     </div>
-                    <div class="input-group">
-                        <div class="form-group">
-                            <span >文字简介/information</span>
-                            <textarea name="info" class="info form-control" rows="3"></textarea>
-                        </div>
+                    <div class="input-group ">
+                        <span>简介:</span>
+                        <textarea style="margin: 10px;border-radius: 6px" name="info" class="form-control" rows="10"></textarea>
                     </div>
                     <style>
                         .file input {
